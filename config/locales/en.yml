@@ -21,3 +21,41 @@
 
 en:
   hello: "Hello world"
+  errors:
+    messages:
+      taken: "is already in use"
+      model_invalid: "%{errors}"
+  activerecord:
+    attributes:
+      device:
+        device_id: "Device id (DID)"
+        device_type: "Device type (DYPE)"
+      datum:
+        device_id: "Device id (DID)"
+        log_time: "Log_time (LOG_TIME)"
+        sensor_data: "Sensor data (SENSOR_DATA)"
+        sensor_error: "Sensor error (SENSOR_ERROR)"
+        sensor_type: "Sensor type (SENSOR_TYPE)"
+    errors:
+      models:
+        device:
+          attributes:
+            device_id:
+              invalid: "must be a hexadecimal number"
+            device_type:
+              invalid: "must be a hexadecimal number"
+        datum:
+          attributes:
+            device_id:
+              invalid: "must be a hexadecimal number"
+            sensor_data:
+              invalid: "must be a number greater than or equal to 0"
+              not_a_number: "must be a number greater than or equal to 0"
+              greater_than_or_equal_to: "must be a number greater than or equal to 0"
+            sensor_error:
+              invalid: "must be a number between 0 and 1"
+              not_a_number: "must be a number between 0 and 1"
+              greater_than_or_equal_to: "must be a number between 0 and 1"
+              less_than_or_equal_to: "must be a number between 0 and 1"
+            sensor_type:
+              invalid: "must be a hexadecimal number"
