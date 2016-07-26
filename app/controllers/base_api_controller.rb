@@ -11,6 +11,7 @@ class BaseApiController < ApplicationController
 				return
 			end
 
+			logger.debug(request.body.read)
 			@json = JSON.parse(request.body.read)
 			logger.debug('parse_request')
 			logger.debug(@json)
