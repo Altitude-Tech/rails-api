@@ -13,9 +13,10 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
-  username: interns
-  password: altitudetech
-  socket: /var/run/mysqld/mysqld.sock
+  username: root
+  password: altitude
+  socket: /var/lib/mysql/mysql.sock
+  
 
 development:
   <<: *default
@@ -52,3 +53,4 @@ production:
   database: api_production
   username: <%= ENV['API_DATABASE_USER'] %>
   password: <%= ENV['API_DATABASE_PASSWORD'] %>
+  socket: /var/run/mysqld/mysqld.sock
