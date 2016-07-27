@@ -1,6 +1,7 @@
 # README
 
 ## Requirements
+* [RVM](https://rvm.io/rvm/install)
 * Ruby v2.2.5+
 * MySQL v5.5+ or MariaDB v10.0+¹
 * Bundler v1.12+
