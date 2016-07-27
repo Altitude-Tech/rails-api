@@ -26,6 +26,7 @@ gem 'puma', '~> 3.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # @todo use for GET requests
 gem 'jbuilder', '~> 2.5'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
@@ -48,7 +49,11 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+# production is ubuntu, and this was throwing weird errors there
+# so limit to development/test instead
+group :development, :test do
+	# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+	gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+end
 
 gem 'json'
