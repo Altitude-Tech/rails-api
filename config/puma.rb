@@ -1,4 +1,4 @@
-if ENV['RACK_ENV'] == 'production'
+if ENV['RAILS_ENV'] == 'production'
 	# <https://www.digitalocean.com/community/tutorials/how-to-deploy-a-rails-app-with-puma-and-nginx-on-ubuntu-14-04>
 	workers 2
 	threads 1, 6
@@ -6,8 +6,7 @@ if ENV['RACK_ENV'] == 'production'
 	app_dir = File.expand_path('../..', __FILE__)
 	shared_dir = "#{app_dir}/shared"
 
-	rails_env = ENV['RAILS_ENV'] || 'production'
-	environment = rails_env
+	environment = 'production'
 
 	# socket location
 	bind "unix://#{shared_dir}/sockets/puma.sock"
@@ -23,7 +22,7 @@ if ENV['RACK_ENV'] == 'production'
 	on_worker_boot do
   		require "active_record"
   		ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
-  		ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
+  		ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")['production'])
 	end
 else
 	# Puma can serve each request in a thread from an internal thread pool.
