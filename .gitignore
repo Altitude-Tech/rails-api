@@ -13,5 +13,13 @@
 !/log/.keep
 !/tmp/.keep
 
+# ignore production puma stuff
+/shared/log/*
+/shared/pids/*
+/shared/sockets/*
+!/shared/log/.keep
+!/shared/pids/.keep
+!/shared/sockets/.keep
+
 # Ignore Byebug command history file.
 .byebug_history
