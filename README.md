@@ -1,24 +1,56 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requirements
+* Ruby v2.2.5+
+* MySQL v5.5+ or MariaDB v10.0+¹
+* Bundler v1.12+
 
-Things you may want to cover:
+¹ If using MariaDB, use Ruby v2.3.0+.
 
-* Ruby version
+## Installation
+Note that the `mysql2` gem used has additional dependencies in order to work correctly.
 
-* System dependencies
+For Ubuntu/LinuxMint:
+```
+$ sudo apt-get install mysql-server mysql-client libmysqlclient-dev
+```
 
-* Configuration
+For CentOS/RHEL/Fedora:
+```
+$ yum install mariadb-server mariadb-devel
 
-* Database creation
+```
 
-* Database initialization
+For Fedora 22+
+```
+$ dnf install mariadb-server mariadb-devel
+```
 
-* How to run the test suite
+For Windows, you can download [MySQL Workbench](https://www.mysql.com/products/workbench/)
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+To install all remaining dependencies:
+```
+$ bundle install
+```
 
-* ...
+## Database setup
+Ensure the user account as defined in `config/database.yml` exists first. For production, both user and password are set via environment variables, so ensure the user exists and the variables have been set accordingly.
+
+To setup the database and all required tables:
+```
+$ rake db:create
+$ rake db:migrate
+```
+
+For production:
+```
+$ RAILS_ENV=production rake db:create
+$ RAILS_ENV=production rake db:migrate
+```
+
+## Tests
+To run the test suite:
+```
+$ rake test
+```
