@@ -29,20 +29,10 @@ test:
   <<: *default
   database: api_test
 
-# see PRODUCTION_SETUP.md for more info
-<%
-if ENV['RAILS_ENV'] == 'production' && ENV['DB_ADMIN']
-    username = ENV['API_DATABASE_ADMIN']
-    password = ENV['API_DATABASE_ADMIN_PASSWORD']
-else
-    username = ENV['API_DATABASE_USER']
-    password = ENV['API_DATABASE_PASSWORD']
-end
-%>
-
+# see PRODUCTION_SETUP.md for more info on this
 production:
   <<: *default
   database: api_production
-  username: <%= ENV['API_DATABASE_USER'] %>
-  password: <%= ENV['API_DATABASE_PASSWORD'] %>
+  username: <% if ENV['RAILS_ENV'] == 'production' && ENV['DB_ADMIN'] then ENV['API_DATABASE_ADMIN'] else ENV['API_DATABASE_USER'] end %>
+  password: <% if ENV['RAILS_ENV'] == 'production' && ENV['DB_ADMIN'] then ENV['API_DATABASE_ADMIN_PASSWORD'] else ENV['API_DATABASE_PASSWORD'] end %>
   socket: /var/run/mysqld/mysqld.sock
