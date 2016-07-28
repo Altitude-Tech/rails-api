@@ -10,6 +10,9 @@
 # ignore Gemfile.lock
 Gemfile.lock
 
+# ignore rvm config
+.version.conf
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
