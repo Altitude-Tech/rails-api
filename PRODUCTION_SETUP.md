@@ -50,10 +50,10 @@ The following environment variables need to be set:
 * `API_DATBASE_ADMIN` - The name of the user with admin access to the database.
 * `API_DATABASE_ADMIN_PASSWORD` - The password of the user set in `API_DATABASE_ADMIN`.
 
-These variables should be set in `.version.conf`. A sample configuration can be found in `.version.conf.sample` which can be copied an edited as required:
+These variables should be set in `.version.conf`. A sample configuration can be found in `.versions.conf.sample` which can be copied an edited as required:
 ```
-$ cp .version.conf.sample .version.conf
-$ nano .version.conf
+$ cp .versions.conf.sample .versions.conf
+$ nano .versions.conf
 # and set the variables required, prefixed with "env-"
 ```
 All other variables in the sample file should be left unaltered.
