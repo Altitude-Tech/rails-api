@@ -1,4 +1,4 @@
-class BaseApiController < ApplicationController
+class BaseApiController < ActionController::Base
 	protect_from_forgery unless: -> { request.format.json? }
 	before_action :parse_request, :check_ip, only: :create
 

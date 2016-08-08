@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-	match '/api', to: 'api#create', via: :post
-	match '/api', to: 'api#index', via: :get
-	match '/api', to: 'api#ignore', via: [:put, :patch, :delete]
+	# @todo remove index
+	# api for submitting data
+	resources :api, only: [:index, :create]
+
+	scope 'api' do
+		# for getting data for a given device
+		resources :devices, only: [:index, :show]
+	end
 end

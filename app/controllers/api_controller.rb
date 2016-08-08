@@ -1,8 +1,4 @@
 class ApiController < BaseApiController
-	def ignore
-		head :bad_request
-	end
-
 	def index
 		if params.key? :help
 			render plain: 'help'
@@ -29,7 +25,7 @@ class ApiController < BaseApiController
 		# <http://www.rubydoc.info/docs/rails/4.1.7/ActiveRecord/RecordInvalid>
 		rescue ActiveRecord::RecordInvalid => e
 			logger.debug(e.message)
-			render plain: "#{e.message}.", status: :bad_request
+			render plain: "#{e.message}", status: :bad_request
 			return
 		end
 
@@ -39,7 +35,7 @@ class ApiController < BaseApiController
 			render plain: 'Key not found: DATA (Data).', status: :bad_request
 			return
 		rescue ActiveRecord::RecordInvalid => e
-			render plain: "#{e.message}.", status: :bad_request
+			render plain: "#{e.message}", status: :bad_request
 			return
 		end
 

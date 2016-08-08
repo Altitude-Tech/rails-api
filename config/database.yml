@@ -15,7 +15,7 @@ default: &default
   pool: 5
   username: root
   password: altitude
-  socket: /var/lib/mysql/mysql.sock
+  socket: <%= if Gem.win_platform? then nil else '/var/lib/mysql/mysql.sock' end %>
   
 
 development:
