@@ -11,7 +11,7 @@ Verify with `$ rvm list`.
 
 Next, install bundler:
 ```
-gem install bundler -v '~> 1.12'
+$ gem install bundler -v '~> 1.12'
 ```
 
 Then, install MySQL for the database:
@@ -26,8 +26,6 @@ $ bundle install
 
 ## Configuration
 ### Database
-*TODO: add in initial database setup*
-
 To create the database user, run the following from the MySQL command line substituting in the required values:
 ```
 > CREATE USER '<API_DATABASE_USER>'@'localhost' IDENTIFIED BY '<API_DATABASE_PASSWORD>';
