@@ -64,7 +64,8 @@ class DevicesControllerTest < ActionController::TestCase
 	test 'lower limit' do
 		get :index, params: { limit: 1 }
 
-		expected_resp = '{"devices":[{"device_id":"12a4","device_type":"1234"}]}'
+		# expected_resp = '{"devices":[{"device_id":"12a4","device_type":"1234"}]}'
+		expected_resp = '{"devices":[{"device_id":"4567","device_type":"cdef"}]}'
 
 		assert_response :success
 		assert_equal 'application/json', response.content_type
