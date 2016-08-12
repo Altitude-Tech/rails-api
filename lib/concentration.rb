@@ -1,5 +1,8 @@
 ##
 # Methods for helping calculate concentration
+#
+# For pressure calculation help, see <http://enwp.org/Barometric_formula>
+# For concentration conversion help, see <http://antoine.frostburg.edu/chem/senese/101/solutions/faq/converting-ppm-to-micrograms-per-cubic-meter.shtml>
 ##
 
 module Concentration
