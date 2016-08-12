@@ -1,0 +1,42 @@
+---
+
+carbon:
+  label: Carbon Monoxide
+  latest:
+    value: 180
+    percentage: 68
+  historic:
+    day: []   # hours
+    month: [] # days
+    year: []  # days or months?
+    all: []   # days or months?
+
+nitrogen:
+  label: Nitrogen Oxide
+  latest:
+    value: 64
+    percentage: 24
+
+smoke:
+  label: Smoke
+  latest:
+    value: 21
+    percentage: 8
+
+alcohols:
+  label: Alcohols
+  latest:
+    value: 42
+    percentage: 56
+
+toxic:
+  label: Toxic Pollutants
+  latest:
+    value: 76
+    percentage: 3
+
+particulates:
+  label: Particulates
+  latest:
+    value: 12
+    percentage: 18
