@@ -19,9 +19,6 @@ class DevicesController < ApplicationController
 			return
 		end
 
-		logger.debug(start)
-		logger.debug(limit)
-
 		@devices = Device.where('id >= ?', start).order('id').limit(limit)
 
 		logger.debug(@devices.count)
