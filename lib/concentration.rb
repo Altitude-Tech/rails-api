@@ -2,8 +2,6 @@
 # Methods for helping calculate concentration
 ##
 
-#require 'math'
-
 module Concentration
 	##
 	# Altitude layers in metres
