@@ -1,6 +1,9 @@
 require 'test_helper'
 
 class DevicesControllerTest < ActionController::TestCase
+	##
+	# Test successful selection of all devices using fixtures
+	##
 	test 'get all devices' do
 		get :index
 
@@ -11,6 +14,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Test error handling of invalid argument for start parameter
+	##
 	test 'invalid start' do
 		get :index, params: { start: 'invalid' }
 
@@ -21,6 +27,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Test error handling of too low value of start parameter
+	##
 	test 'too low start' do
 		get :index, params: { start: 0 }
 
@@ -31,6 +40,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Test error handling of invalid argument for limit parameter
+	##
 	test 'invalid limit' do
 		get :index, params: { limit: 'invalid' }
 
@@ -41,6 +53,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Test error handling of too low value of limit parameter
+	##
 	test 'too low limit' do
 		get :index, params: { limit: 0 }
 
@@ -51,6 +66,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Test error handling of too high value of limit parameter
+	##
 	test 'too high limit' do
 		get :index, params: { limit: 501 }
 
@@ -61,6 +79,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Test success of lower limit parameter
+	##
 	test 'lower limit' do
 		get :index, params: { limit: 1 }
 
@@ -72,6 +93,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Testt success of upper limit parameter
+	##
 	test 'upper limit' do
 		get :index, params: { limit: 500 }
 
@@ -82,6 +106,9 @@ class DevicesControllerTest < ActionController::TestCase
 		assert_equal expected_resp, response.body
 	end
 
+	##
+	# Test successful selection by device id
+	##
 	test 'get device' do
 		get :show, params: { id: 1234 }
 
