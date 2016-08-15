@@ -38,16 +38,8 @@ en:
         sensor_type: Sensor type (SENSOR_TYPE)
     errors:
       models:
-        device:
-          attributes:
-            device_id:
-              invalid: must be a hexadecimal number.
-            device_type:
-              invalid: must be a hexadecimal number.
         datum:
           attributes:
-            device_id:
-              invalid: must be a hexadecimal number.
             sensor_data:
               invalid: must be a number greater than or equal to 0.
               not_a_number: must be a number greater than or equal to 0.
@@ -57,8 +49,9 @@ en:
               not_a_number: must be a number between 0 and 1.
               greater_than_or_equal_to: must be a number between 0 and 1.
               less_than_or_equal_to: must be a number between 0 and 1.
-            sensor_type:
-              invalid: must be a hexadecimal number.
+
+  # custom validator errors
+  invalid_hex: 'must be a hexadecimal number.'
 
   # errors for devices api: /api/devices
   devices_not_found:  Device not found.

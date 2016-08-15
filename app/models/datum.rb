@@ -1,9 +1,6 @@
 class Datum < ApplicationRecord
 	# make sure this is a hex number
-	validates :sensor_type,
-		format: {
-			with: /\A[a-f0-9]+\Z/i
-		}
+	validates :sensor_type, hex: true
 	validates :sensor_error,
 		numericality: {
 			greater_than_or_equal_to: 0,
