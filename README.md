@@ -1,50 +1,100 @@
 # README
 
-## Requirements
-* Ruby v2.2.5+
-* MySQL v5.5+ or MariaDB v10.0+¹
-* Bundler v1.12+
+## Setup
+*To do: WIndows (& OSX?) support.*
 
-¹ If using MariaDB, use Ruby v2.3.0+.
-
-## Installation
-Note that the `mysql2` gem used has additional dependencies in order to work correctly.
+### Installing Ruby
+1. Install cURL
 
 For Ubuntu/LinuxMint:
-```
-$ sudo apt-get install mysql-server mysql-client libmysqlclient-dev
-```
+```$ sudo apt-get install curl gnugp```
 
 For CentOS/RHEL/Fedora:
-```
-$ yum install mariadb-server mariadb-devel
+```$ sudo yum install curl```
 
+For Fedora 22+:
+```$ sudo dnf install curl```
+
+2. Install [RVM](https://rvm.io/rvm/install) and Ruby:
+```
+cd ~/
+$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+$ curl -sSL https://get.rvm.io | bash -s stable --ruby
+$ source .rvm/scripts/rvm
 ```
 
-For Fedora 22+
-```
-$ dnf install mariadb-server mariadb-devel
-```
+3. Verify installation:
+```$ ruby --version```
 
-For Windows, you can download [MySQL Workbench](https://www.mysql.com/products/workbench/)
+## Database setup:
+1. Install MySQL (or MariaDB for CentOS, etc.)
 
+For Ubuntu/LinuxMint:
+```$ sudo apt-get install mysql-server mysql-client libmysqlclient-dev```
 
-To install all remaining dependencies:
+For CentOS/RHEL/Fedora:
+```$ yum install mariadb-server mariadb-devel```
+
+For Fedora 22+:
+```$ dnf install mariadb-server mariadb-devel```
+
+2. Start the database
+
+For Ubuntu/LinuxMint:
+```$ sudo service mysqld start```
+
+For CentOS/RHEL/Fedora:
+```$ sudo systemctl start mariadb```
+
+3. Secure the database installation:
+```$ sudo mysql_secure_installation```
+
+	1. Set the root password to `altitude`.
+	2. Remove anonymous users.
+	3. Disallow remote root login.
+	4. Remove test database.
+	5. Reload priviledges
+
+### Install Nodejs
+1. Install nodejs:
+
+For Ubuntu/LinuxMint:
+```$ sudo apt-get install nodejs```
+
+For CentOS/RHEL/Fedora:
+```$ sudo yum install nodejs```
+
+For Fedora 22+:
+```$ sudo dnf install nodejs```
+
+### Install Gems
+1. Install [Bundler](http://bundler.io/)
+```$ gem install bundler```
+
+2. Install all required gems:
 ```
+$ cd /path/to/rails-api
 $ bundle install
 ```
 
-## Database setup
-Ensure the user account as defined in `config/database.yml` exists first.
-
-To setup the database and all required tables:
+### Create the database
+1. Create the database:
 ```
+$ cd /path/to/rails-api
 $ rake db:create
-$ rake db:migrate
 ```
 
-## Tests
+2. Create the database tables
+```$ rake db:migrate```
+
+## Running tests
 To run the test suite:
 ```
 $ rake test
+```
+
+## Run the development server
+To start a development server:
+```
+$ rails server
 ```
