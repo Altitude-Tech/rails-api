@@ -1,3 +1,7 @@
+##
+# Api Controller tests
+##
+
 require 'test_helper'
 
 class ApiControllerTest < ActionController::TestCase
@@ -39,7 +43,7 @@ class ApiControllerTest < ActionController::TestCase
 			:DYPE => '1234',
 			:LOG_TIME => Time.now.to_i,
 			:DATA => {
-				:SENSOR_TYPE => 'af123',
+				:SENSOR_TYPE => SENSORS['0'],
 				:SENSOR_ERROR => 0.0,
 				:SENSOR_DATA => 10
 			}
@@ -59,7 +63,7 @@ class ApiControllerTest < ActionController::TestCase
 			:DID => '12a4',
 			:LOG_TIME => Time.now.to_i,
 			:DATA => {
-				:SENSOR_TYPE => 'af123',
+				:SENSOR_TYPE => SENSORS['0'],
 				:SENSOR_ERROR => 0.0,
 				:SENSOR_DATA => 10
 			}
@@ -78,7 +82,7 @@ class ApiControllerTest < ActionController::TestCase
 			:DID => '12a4',
 			:DYPE => '1234',
 			:DATA => {
-				:SENSOR_TYPE => 'af123',
+				:SENSOR_TYPE => SENSORS['0'],
 				:SENSOR_ERROR => 0.0,
 				:SENSOR_DATA => 10
 			}
@@ -132,7 +136,7 @@ class ApiControllerTest < ActionController::TestCase
 			:DYPE => '1234',
 			:LOG_TIME => Time.now.to_i,
 			:DATA => {
-				:SENSOR_TYPE => 'af123',
+				:SENSOR_TYPE => SENSORS['0'],
 				:SENSOR_DATA => 10
 			}
 		}
@@ -151,7 +155,7 @@ class ApiControllerTest < ActionController::TestCase
 			:DYPE => '1234',
 			:LOG_TIME => Time.now.to_i,
 			:DATA => {
-				:SENSOR_TYPE => 'af123',
+				:SENSOR_TYPE => SENSORS['0'],
 				:SENSOR_ERROR => 0.0
 			}
 		}
@@ -170,7 +174,7 @@ class ApiControllerTest < ActionController::TestCase
 			:DYPE => '1234',
 			:LOG_TIME => Time.now.to_i,
 			:DATA => {
-				:SENSOR_TYPE => 'af123',
+				:SENSOR_TYPE => SENSORS['0'],
 				:SENSOR_ERROR => 0.0,
 				:SENSOR_DATA => 10
 			}

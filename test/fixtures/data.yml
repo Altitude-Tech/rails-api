@@ -1,14 +1,14 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  sensor_type: 7654
+  sensor_type: 0
   sensor_error: 9.99
   sensor_data: 1.5
   log_time: 2016-07-13 16:31:36
   device_id: 1234
 
 two:
-  sensor_type: abcd
+  sensor_type: 1
   sensor_error: 9.99
   sensor_data: 1.5
   log_time: 2016-07-13 16:31:36

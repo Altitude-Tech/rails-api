@@ -1,3 +1,7 @@
+##
+# Concentration tests
+##
+
 require 'test_helper'
 require 'concentration'
 
@@ -102,7 +106,7 @@ class ConcentrationTest < Minitest::Test
 	##
 	def test_co_ppm_to_ugm3
 		conc_ppm = 1000
-		gas = 'carbon monoxide'
+		gas = GAS_CARBON_MONOXIDE
 		temperature = 273.15
 		altitude = 0
 
@@ -118,7 +122,7 @@ class ConcentrationTest < Minitest::Test
 	##
 	def test_no2_ppm_to_ugm3
 		conc_ppm = 1000
-		gas = 'nitrogen dioxide'
+		gas = GAS_NITROGEN_DIOXIDE
 		temperature = 273.15
 		altitude = 0
 
@@ -134,7 +138,7 @@ class ConcentrationTest < Minitest::Test
 	##
 	def test_co_ugm3_to_ppm
 		conc_ugm3 = 2000000
-		gas = 'carbon monoxide'
+		gas = GAS_CARBON_MONOXIDE
 		temperature = 273.15
 		altitude = 0
 
@@ -150,7 +154,7 @@ class ConcentrationTest < Minitest::Test
 	##
 	def test_no2_ugm3_to_ppm
 		conc_ugm3 = 2000000
-		gas = 'nitrogen dioxide'
+		gas = GAS_NITROGEN_DIOXIDE
 		temperature = 273.15
 		altitude = 0
 
