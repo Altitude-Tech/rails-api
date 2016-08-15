@@ -60,27 +60,17 @@ module Concentration
 	PM25_MOLAR_MASS = 0
 
 	##
-	# Aliases for supported gases
+	# Link supported gases to their respective mass
 	##
-	GASES = {
-		# carbon monoxide
-		'co'				=> CO_MOLAR_MASS,
-		'carbon monoxide'	=> CO_MOLAR_MASS,
-		# nitrogen dioxide
-		'no2'				=> NO2_MOLAR_MASS,
-		'nitrogen dioxide'	=> NO2_MOLAR_MASS,
-		# alcohols
-		'alcohol'			=> ALCOHOLS_MOLAR_MASS,
-		'alcohols'			=> ALCOHOLS_MOLAR_MASS,
-		# toxic gases
-		'toxic'				=> TOXIC_GASES_MOLAR_MASS,
-		'toxic gases'		=> TOXIC_GASES_MOLAR_MASS,
-		# particulates (PM10)
-		'pm10'				=> PM10_MOLAR_MASS,
-		# particulates (PM2.5)
-		'pm25'				=> PM25_MOLAR_MASS,
-		'pm2.5'				=> PM25_MOLAR_MASS
-	}
+	GASES = {}
+	# see config/initializers/gases.rb for available gases
+	GASES[GAS_CARBON_MONOXIDE] = CO_MOLAR_MASS
+	GASES[GAS_NITROGEN_DIOXIDE] = NO2_MOLAR_MASS
+	GASES[GAS_ALCOHOLS] = ALCOHOLS_MOLAR_MASS
+	GASES[GAS_SMOKE] = SMOKE_MOLAR_MASS
+	GASES[GAS_TOXIC_GASES] = TOXIC_GASES_MOLAR_MASS
+	GASES[GAS_PM10] = PM10_MOLAR_MASS
+	GASES[GAS_PM25] = PM25_MOLAR_MASS
 
 	##
 	# Converts a temperature in centigrade to kelvin.
@@ -123,8 +113,6 @@ module Concentration
 		st = STANDARD_TEMPERATURES[index]
 		tlr = TEMPERATURE_LAPSE_RATES[index]
 
-		Rails.logger.debug('sp:' + String(sp) + ', st:' + String(st) + ', tlr:' + String(tlr) + ', h:' + String(altitude) + ', hb:' + String(layer))
-
 		if tlr === 0
 			pressure = self.calc_pressure_zero(sp, st, tlr, altitude, layer)
 		else
@@ -148,7 +136,7 @@ module Concentration
 	#   (Number): The density in grams per metres cubed.
 	##
 	def self.calc_density(gas, temperature, altitude)
-		molar_mass = self.get_molar_mass(gas)
+		molar_mass = GASES[gas]
 		pressure = self.calc_pressure(altitude)
 
 		# <http://antoine.frostburg.edu/chem/senese/101/solutions/faq/converting-ppm-to-micrograms-per-cubic-meter.shtml>
@@ -194,19 +182,6 @@ module Concentration
 	end
 
 	private
-		##
-		# Gets the molar mass of a gas.
-		#
-		# Params:
-		#   gas (String): The name of the gas.
-		#
-		# Returns:
-		#   (Number): The molar mass in grams per mole.
-		##
-		def self.get_molar_mass(gas)
-			return GASES[gas.downcase]
-		end
-
 		##
 		# Get the altitude at the base of the layer for a given altitude.
 		#
