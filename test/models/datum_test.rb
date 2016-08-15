@@ -1,3 +1,7 @@
+##
+# Datum model tests
+##
+
 require 'test_helper'
 
 class DatumTest < ActiveSupport::TestCase

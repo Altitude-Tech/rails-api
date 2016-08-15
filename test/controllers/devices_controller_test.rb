@@ -1,3 +1,7 @@
+##
+# Devices Api Controller tests
+##
+
 require 'test_helper'
 
 class DevicesControllerTest < ActionController::TestCase
