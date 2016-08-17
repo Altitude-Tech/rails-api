@@ -11,8 +11,8 @@ class ApiControllerTest < ActionController::TestCase
     DYPE: '1234',
     LOG_TIME: Time.now.to_i,
     TEMPERATURE: 25.37,
-    PRESSURE: 1009.30164141,
-    HUMIDITY: 63.1271798896,
+    PRESSURE: 1009.30,
+    HUMIDITY: 63.12,
     DATA: {
       SENSOR_TYPE: SENSOR_MQ2_HASH,
       SENSOR_ERROR: 0.1,
