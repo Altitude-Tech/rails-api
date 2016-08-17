@@ -3,10 +3,18 @@
 carbon:
   label: Carbon Monoxide
   latest:
-    value: 180
-    percentage: 68
+    value: 180      # ppm
+    percentage: 68  # (calculation)
   historic:
-    day: []   # hours
+    day: # hours
+      00:00:
+        value: 5
+        precentage: 5
+      00:00:
+        value: 6
+        percentage: 6
+      # etc.
+
     month: [] # days
     year: []  # days or months?
     all: []   # days or months?
