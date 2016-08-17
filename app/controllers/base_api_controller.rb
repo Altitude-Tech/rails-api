@@ -7,12 +7,25 @@ class BaseApiController < ActionController::Base
       body = request.body.read
 
       if body.blank?
-        render plain: 'Missing request body.', status: :bad_request
+        msg = 'Missing request body.'
+        to_return = {error: msg}
+
+        render json: to_return.to_json, status: :bad_request
         return
       end
 
       logger.debug(request.body.read)
-      @json = JSON.parse(request.body.read)
+
+      begin
+        @json = JSON.parse(request.body.read)
+      rescue JSON::ParserError => e
+        msg = "There was a problem in the JSON you submitted: #{e.message}"
+        to_return = {error: msg}
+
+        render json: to_return.to_json, status: :bad_request
+      end
+
+
       logger.debug('parse_request')
       logger.debug(@json)
       logger.debug(params)

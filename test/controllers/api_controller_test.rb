@@ -46,7 +46,19 @@ class ApiControllerTest < ActionController::TestCase
   test 'no request body' do
     post :create
 
-    expected = 'Missing request body.'
+    expected = '{"error":"Missing request body."}'
+
+    assert_response :bad_request
+    assert_equal(expected, response.body)
+  end
+
+  ##
+  # Test error handling for invalid json in the request body
+  ##
+  test 'invalid request body' do
+    post :create, body: 'invalid'
+
+    expected = '{"error":"There was a problem in the JSON you submitted: 784: unexpected token at \'invalid\'"}'
 
     assert_response :bad_request
     assert_equal(expected, response.body)
