@@ -110,5 +110,5 @@ $ sudo ln -s /etc/nginx/sites-enabled/api-nginx.conf api-nginx.conf
 Finally, start up puma-manager and nginx:
 ```
 $ sudo start puma-manager
-$ sudo restart nginx
+$ sudo service nginx restart
 ```
