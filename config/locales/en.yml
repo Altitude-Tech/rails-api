@@ -51,7 +51,8 @@ en:
               less_than_or_equal_to: must be a number between 0 and 1.
 
   # custom validator errors
-  invalid_hex: 'must be a hexadecimal number.'
+  invalid_hex: must be a hexadecimal number.
+  invalid_sensor: is an unrecognised value.
 
   # errors for devices api: /api/devices
   devices_not_found:  Device not found.

@@ -1,20 +1,22 @@
 class ApplicationController < ActionController::Base
-	# protect_from_forgery with: :exception
+  # protect_from_forgery with: :exception
 
-	protected
-		# validate an argument is an integer and within defined limits
-		def validate_int(num, min, max)
-			begin
-				num = Integer(num)
-			# for catching nil
-			rescue TypeError => e
-				raise ArgumentError.new(e)
-			end
+  protected
+    ##
+    # Validate an argument is an integer and within defined limits
+    ##
+    def validate_int(num, min, max)
+      begin
+        num = Integer(num)
+      # for catching nil
+      rescue TypeError => e
+        raise ArgumentError, e
+      end
 
-			if num < min || num > max
-				raise ArgumentError.new('Number outside limits')
-			end
+      not_between = !!(num < min) || !!(num > max)
 
-			return num
-		end
+      raise ArgumentError, 'Number outside limits' if not_between
+
+      return num
+  end
 end
