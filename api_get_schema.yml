@@ -10,6 +10,7 @@ carbon:
       00:00:
         value: 5
         precentage: 5
+
       00:00:
         value: 6
         percentage: 6
