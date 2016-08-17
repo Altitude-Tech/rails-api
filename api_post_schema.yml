@@ -2,25 +2,25 @@
 # POST: /api
 
 # device identification
-device_id: '123456'
-device_type: '123456'
+DID: '123456'
+DYPE: '123456'
 
 # data common across each sensor
-log_time: '1471020116'              # unix time
-temperature: '23.00'                # degrees celsius
-humidity: '64.00'                   # relative humidity (percentage)
-pressure: '0.0'                     # hecto pascals (100 Pa)
+LOG_TIME: '1471020116'              # unix time
+TEMPERATURE: '23.00'                # degrees celsius
+HUMIDITY: '64.00'                   # relative humidity (percentage)
+PRESSURE: '0.0'                     # hecto pascals (100 Pa)
 
 # sensor data
-data:
-  - sensor_type: '1234567890abcdef' # sha1 hash of sensor name (mq2, mq7, mq135)
-    sensor_error: '0.0'             # to be calculated before being sent
-    sensor_data: '123456'           # raw adc data
+DATA:
+  - SENSOR_TYPE: '1234567890abcdef' # sha1 hash of sensor name (mq2, mq7, mq135)
+    SENSOR_ERROR: '0.0'             # to be calculated before being sent
+    SENSOR_DATA: '123456'           # raw adc data
 
-  - sensor_type: '1234567890abcdef'
-    sensor_error: '0.0'
-    sensor_data: '123456'
+  - SENSOR_TYPE: '1234567890abcdef'
+    SENSOR_ERROR: '0.0'
+    SENSOR_DATA: '123456'
 
-  - sensor_type: '1234567890abcdef'
-    sensor_error: '0.0'
-    sensor_data: '123456'
+  - SENSOR_TYPE: '1234567890abcdef'
+    SENSOR_ERROR: '0.0'
+    SENSOR_DATA: '123456'
