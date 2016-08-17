@@ -1,34 +1,25 @@
 ---
-##
-# @todo be careful sending floats at floats
-#       http://yaml-online-parser.appspot.com/ had some issues with them being lossy
-#       may be safer to keep them as strings
-##
 
-# device data
-device_id: 1234567890abcdef
-device_type: 1234567890abcdef
+# device identification
+device_id: '123456'
+device_type: '123456'
 
+# data common across each sensor
+log_time: '1471020116'              # unix time
+temperature: '23.00'                # degrees celsius
+humidity: '64.00'                   # relative humidity (percentage)
+pressure: '0.0'                     # hecto pascals (100 Pa)
+
+# sensor data
 data:
-    # sensor data
-  - sensor_type: '1'
+  - sensor_type: '1234567890abcdef' # sha1 hash of sensor name (mq2, mq7, mq135)
+    sensor_error: '0.0'             # to be calculated before being sent
+    sensor_data: '123456'           # raw adc data
+
+  - sensor_type: '1234567890abcdef'
     sensor_error: '0.0'
-    sensor_data: '23.4563' # parts per million
-    # altitude could be substituted for pressure
-    altitude: '0.0'        # metres
-    temperature: '21.31'   # centigrade
-    log_time: '1471020116' # unix time
+    sensor_data: '123456'
 
-  - sensor_type: '2'
-    sensor_error: '0.1'
-    sensor_data: '1.2345'
-    altitude: '0.0'
-    temperature: '21.31'
-    log_time: 1471020116'
-
-  - sensor_type: '3'
-    sensor_error: '0.5'
-    sensor_data: '5.4567'
-    altitude: '0.0'
-    temperature: '21.31'
-    log_time: '1471020116'
+  - sensor_type: '1234567890abcdef'
+    sensor_error: '0.0'
+    sensor_data: '123456'
