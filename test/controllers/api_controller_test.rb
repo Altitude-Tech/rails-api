@@ -155,6 +155,7 @@ class ApiControllerTest < ActionController::TestCase
   ##
   test 'successful create' do
     data = BASE_DATA.deep_dup
+    Rails.logger.debug(data.to_json)
 
     expected = 'Data inserted successfully.'
 

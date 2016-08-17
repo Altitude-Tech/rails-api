@@ -1,4 +1,7 @@
 class ApiController < BaseApiController
+  ##
+  #
+  ##
   def index
     if params.key? :help
       render plain: 'help'
@@ -6,9 +9,13 @@ class ApiController < BaseApiController
     end
 
     render json: params
-
   end
 
+  ##
+  # Creates a new entry in data.
+  #
+  # Also creates a new entry in devices if not found already.
+  ##
   def create
     begin
       format_log_time
@@ -43,6 +50,9 @@ class ApiController < BaseApiController
   end
 
   private
+    ##
+    # Formats unix time to a format accepted by mysql.
+    ##
     def format_log_time
       # use this to catch out any non-integers
       log_time = Integer(@json.fetch('LOG_TIME'))
@@ -50,6 +60,9 @@ class ApiController < BaseApiController
       @json['LOG_TIME'] = Time.at(log_time).to_s(:db)
     end
 
+    ##
+    # Checks to see if the device exists yet and tries to create it if not.
+    ##
     def check_for_device
       device_data = {}
 
@@ -78,15 +91,21 @@ class ApiController < BaseApiController
       end
     end
 
+    ##
+    # Attempt to create an entry for data
+    ##
     def insert_to_db
       data = @json.fetch('DATA')
 
       data = data.map { |k, v| [k.downcase, v] }.to_h
       data = data.symbolize_keys
-      data[:log_time] = @json['LOG_TIME']
-      data[:device_id] = @device.id
 
-      # logger.debug(data)
+      # move keys only in the parent hash that go in the data
+      data[:log_time] = @json['LOG_TIME']
+      data[:temperature] = @json['TEMPERATURE']
+      data[:humidity] = @json['HUMIDITY']
+      data[:pressure] = @json['PRESSURE']
+      data[:device_id] = @device.id
 
       Datum.create!(**data)
     end

@@ -12,4 +12,13 @@ class Datum < ApplicationRecord
     }
   validates :log_time, presence: true
   validates :device_id, presence: true
+  validates :temperature, numericality: true
+  validates :pressure,
+    numericality: {
+      greater_than_or_equal_to: 0
+    }
+  validates :humidity,
+    numericality: {
+      greater_than_or_equal_to: 0
+    }
 end

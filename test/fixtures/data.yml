@@ -6,6 +6,9 @@ one:
   sensor_data: 1.5
   log_time: 2016-07-13 16:31:36
   device_id: 1234
+  temperature: 20.00
+  pressure: 1009.30
+  humidity: 60.00
 
 two:
   sensor_type: 4080cf866795cdaf370a641cbd8044453d79ae30
@@ -13,3 +16,6 @@ two:
   sensor_data: 1.5
   log_time: 2016-07-13 16:31:36
   device_id: 4567
+  temperature: 20.00
+  pressure: 1009.30
+  humidity: 60.00

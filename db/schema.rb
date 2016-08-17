@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160726105345) do
+ActiveRecord::Schema.define(version: 20160817141519) do
 
   create_table "data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "sensor_type",                                     null: false
@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 20160726105345) do
     t.integer  "device_id",                                       null: false
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+    t.float    "temperature",  limit: 24,                         null: false
+    t.float    "pressure",     limit: 24,                         null: false
+    t.float    "humidity",     limit: 24,                         null: false
     t.index ["device_id"], name: "index_data_on_device_id", using: :btree
   end
 
