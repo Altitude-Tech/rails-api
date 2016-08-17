@@ -1,4 +1,5 @@
 ---
+# POST: /api
 
 # device identification
 device_id: '123456'
