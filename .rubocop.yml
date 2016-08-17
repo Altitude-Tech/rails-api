@@ -1,0 +1,14 @@
+inherit_from: .rubocop_todo.yml
+
+# exclude auto-generated files
+Style/StringLiterals:
+  Exclude:
+    - 'db/schema.rb'
+
+# something from a tutorial
+# not sure what it's meant to be catching
+# so leave it be
+Style/RescueModifier:
+  Exclude:
+    - 'config/puma.rb'
+

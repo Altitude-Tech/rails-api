@@ -27,5 +27,8 @@ Gemfile.lock
 !/shared/pids/.keep
 !/shared/sockets/.keep
 
-# Ignore Byebug command history file.
+# ignore Byebug command history file.
 .byebug_history
+
+# ignore rubocop todo
+.rubocop_todo.yml
