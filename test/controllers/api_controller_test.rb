@@ -13,11 +13,11 @@ class ApiControllerTest < ActionController::TestCase
     TEMPERATURE: 25.37,
     PRESSURE: 1009.30,
     HUMIDITY: 63.12,
-    DATA: {
+    DATA: [{
       SENSOR_TYPE: SENSOR_MQ2_HASH,
       SENSOR_ERROR: 0.1,
       SENSOR_DATA: 47,
-    }
+    }]
   }
 
   ##
@@ -110,7 +110,7 @@ class ApiControllerTest < ActionController::TestCase
   ##
   test 'missing sensor type' do
     data = BASE_DATA.deep_dup
-    data[:DATA].delete(:SENSOR_TYPE)
+    data[:DATA][0].delete(:SENSOR_TYPE)
 
     expected = 'Validation failed: Sensor type (SENSOR_TYPE) is an ' \
                'unrecognised value.'
@@ -125,7 +125,7 @@ class ApiControllerTest < ActionController::TestCase
   ##
   test 'missing sensor error' do
     data = BASE_DATA.deep_dup
-    data[:DATA].delete(:SENSOR_ERROR)
+    data[:DATA][0].delete(:SENSOR_ERROR)
 
     post :create, body: data.to_json
 
@@ -140,7 +140,7 @@ class ApiControllerTest < ActionController::TestCase
   ##
   test 'missing sensor data' do
     data = BASE_DATA.deep_dup
-    data[:DATA].delete(:SENSOR_DATA)
+    data[:DATA][0].delete(:SENSOR_DATA)
 
     expected = 'Validation failed: Sensor data (SENSOR_DATA) must be a ' \
                'number greater than or equal to 0.'

@@ -97,15 +97,33 @@ class ApiController < BaseApiController
     def insert_to_db
       data = @json.fetch('DATA')
 
+      parent_data = {
+        log_time: @json['LOG_TIME'],
+        temperature: @json['TEMPERATURE'],
+        humidity: @json['HUMIDITY'],
+        pressure: @json['PRESSURE'],
+        device_id: @device.id
+      }
+
+      if data.kind_of?(Array)
+        data.each do |d|
+          insert_each(d, parent_data.deep_dup)
+        end
+      else
+        insert_each(data, parent_data)
+      end
+    end
+
+    ##
+    #
+    ##
+    def insert_each(data, parent_data)
       data = data.map { |k, v| [k.downcase, v] }.to_h
       data = data.symbolize_keys
+      data = data.merge(parent_data)
 
-      # move keys only in the parent hash that go in the data
-      data[:log_time] = @json['LOG_TIME']
-      data[:temperature] = @json['TEMPERATURE']
-      data[:humidity] = @json['HUMIDITY']
-      data[:pressure] = @json['PRESSURE']
-      data[:device_id] = @device.id
+      logger.debug('data:')
+      logger.debug(data)
 
       Datum.create!(**data)
     end

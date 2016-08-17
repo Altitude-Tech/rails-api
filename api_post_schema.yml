@@ -2,8 +2,8 @@
 # POST: /api
 
 # device identification
-DID: '123456'
-DYPE: '123456'
+DID: '123456'                       # device id (hex number)
+DYPE: '123456'                      # device type (hex number)
 
 # data common across each sensor
 LOG_TIME: '1471020116'              # unix time
