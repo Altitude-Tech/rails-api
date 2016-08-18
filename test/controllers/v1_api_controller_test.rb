@@ -7,13 +7,13 @@ require 'test_helper'
 ##
 # Application Controller tests
 ##
-class ApplicationControllerTest < ActionController::TestCase
+class V1ApiControllerTest < ActionController::TestCase
   ##
   #
   ##
   test 'integer too low' do
     assert_raises(ArgumentError) do
-      ApplicationController.new.send(:validate_int, 0, 1, 5)
+      V1ApiController.new.send(:validate_int, 0, 1, 5)
     end
   end
 
@@ -22,7 +22,7 @@ class ApplicationControllerTest < ActionController::TestCase
   ##
   test 'integer too high' do
     assert_raises(ArgumentError) do
-      ApplicationController.new.send(:validate_int, 6, 1, 5)
+      V1ApiController.new.send(:validate_int, 6, 1, 5)
     end
   end
 
@@ -31,7 +31,7 @@ class ApplicationControllerTest < ActionController::TestCase
   ##
   test 'non integer' do
     assert_raises(ArgumentError) do
-      ApplicationController.new.send(:validate_int, 'invalid', 1, 5)
+      V1ApiController.new.send(:validate_int, 'invalid', 1, 5)
     end
   end
 
@@ -42,7 +42,7 @@ class ApplicationControllerTest < ActionController::TestCase
     expected = 1
 
     assert_nothing_raised do
-      actual = ApplicationController.new.send(:validate_int, 1, 1, 5)
+      actual = V1ApiController.new.send(:validate_int, 1, 1, 5)
 
       assert_equal(expected, actual)
     end
@@ -55,7 +55,7 @@ class ApplicationControllerTest < ActionController::TestCase
     expected = 5
 
     assert_nothing_raised do
-      actual = ApplicationController.new.send(:validate_int, 5, 1, 5)
+      actual = V1ApiController.new.send(:validate_int, 5, 1, 5)
 
       assert_equal(expected, actual)
     end
@@ -68,7 +68,7 @@ class ApplicationControllerTest < ActionController::TestCase
     expected = 1
 
     assert_nothing_raised do
-      actual = ApplicationController.new.send(:validate_int, '1', 1, 5)
+      actual = V1ApiController.new.send(:validate_int, '1', 1, 5)
 
       assert_equal(expected, actual)
     end
@@ -81,7 +81,7 @@ class ApplicationControllerTest < ActionController::TestCase
     expected = 5
 
     assert_nothing_raised do
-      actual = ApplicationController.new.send(:validate_int, '5', 1, 5)
+      actual = V1ApiController.new.send(:validate_int, '5', 1, 5)
 
       assert_equal(expected, actual)
     end

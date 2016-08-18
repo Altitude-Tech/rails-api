@@ -7,7 +7,7 @@ require 'test_helper'
 ##
 # Devices api controller tests
 ##
-class DevicesControllerTest < ActionController::TestCase
+class V1::DevicesControllerTest < ActionController::TestCase
   ##
   # Test successful selection of all devices using fixtures
   ##

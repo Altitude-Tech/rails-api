@@ -1,7 +1,9 @@
 ##
 #
 ##
-class ApiController < ApplicationController
+class V1::DataController < V1ApiController
+  before_action :set_json
+
   ##
   #
   ##

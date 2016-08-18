@@ -1,8 +1,8 @@
 ##
 # Devices api controller
 ##
-class DevicesController < ApplicationController
-  before_action :set_json
+class V1::DevicesController < V1ApiController
+  before_filter :set_json
 
   ##
   #
@@ -34,13 +34,6 @@ class DevicesController < ApplicationController
   ##
   #
   ##
-  def set_json
-    request.format = :json
-  end
-
-  ##
-  #
-  ##
   def extract_int_param(param, default, min, max)
     val = params[param] || default
 
@@ -55,13 +48,5 @@ class DevicesController < ApplicationController
       render_error(msg)
       return false
     end
-  end
-
-  ##
-  #
-  ##
-  def render_error(msg)
-    error_json = { error: msg }
-    render(json: error_json, status: :bad_request)
   end
 end

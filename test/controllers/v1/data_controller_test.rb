@@ -5,9 +5,9 @@
 require 'test_helper'
 
 ##
-# ApiController tests
+# DataController tests
 ##
-class ApiControllerTest < ActionController::TestCase
+class V1::DataControllerTest < ActionController::TestCase
   # base data hash to be manipulated as required
   BASE_DATA = {
     DID: '5678',
@@ -28,8 +28,8 @@ class ApiControllerTest < ActionController::TestCase
   ##
   test 'recognise GET' do
     assert_recognizes(
-      { controller: 'api', action: 'index' },
-      { path: 'api', method: :get }
+      { controller: 'v1/data', action: 'index' },
+      { path: 'v1/data', method: :get }
     )
   end
 
@@ -38,8 +38,8 @@ class ApiControllerTest < ActionController::TestCase
   ##
   test 'recognise POST' do
     assert_recognizes(
-      { controller: 'api', action: 'create' },
-      { path: 'api', method: :post }
+      { controller: 'v1/data', action: 'create' },
+      { path: 'v1/data', method: :post }
     )
   end
 
