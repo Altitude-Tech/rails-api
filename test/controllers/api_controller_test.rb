@@ -104,6 +104,19 @@ class ApiControllerTest < ActionController::TestCase
   end
 
   ##
+  # Test error handling for log_time in milliseconds
+  ##
+  test 'millisecond log time' do
+    data = BASE_DATA.deep_dup
+    data[:LOG_TIME] *= 1000
+    expected = '{"error":"\"log_time\" must be unix time in seconds."}'
+
+    post :create, body: data.to_json
+
+    assert_equal(expected, response.body)
+  end
+
+  ##
   # Test error handling for missing data key in JSON request body
   ##
   test 'missing data' do

@@ -153,8 +153,10 @@ class ApiController < BaseApiController
     end
   rescue ArgumentError => e
     render_error(e.message)
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
+  rescue ActiveRecord::RecordInvalid => e
     render_error(e.message)
+  rescue ActiveRecord::StatementInvalid
+    render_error(t(:data_invalid_time))
   else
     success = { success: 'Data successfully inserted.' }
     render(json: success.to_json)
