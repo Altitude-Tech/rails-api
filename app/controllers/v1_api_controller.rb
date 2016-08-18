@@ -3,6 +3,7 @@
 ##
 class V1ApiController < ActionController::Base
   before_action :parse_request, only: :create
+  before_action :set_json
 
   protected
 

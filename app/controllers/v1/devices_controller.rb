@@ -2,8 +2,6 @@
 # Devices api controller
 ##
 class V1::DevicesController < V1ApiController
-  before_filter :set_json
-
   ##
   #
   ##
