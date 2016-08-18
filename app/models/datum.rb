@@ -2,6 +2,8 @@
 #
 ##
 class Datum < ApplicationRecord
+  before_create :convert_to_si_units
+
   validates(:sensor_type, sensor: true)
   validates(:sensor_error,
             numericality: {
@@ -17,4 +19,15 @@ class Datum < ApplicationRecord
             numericality: { greater_than_or_equal_to: 0 })
   validates(:humidity,
             numericality: { greater_than_or_equal_to: 0 })
+
+  private
+
+  def convert_to_si_units
+    # convert pressure from hecto-pascals to pascals
+    self.pressure *= 100
+
+    # convert temperaturature from celsius to kelvin
+    self.temperature = Concentration.centigrade_to_kelvin(self.temperature)
+  end
+
 end
