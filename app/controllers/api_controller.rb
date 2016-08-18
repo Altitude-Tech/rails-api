@@ -98,6 +98,22 @@ class ApiController < BaseApiController
   end
 
   ##
+  # This has to happen before creation, otherwise rails will silently
+  # convert the integer to nil and then claims validation failed.
+  #
+  # See <http://stackoverflow.com/a/29941161>
+  ##
+  def format_log_time(time)
+    # catch out any non-integers
+    time = Integer(time)
+  rescue TypeError, ArgumentError
+    raise ArgumentError, t(:data_invalid_time)
+  else
+    # convert unix time to sql datetime format
+    Time.at(time).to_s(:db)
+  end
+
+  ##
   #
   ##
   def make_base_data
@@ -108,13 +124,19 @@ class ApiController < BaseApiController
     end
 
     data[:device_id] = device.id
+    data[:log_time] = format_log_time(data[:log_time])
+
+    # rubocop:disable Style/RedundantReturn
+    return data
+    # rubocop:enable Style/RedundantReturn
   end
 
   ##
   # Attempt to create an entry for data
+  #
+  # @todo remove outer transaction when device isn't created if missing
   ##
   def insert_to_db
-    # @todo remove outer transaction when device isn't created if missing
     Device.transaction do
       Datum.transaction do
         base_data = make_base_data
@@ -125,23 +147,26 @@ class ApiController < BaseApiController
             insert_each(d, base_data.deep_dup)
           end
         else
-          insert_each(sensor_data, base_data)
+          render_error('"data" value must be an array.')
         end
       end
     end
+  rescue ArgumentError => e
+    render_error(e.message)
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
+    render_error(e.message)
+  else
+    success = { success: 'Data successfully inserted.' }
+    render(json: success.to_json)
   end
 
   ##
   #
   ##
-  def insert_each(data, parent_data)
-    data = data.map { |k, v| [k.downcase, v] }.to_h
-    data = data.symbolize_keys
-    data = data.merge(parent_data)
+  def insert_each(sensor_data, parent_data)
+    data = sensor_data.merge(parent_data)
+    logger.debug('data: ' + data.to_s)
 
-    logger.debug('data:')
-    logger.debug(data)
-
-    Datum.create!(**data)
+    Datum.create!(data)
   end
 end

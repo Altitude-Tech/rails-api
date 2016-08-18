@@ -28,14 +28,17 @@ en:
   activerecord:
     attributes:
       device:
-        device_id: Device id (DID)
-        device_type: Device type (DYPE)
+        device_id: did
+        device_type: dype
       datum:
-        device_id: Device id (DID)
-        log_time: Log_time (LOG_TIME)
-        sensor_data: Sensor data (SENSOR_DATA)
-        sensor_error: Sensor error (SENSOR_ERROR)
-        sensor_type: Sensor type (SENSOR_TYPE)
+        device_id: did
+        log_time: log_time
+        sensor_data: sensor_data
+        sensor_error: sensor_error
+        sensor_type: sensor_type
+        temperature: temperature
+        humidity: humidity
+        pressure: pressure
     errors:
       models:
         datum:
@@ -58,7 +61,7 @@ en:
   invalid_sensor: is an unrecognised value.
 
   # errors for model callbacks
-  invalid_unix_time: must be unix time in seconds.
+
 
   # errors for base api methods
   base_api_missing_body: 'Missing request body.'
@@ -66,6 +69,7 @@ en:
 
   # errors for data api methods
   data_missing_key: 'Missing key in request body: "%{key}".'
+  data_invalid_time: '"log_time" must be unix time in seconds.'
 
   # errors for devices api: /api/devices
   devices_not_found:  Device not found.
