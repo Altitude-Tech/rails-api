@@ -1,7 +1,7 @@
 ##
 #
 ##
-class ApiController < BaseApiController
+class ApiController < ApplicationController
   ##
   #
   ##
