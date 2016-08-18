@@ -1,4 +1,4 @@
-# README agds
+# README
 
 ## Setup
 *To do: WIndows (& OSX?) support.*
