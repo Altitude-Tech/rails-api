@@ -50,9 +50,22 @@ en:
               greater_than_or_equal_to: must be a number between 0 and 1.
               less_than_or_equal_to: must be a number between 0 and 1.
 
+  # error message for validate_int
+  int_outside_limits: 'Number outside limits'
+
   # custom validator errors
   invalid_hex: must be a hexadecimal number.
   invalid_sensor: is an unrecognised value.
+
+  # errors for model callbacks
+  invalid_unix_time: must be unix time in seconds.
+
+  # errors for base api methods
+  base_api_missing_body: 'Missing request body.'
+  base_api_json_parse_error: 'There was a problem in the JSON you submitted: %{msg}'
+
+  # errors for data api methods
+  data_missing_key: 'Missing key in request body: "%{key}".'
 
   # errors for devices api: /api/devices
   devices_not_found:  Device not found.

@@ -1,3 +1,6 @@
+##
+#
+##
 class Device < ApplicationRecord
   # @todo check which of these is correct
   # has_many :data

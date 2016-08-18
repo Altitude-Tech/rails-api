@@ -1,14 +1,39 @@
 inherit_from: .rubocop_todo.yml
 
-# exclude auto-generated files
-Style/StringLiterals:
+AllCops:
+  Include:
+    - Rakefile
+    - config.ru
+    - lib/**/*.rake
   Exclude:
-    - 'db/schema.rb'
-
-# something from a tutorial
-# not sure what it's meant to be catching
-# so leave it be
-Style/RescueModifier:
-  Exclude:
+    # auto-generated
+    - db/schema.rb
+    # something from a tutorial
+    # leave it alone until I understand it better
     - 'config/puma.rb'
 
+Style/Documentation:
+  Exclude:
+    # don't require documenting largely auto generate migrations
+    - 'db/migrate/*'
+
+Style/BracesAroundHashParameters:
+  EnforcedStyle: context_dependent
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    # standard rails class, don't mess with it for now
+    - 'test/test_helper.rb'
+
+# Offense count: 1
+# Configuration parameters: CountComments.
+Metrics/ClassLength:
+  Exclude:
+    # don't limit length of test cases
+    - 'test/**/*'
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/LineLength:
+  Max: 100

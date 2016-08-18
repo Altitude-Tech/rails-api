@@ -1,9 +1,12 @@
 ##
-# Api Controller tests
+#
 ##
 
 require 'test_helper'
 
+##
+# ApiController tests
+##
 class ApiControllerTest < ActionController::TestCase
   # base data hash to be manipulated as required
   BASE_DATA = {
@@ -16,9 +19,9 @@ class ApiControllerTest < ActionController::TestCase
     DATA: [{
       SENSOR_TYPE: SENSOR_MQ2_HASH,
       SENSOR_ERROR: 0.1,
-      SENSOR_DATA: 47,
+      SENSOR_DATA: 47
     }]
-  }
+  }.freeze
 
   ##
   # Test acceptance of GET request
@@ -58,7 +61,8 @@ class ApiControllerTest < ActionController::TestCase
   test 'invalid request body' do
     post :create, body: 'invalid'
 
-    expected = '{"error":"There was a problem in the JSON you submitted: 784: unexpected token at \'invalid\'"}'
+    expected = '{"error":"There was a problem in the JSON you submitted: ' \
+               '784: unexpected token at \'invalid\'"}'
 
     assert_response :bad_request
     assert_equal(expected, response.body)
@@ -70,7 +74,7 @@ class ApiControllerTest < ActionController::TestCase
   test 'missing device id' do
     data = BASE_DATA.deep_dup.except(:DID)
 
-    expected = 'Key not found: DID (Device id).'
+    expected = '{"error":"Missing key in request body: \"did\"."}'
 
     post :create, body: data.to_json
 
@@ -84,7 +88,7 @@ class ApiControllerTest < ActionController::TestCase
   test 'missing device type' do
     data = BASE_DATA.deep_dup.except(:DYPE)
 
-    expected = 'Key not found: DYPE (Device type).'
+    expected = '{"error":"Missing key in request body: \"dype\"."}'
 
     post :create, body: data.to_json
 
@@ -97,7 +101,7 @@ class ApiControllerTest < ActionController::TestCase
   test 'missing log time' do
     data = BASE_DATA.deep_dup.except(:LOG_TIME)
 
-    expected = 'Validation failed: Log_time (LOG_TIME) can\'t be blank'
+    expected = '{"error":"Missing key in request body: \"log_time\"."}'
 
     post :create, body: data.to_json
 
@@ -110,7 +114,7 @@ class ApiControllerTest < ActionController::TestCase
   test 'missing data' do
     data = BASE_DATA.deep_dup.except(:DATA)
 
-    expected = 'Key not found: DATA (Data).'
+    expected = '{"error":"Missing key in request body: \"data\"."}'
 
     post :create, body: data.to_json
 
@@ -124,8 +128,7 @@ class ApiControllerTest < ActionController::TestCase
     data = BASE_DATA.deep_dup
     data[:DATA][0].delete(:SENSOR_TYPE)
 
-    expected = 'Validation failed: Sensor type (SENSOR_TYPE) is an ' \
-               'unrecognised value.'
+    expected = '{"error":"Missing key in request body: \"sensor_type\"."}'
 
     post :create, body: data.to_json
 
@@ -141,8 +144,7 @@ class ApiControllerTest < ActionController::TestCase
 
     post :create, body: data.to_json
 
-    expected = 'Validation failed: Sensor error (SENSOR_ERROR) must be a ' \
-               'number between 0 and 1.'
+    expected = '{"error":"Missing key in request body: \"sensor_error\"."}'
 
     assert_equal(expected, response.body)
   end
@@ -154,8 +156,7 @@ class ApiControllerTest < ActionController::TestCase
     data = BASE_DATA.deep_dup
     data[:DATA][0].delete(:SENSOR_DATA)
 
-    expected = 'Validation failed: Sensor data (SENSOR_DATA) must be a ' \
-               'number greater than or equal to 0.'
+    expected = '{"error":"Missing key in request body: \"sensor_data\"."}'
 
     post :create, body: data.to_json
 

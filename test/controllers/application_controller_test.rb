@@ -1,9 +1,12 @@
 ##
-# Application Controller tests
+#
 ##
 
 require 'test_helper'
 
+##
+# Application Controller tests
+##
 class ApplicationControllerTest < ActionController::TestCase
   ##
   #

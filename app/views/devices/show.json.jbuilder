@@ -1,1 +1,1 @@
-json.(@device, :device_id, :device_type)
+json.call(@device, :device_id, :device_type)

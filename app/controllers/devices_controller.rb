@@ -1,3 +1,6 @@
+##
+# Devices api controller
+##
 class DevicesController < ApplicationController
   before_action :set_json
 
@@ -5,37 +8,14 @@ class DevicesController < ApplicationController
   #
   ##
   def index
-    limit = params['limit'] || 10
-    start = params['start'] || 1
+    limit = extract_int_param('limit', 10, 1, 500)
+    start = extract_int_param('start', 1, 1, Float::INFINITY)
 
-    logger.debug('limit:' + limit.to_s)
-
-    begin
-      limit = validate_int(limit, 1, 500)
-    rescue ArgumentError
-      return_error(t(:devices_error_limit, max: 500))
-      return
-    end
-
-    logger.debug('start:' + start.to_s)
-
-    begin
-      start = validate_int(start, 1, Float::INFINITY)
-    rescue ArgumentError
-      return_error(t(:devices_error_start))
-      return
-    end
-
-    logger.debug('start2:' + start.to_s)
+    return if limit == false || start == false
 
     @devices = Device.where('id >= ?', start).order('id').limit(limit)
 
-    logger.debug(@devices.count)
-
-    if !@devices.any?
-      return_error(t(:devices_no_more))
-      return
-    end
+    render_error(t(:devices_no_more)) unless @devices.any?
   end
 
   ##
@@ -46,22 +26,42 @@ class DevicesController < ApplicationController
     # as it's the indentification people are more likely to have
     @device = Device.find_by!(device_id: params[:id])
   rescue ActiveRecord::RecordNotFound
-    return_error(t(:devices_not_found))
+    render_error(t(:devices_not_found))
   end
 
   private
-    ##
-    #
-    ##
-    def set_json
-      request.format = :json
-    end
 
-    ##
-    #
-    ##
-    def return_error(msg)
-      error_json = { :error => msg }
-      render(json: error_json, status: :bad_request)
+  ##
+  #
+  ##
+  def set_json
+    request.format = :json
+  end
+
+  ##
+  #
+  ##
+  def extract_int_param(param, default, min, max)
+    val = params[param] || default
+
+    begin
+      validate_int(val, min, max)
+    rescue ArgumentError
+      msg = "devices_error_#{param}"
+      logger.debug(msg)
+      msg = param == 'limit' ? t(msg, max: max) : t(msg)
+      logger.debug(msg)
+
+      render_error(msg)
+      return false
     end
+  end
+
+  ##
+  #
+  ##
+  def render_error(msg)
+    error_json = { error: msg }
+    render(json: error_json, status: :bad_request)
+  end
 end

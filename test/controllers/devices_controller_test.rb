@@ -1,9 +1,12 @@
 ##
-# Devices Api Controller tests
+#
 ##
 
 require 'test_helper'
 
+##
+# Devices api controller tests
+##
 class DevicesControllerTest < ActionController::TestCase
   ##
   # Test successful selection of all devices using fixtures
@@ -100,7 +103,7 @@ class DevicesControllerTest < ActionController::TestCase
   end
 
   ##
-  # Testt success of upper limit parameter
+  # Test success of upper limit parameter
   ##
   test 'upper limit' do
     get(:index, params: { limit: 500 })

@@ -1,9 +1,12 @@
 ##
-# Datum model tests
+#
 ##
 
 require 'test_helper'
 
+##
+# Datum model tests
+##
 class DatumTest < ActiveSupport::TestCase
   BASE_DATA = {
     sensor_type: SENSOR_MQ2_HASH,
@@ -13,8 +16,8 @@ class DatumTest < ActiveSupport::TestCase
     device_id: 1234,
     temperature: 25.37,
     pressure: 1009.30,
-    humidity: 63.12,
-  }
+    humidity: 63.12
+  }.freeze
 
   ##
   # Test error handling for invalid sensor type
@@ -144,6 +147,22 @@ class DatumTest < ActiveSupport::TestCase
     data.delete(:log_time)
 
     assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling for unix time in milliseconds
+  # Should only accept unix time in seconds
+  ##
+  test 'invalid millisecond log time' do
+    time = Time.at(Time.now.to_i * 1000).to_s(:db)
+    data = BASE_DATA.deep_dup
+    data[:log_time] = time
+
+    Rails.logger.debug(time)
+
+    assert_raises(ActiveRecord::StatementInvalid) do
       Datum.create!(data)
     end
   end

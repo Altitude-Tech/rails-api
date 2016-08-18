@@ -7,9 +7,15 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Api
+  ##
+  #
+  ##
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+
+    # Don't used coloured logs
+    config.colorize_logging = false
   end
 end

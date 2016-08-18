@@ -1,9 +1,12 @@
 ##
-# Device model tests
+#
 ##
 
 require 'test_helper'
 
+##
+# Device model tests
+##
 class DeviceTest < ActiveSupport::TestCase
   ##
   # Test error handling of invalid value for device id
