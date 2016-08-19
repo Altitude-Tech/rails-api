@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   namespace :v1 do
-    # for submitting data
-    resources :data, only: [:index, :create]
-    # for getting devices
-    resources :devices, only: [:index, :show]
+    controller :data do
+      match 'data', to: 'data#create', via: :post
+      match 'data/:device', to: 'data#show', as: :device, via: :get
+    end
+
+    resources :devices, only: [:create, :index, :show]
+    resources :users, only: [:create, :index, :show, :update]
   end
 end

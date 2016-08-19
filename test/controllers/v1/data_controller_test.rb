@@ -22,26 +22,6 @@ module V1
     }.freeze
 
     ##
-    # Test acceptance of GET request
-    ##
-    test 'recognise GET' do
-      assert_recognizes(
-        { controller: 'v1/data', action: 'index' },
-        { path: 'v1/data', method: :get }
-      )
-    end
-
-    ##
-    # Test acceptance of POST request
-    ##
-    test 'recognise POST' do
-      assert_recognizes(
-        { controller: 'v1/data', action: 'create' },
-        { path: 'v1/data', method: :post }
-      )
-    end
-
-    ##
     # Test error handling for no request body
     ##
     test 'no request body' do
