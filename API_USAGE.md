@@ -1,18 +1,36 @@
 # API Usage
 
+All requests are authenticated by API keys, unless stated otherwise, which should be sent as part of the request.
+
+For GET requests, send the API key as a parameter with the name `key`:
+```
+GET /path/to/api?key=<API_KEY>
+```
+
+For all others, include the key in the JSON request body with the name `key`:
+```json
+{
+	"key": "<API_KEY>",
+	// other parameters
+	// ...
+}
+```
+
 ## To do
 * Handle multiple devices to users/keys
 * Access for map data?
+* Find a way to generate this automatically.
 
 ## Data
 * `POST /v1/data`
-	Create a new data entry.
-	Authenticated API key.
 
+	Creates a new data entry.
+
+	Request body:
 	```json
 	{
 		"key": "<API_KEY>",
-		"did": "<DEVICE_ID>",
+		"device": "<DEVICE_ID>",
 		"log_time": "<LOG_TIME>",
 		"temperature": "<TEMPERATURE>",
 		"humidity": "<HUMIDITY>",
@@ -37,67 +55,109 @@
 	}
 	```
 
+	Keys:
+	* `did`: The device's id.
 	* `log_time`: Unix time in seconds.
 	* `temperature`: Temperature in °C.
-	* `humidity`: Relative humidity.
-	* `pressure`: Pressure in hPa.
-	* `sensor_type`: Sensor type as a SHA1 hash.
-	* `sensor_error`: Standard error of the sensor.
-
-* `GET  /v1/data/:device`
-	Get a list of data for a specific device.
-	Authenticated by API key.
-
-	Parameters:
-	* `key` (required): A valid API key.
-
-	Example:
-	````
-	/v1/data/<DEVICE_ID>?key=<API_KEY>
-	```
+	* `humidity`: The relative humidity.
+	* `pressure`: The pressure in hPa.
+	* `sensor_type`: The name of the sensor type as a SHA1 hash. Valid pre-hashed values are:
+		* `mq2`
+		* `mq7`
+		* `mq135`
+	* `sensor_error`: The standard error of the sensor.
+	* `sensor_data`: The raw ADC value output by the sensor.
 
 ## Devices
 * `POST /v1/devices`
-	Create a new device entry.
-	Authenticated by API key.
 
-* `GET  /v1/devices`
-	Get a list of devices.
-	Restricted to admins.
-	Authenticated by API key.
+	For registering a new device.
 
-* `GET  /v1/devices/:id`
-	Get a specific device for it's id.
-	Authenticated by API key.
+	Request body:
+	```json
+	{
+		"device_id": "<DEVICE_ID>",
+		"device_type": "<DEVICE_TYPE>"
+	}
+	```
+
+	Keys:
+	* `device_id`: The device's id.
+	* `device_type`: The type of device as a SHA1 hash. Valid pre-hashed values are:
+		* `test`
+
+* `GET /v1/devices`
+
+	Retrieves a list of devices. Limited to admins.
 
 ## Users
 * `POST /v1/users`
-	Create a new user entry.
-	Generates a new API key for the user.
 
-* `GET /v1/users`
-	Get a list of users.
-	Restricted to admins,
-	Authenticated by API key.
+	For registering a new user account. Returns an API key to be used in future requests.
 
-* `GET /v1/users/:id`
-	Get a specific user from it's id.
-	Restricted to admins.
+	Request body:
+	```json
+	{
+		"name": "<NAME>",
+		"email": "<EMAIL>",
+		"password": "<PASSWORD>"
+	}
+	```
 
-* `GET /v1/users/:key`
-	Get a specific user based on it's API key.
+	Keys:
+	* `name`: The new user's name.
+	* `email`: The new user's email address.
+	* `password`: The new user's password.
 
-* `PATCH /v1/users/:key`
-* `PUT /v1/users/:key`
-	Update a specific user's credentials.
-	Authenticated by API key.
+	Returns:
+	```json
+	{
+		"key": "<API_KEY>"
+	}
+	```
 
-## Keys
-* `POST /v1/keys/:user_id`
-	Generates a new API key for a user.
-	Restricted? Needs some kind of auth.
+* `POST /v1/users/login`
 
-* `DELETE /v1/keys/:user_id`
-	Invalidates a user's API key.
-	Restricted to admins.
-	Authenticated by API key.
+	For logging in as a user. Returns the user's current API key.
+
+	Request body:
+	```json
+	{
+		"email": "<EMAIL>",
+		"password": "<PASSWORD>"
+	}
+	```
+
+	Keys:
+	* `email`: The new user's email address.
+	* `password`: The new user's password.
+
+	Returns:
+	```json
+	{
+		"key": "<API_KEY>"
+	}
+	```
+
+* `POST /v1/users/new_key`
+
+	For requesting a new api key. Invalidates the previously held key if applicable.
+
+	Request body:
+	```json
+	{
+		"email": "<EMAIL>",
+		"password": "<PASSWORD>"
+	}
+	```
+
+	Keys:
+	* `email`: The new user's email address.
+	* `password`: The new user's password.
+
+	Returns:
+	```json
+	{
+		"key": "<API_KEY>"
+	}
+	```
