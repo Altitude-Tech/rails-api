@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   device_id: 1234
   device_type: abcd
 
 two:
+  id: 2
   device_id: 4567
   device_type: cdef

@@ -10,8 +10,8 @@ module V1
     # Test successful selection of all devices using fixtures
     ##
     test 'get all devices' do
-      expected = '{"devices":[{"device_id":"4567","device_type":"cdef"},' \
-                 '{"device_id":"1234","device_type":"abcd"}]}'
+      expected = '{"devices":[{"device_id":"1234","device_type":"abcd"},' \
+                 '{"device_id":"4567","device_type":"cdef"}]}'
 
       get(:index)
 
@@ -89,7 +89,7 @@ module V1
     # Test success of lower limit parameter
     ##
     test 'lower limit' do
-      expected = '{"devices":[{"device_id":"4567","device_type":"cdef"}]}'
+      expected = '{"devices":[{"device_id":"1234","device_type":"abcd"}]}'
 
       get(:index, params: { limit: 1 })
 
@@ -104,8 +104,8 @@ module V1
     test 'upper limit' do
       get(:index, params: { limit: 500 })
 
-      expected = '{"devices":[{"device_id":"4567","device_type":"cdef"},' \
-                 '{"device_id":"1234","device_type":"abcd"}]}'
+      expected = '{"devices":[{"device_id":"1234","device_type":"abcd"},' \
+                 '{"device_id":"4567","device_type":"cdef"}]}'
 
       assert_response(:success)
       assert_equal('application/json', response.content_type)
