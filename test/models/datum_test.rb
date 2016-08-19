@@ -153,9 +153,12 @@ class DatumTest < ActiveSupport::TestCase
   # Should only accept unix time in seconds
   ##
   test 'invalid millisecond log time' do
+    device = Device.first!
     time = Time.at(Time.now.to_i * 1000).utc.to_s(:db)
+
     data = BASE_DATA.deep_dup
     data[:log_time] = time
+    data[:device_id] = device.id
 
     assert_raises(ActiveRecord::StatementInvalid) do
       Datum.create!(data)
@@ -169,7 +172,7 @@ class DatumTest < ActiveSupport::TestCase
     data = BASE_DATA.deep_dup
     data[:device_id] = 'invalid'
 
-    assert_raises(ActiveRecord::InvalidForeignKey) do
+    assert_raises(ActiveRecord::RecordInvalid) do
       Datum.create!(data)
     end
   end

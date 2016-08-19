@@ -2,6 +2,8 @@
 #
 ##
 class Datum < ApplicationRecord
+  belongs_to :device
+
   before_create :convert_to_si_units
 
   validates(:sensor_type, sensor: true)
