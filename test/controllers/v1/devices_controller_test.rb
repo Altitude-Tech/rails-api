@@ -113,6 +113,19 @@ module V1
     end
 
     ##
+    # Test retrieving out-of-bounds indicies
+    ##
+    test 'out-of-bounds' do
+      get(:index, params: { start: 3 })
+
+      expected = '{"error":"No more devices were found."}'
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
+
+    ##
     # Test successful selection by device id
     ##
     test 'get device' do
