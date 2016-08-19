@@ -1,5 +1,5 @@
 ##
-#
+# Represents a device
 ##
 class Device < ApplicationRecord
   has_many :datum
