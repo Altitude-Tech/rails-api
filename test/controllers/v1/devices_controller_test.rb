@@ -1,131 +1,128 @@
 ##
-#
+# DevicesController tests
 ##
 
 require 'test_helper'
 
-##
-# Devices api controller tests
-##
-class V1::DevicesControllerTest < ActionController::TestCase
-  ##
-  # Test successful selection of all devices using fixtures
-  ##
-  test 'get all devices' do
-    get(:index)
+module V1
+  class DevicesControllerTest < ActionController::TestCase
+    ##
+    # Test successful selection of all devices using fixtures
+    ##
+    test 'get all devices' do
+      expected = '{"devices":[{"device_id":"4567","device_type":"cdef"},' \
+                 '{"device_id":"1234","device_type":"abcd"}]}'
 
-    expected = '{"devices":[{"device_id":"4567","device_type":"cdef"},' \
-               '{"device_id":"1234","device_type":"abcd"}]}'
+      get(:index)
 
-    assert_response(:success)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+      assert_response(:success)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-  ##
-  # Test error handling of invalid argument for start parameter
-  ##
-  test 'invalid start' do
-    get(:index, params: { start: 'invalid' })
+    ##
+    # Test error handling of invalid argument for start parameter
+    ##
+    test 'invalid start' do
+      expected = '{"error":"Start must be an integer greater than 1."}'
 
-    expected = '{"error":"Start must be an integer greater than 1."}'
+      get(:index, params: { start: 'invalid' })
 
-    assert_response(:bad_request)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-  ##
-  # Test error handling of too low value of start parameter
-  ##
-  test 'too low start' do
-    get(:index, params: { start: 0 })
+    ##
+    # Test error handling of too low value of start parameter
+    ##
+    test 'too low start' do
+      expected = '{"error":"Start must be an integer greater than 1."}'
 
-    expected = '{"error":"Start must be an integer greater than 1."}'
+      get(:index, params: { start: 0 })
 
-    assert_response(:bad_request)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-  ##
-  # Test error handling of invalid argument for limit parameter
-  ##
-  test 'invalid limit' do
-    get(:index, params: { limit: 'invalid' })
+    ##
+    # Test error handling of invalid argument for limit parameter
+    ##
+    test 'invalid limit' do
+      expected = '{"error":"Limit must be an integer between 1 and 500."}'
 
-    expected = '{"error":"Limit must be an integer between 1 and 500."}'
+      get(:index, params: { limit: 'invalid' })
 
-    assert_response(:bad_request)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-  ##
-  # Test error handling of too low value of limit parameter
-  ##
-  test 'too low limit' do
-    get(:index, params: { limit: 0 })
+    ##
+    # Test error handling of too low value of limit parameter
+    ##
+    test 'too low limit' do
+      expected = '{"error":"Limit must be an integer between 1 and 500."}'
 
-    expected = '{"error":"Limit must be an integer between 1 and 500."}'
+      get(:index, params: { limit: 0 })
 
-    assert_response(:bad_request)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-  ##
-  # Test error handling of too high value of limit parameter
-  ##
-  test 'too high limit' do
-    get(:index, params: { limit: 501 })
+    ##
+    # Test error handling of too high value of limit parameter
+    ##
+    test 'too high limit' do
+      expected = '{"error":"Limit must be an integer between 1 and 500."}'
 
-    expected = '{"error":"Limit must be an integer between 1 and 500."}'
+      get(:index, params: { limit: 501 })
 
-    assert_response(:bad_request)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-  ##
-  # Test success of lower limit parameter
-  ##
-  test 'lower limit' do
-    get(:index, params: { limit: 1 })
+    ##
+    # Test success of lower limit parameter
+    ##
+    test 'lower limit' do
+      expected = '{"devices":[{"device_id":"4567","device_type":"cdef"}]}'
 
-    expected = '{"devices":[{"device_id":"4567","device_type":"cdef"}]}'
+      get(:index, params: { limit: 1 })
 
-    Rails.logger.debug(response.body)
+      assert_response(:success)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-    assert_response(:success)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+    ##
+    # Test success of upper limit parameter
+    ##
+    test 'upper limit' do
+      get(:index, params: { limit: 500 })
 
-  ##
-  # Test success of upper limit parameter
-  ##
-  test 'upper limit' do
-    get(:index, params: { limit: 500 })
+      expected = '{"devices":[{"device_id":"4567","device_type":"cdef"},' \
+                 '{"device_id":"1234","device_type":"abcd"}]}'
 
-    expected = '{"devices":[{"device_id":"4567","device_type":"cdef"},' \
-               '{"device_id":"1234","device_type":"abcd"}]}'
+      assert_response(:success)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
 
-    assert_response(:success)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
-  end
+    ##
+    # Test successful selection by device id
+    ##
+    test 'get device' do
+      expected = '{"device_id":"1234","device_type":"abcd"}'
 
-  ##
-  # Test successful selection by device id
-  ##
-  test 'get device' do
-    get(:show, params: { id: 1234 })
+      get(:show, params: { id: 1234 })
 
-    expected = '{"device_id":"1234","device_type":"abcd"}'
-
-    assert_response(:success)
-    assert_equal('application/json', response.content_type)
-    assert_equal(expected, response.body)
+      assert_response(:success)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected, response.body)
+    end
   end
 end

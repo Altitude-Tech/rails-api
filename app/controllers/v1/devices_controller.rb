@@ -1,50 +1,53 @@
 ##
 # Devices api controller
 ##
-class V1::DevicesController < V1ApiController
+module V1
   ##
   #
   ##
-  def index
-    limit = extract_int_param('limit', 10, 1, 500)
-    start = extract_int_param('start', 1, 1, Float::INFINITY)
+  class DevicesController < V1ApiController
+    ##
+    #
+    ##
+    def index
+      limit = extract_int_param('limit', 10, 1, 500)
+      start = extract_int_param('start', 1, 1, Float::INFINITY)
 
-    return if limit == false || start == false
+      return if limit == false || start == false
 
-    @devices = Device.where('id >= ?', start).order('id').limit(limit)
+      @devices = Device.where('id >= ?', start).order('id').limit(limit)
 
-    render_error(t(:devices_no_more)) unless @devices.any?
-  end
+      render_error(t(:devices_no_more)) unless @devices.any?
+    end
 
-  ##
-  #
-  ##
-  def show
-    # look up by device_id rather than id (primary key in the database)
-    # as it's the indentification people are more likely to have
-    @device = Device.find_by!(device_id: params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render_error(t(:devices_not_found))
-  end
+    ##
+    #
+    ##
+    def show
+      # look up by device_id rather than id (primary key in the database)
+      # as it's the indentification people are more likely to have
+      @device = Device.find_by!(device_id: params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render_error(t(:devices_not_found))
+    end
 
-  private
+    private
 
-  ##
-  #
-  ##
-  def extract_int_param(param, default, min, max)
-    val = params[param] || default
+    ##
+    #
+    ##
+    def extract_int_param(param, default, min, max)
+      val = params[param] || default
 
-    begin
-      validate_int(val, min, max)
-    rescue ArgumentError
-      msg = "devices_error_#{param}"
-      logger.debug(msg)
-      msg = param == 'limit' ? t(msg, max: max) : t(msg)
-      logger.debug(msg)
+      begin
+        validate_int(val, min, max)
+      rescue ArgumentError
+        msg = "devices_error_#{param}"
+        msg = param == 'limit' ? t(msg, max: max) : t(msg)
 
-      render_error(msg)
-      return false
+        render_error(msg)
+        return false
+      end
     end
   end
 end

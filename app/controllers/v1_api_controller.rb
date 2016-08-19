@@ -22,9 +22,7 @@ class V1ApiController < ActionController::Base
 
     raise ArgumentError, t(:int_outside_limits) if not_between
 
-    # rubocop:disable RedundantReturn
     return num
-    # rubocop:enable RedundantReturn
   end
 
   ##
@@ -36,13 +34,21 @@ class V1ApiController < ActionController::Base
   end
 
   ##
+  # Render a success message as json
+  ##
+  def render_success(msg)
+    success = { success: msg }
+    render(json: success.to_json)
+  end
+
+  ##
   # Check request IP address matches a whitelisted IP
   #
   # @todo implement this
   ##
   def check_ip
     # @todo disable in development as well
-    logger.debug(request.remote_ip) unless Rails.env.test?
+    logger.debug('IP: ' + request.remote_ip.to_s) unless Rails.env.test?
   end
 
   ##
@@ -60,8 +66,6 @@ class V1ApiController < ActionController::Base
   def parse_request
     body = request.body.read
     render_error(t(:base_api_missing_body)) && return if body.blank?
-
-    logger.debug(body)
 
     begin
       @json = JSON.parse(body)

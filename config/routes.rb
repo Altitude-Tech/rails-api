@@ -4,6 +4,5 @@ Rails.application.routes.draw do
     resources :data, only: [:index, :create]
     # for getting devices
     resources :devices, only: [:index, :show]
-
   end
 end

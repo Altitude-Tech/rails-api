@@ -17,5 +17,8 @@ module Api
 
     # Don't used coloured logs
     config.colorize_logging = false
+
+    # use UTC as time zone
+    config.time_zone = 'UTC'
   end
 end

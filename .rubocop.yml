@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 AllCops:
   Include:
     - Rakefile
@@ -16,6 +14,9 @@ Style/Documentation:
   Exclude:
     # don't require documenting largely auto generate migrations
     - 'db/migrate/*'
+    # don't require class/module docs for tests
+    - 'test/**/*'
+    - 'test/**/**/*'
 
 Style/BracesAroundHashParameters:
   EnforcedStyle: context_dependent
@@ -28,12 +29,20 @@ Style/ClassAndModuleChildren:
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
+  Max: 150
   Exclude:
     # don't limit length of test cases
     - 'test/**/*'
 
+Style/RedundantSelf:
+  Exclude:
+    - 'app/models/datum.rb'
+
+Style/RedundantReturn:
+  Enabled: false
+
 Metrics/MethodLength:
-  Max: 20
+  Max: 25
 
 Metrics/LineLength:
   Max: 100

@@ -1,12 +1,9 @@
 ##
-#
+# V1ApiController tests
 ##
 
 require 'test_helper'
 
-##
-# Application Controller tests
-##
 class V1ApiControllerTest < ActionController::TestCase
   ##
   #

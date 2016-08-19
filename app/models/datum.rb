@@ -29,5 +29,4 @@ class Datum < ApplicationRecord
     # convert temperaturature from celsius to kelvin
     self.temperature = Concentration.centigrade_to_kelvin(self.temperature)
   end
-
 end
