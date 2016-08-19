@@ -4,6 +4,23 @@
 * [Production](PRODUCTION_SETUP.md)
 * [Development](DEVELOPMENT_SETUP.md)
 
+Sometimes new gems or database changes will be made after your initial setup.
+
+To install new gems:
+```
+$ bundler install
+```
+
+To update the database for development/tests:
+```
+$ rake db:migrate
+```
+
+To update the database in production:
+```
+$ DB_ADMIN=1 rake db:migrate
+```
+
 ## Running tests
 To run the test suite:
 ```
