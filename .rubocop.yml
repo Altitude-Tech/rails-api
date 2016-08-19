@@ -1,4 +1,5 @@
 AllCops:
+  TargetRubyVersion: 2.3
   Include:
     - Rakefile
     - config.ru
@@ -9,6 +10,10 @@ AllCops:
     # something from a tutorial
     # leave it alone until I understand it better
     - 'config/puma.rb'
+
+# ruby 3 feature, ignore it for now
+Style/FrozenStringLiteralComment:
+  Enabled: false
 
 Style/Documentation:
   Exclude:
