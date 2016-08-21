@@ -7,9 +7,6 @@ AllCops:
   Exclude:
     # auto-generated
     - db/schema.rb
-    # something from a tutorial
-    # leave it alone until I understand it better
-    - 'config/puma.rb'
 
 # ruby 3 feature, ignore it for now
 Style/FrozenStringLiteralComment:

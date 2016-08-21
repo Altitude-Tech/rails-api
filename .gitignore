@@ -15,17 +15,16 @@ Gemfile.lock
 
 # Ignore all logfiles and tempfiles.
 /log/*
-/tmp/*
 !/log/.keep
+!/log/nginx/.keep
+!/log/puma/.keep
+
+/tmp/*
 !/tmp/.keep
+!/tmp/pids/.keep
+
 
 # ignore production puma stuff
-/shared/log/*
-/shared/pids/*
-/shared/sockets/*
-!/shared/log/.keep
-!/shared/pids/.keep
-!/shared/sockets/.keep
 
 # ignore Byebug command history file.
 .byebug_history

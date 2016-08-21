@@ -15,8 +15,8 @@ default: &default
   pool: 5
   username: root
   password: altitude
-  socket: <%= if Gem.win_platform? then nil else '/var/lib/mysql/mysql.sock' end %>
-  
+  socket: /var/run/mysqld/mysqld.sock
+
 
 development:
   <<: *default
@@ -35,4 +35,3 @@ production:
   database: api_production
   username: <%= if ENV['DB_ADMIN'] then ENV['API_DATABASE_ADMIN'] else ENV['API_DATABASE_USER'] end %>
   password: <%= if ENV['DB_ADMIN'] then ENV['API_DATABASE_ADMIN_PASSWORD'] else ENV['API_DATABASE_PASSWORD'] end %>
-  socket: /var/run/mysqld/mysqld.sock
