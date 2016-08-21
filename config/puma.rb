@@ -5,7 +5,6 @@ workers 2
 threads 1, 6
 
 app_dir = File.expand_path('../..', __FILE__)
-shared_dir = "#{app_dir}/shared"
 
 environment = ENV['RAILS_ENV'] || 'development'
 
@@ -15,7 +14,7 @@ environment = ENV['RAILS_ENV'] || 'development'
 bind 'unix:///tmp/puma.sock'
 
 # logging
-stdout_redirect "#{app_dir}/log/puma.stdout.log", "#{app__dir}/log/puma.stderr.log", true
+stdout_redirect "#{app_dir}/log/puma/stdout.log", "#{app_dir}/log/puma/stderr.log", true
 
 # Set master PID and state locations
 pidfile "#{app_dir}/tmp/pids/puma.pid"
