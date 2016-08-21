@@ -13,15 +13,17 @@ Gemfile.lock
 # ignore rvm config
 .versions.conf
 
-# Ignore all logfiles and tempfiles.
+# ignore all logfiles and tempfiles
+# @todo fix this
 /log/*
-!/log/.keep
-!/log/nginx/.keep
-!/log/puma/.keep
+/log/*/
+#!/log/.keep
+#!/log/*/.keep
 
 /tmp/*
+/tmp/*/
 !/tmp/.keep
-!/tmp/pids/.keep
+!/tmp/*/.keep
 
 
 # ignore production puma stuff
