@@ -5,7 +5,7 @@ module V1
   ##
   #
   ##
-  class DataController < V1ApiController
+  class UsersController < V1ApiController
     before_action :set_json
 
     def create
