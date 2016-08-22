@@ -3,7 +3,12 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.0.0'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'puma', '~> 3.0'
+
+# for building json apis
 gem 'jbuilder', '~> 2.5'
+
+# for generating api docs
+gem 'apipie-rails', '~> 0.3.6'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
