@@ -5,10 +5,7 @@ require 'rails/test_help'
 
 # empty log file before running tests
 log_file = File.expand_path('../../log/test.log', __FILE__)
-
-if File.file?(log_file)
-  File.open(log_file, 'w') {}
-end
+File.open(log_file, 'w') {} if File.file?(log_file)
 
 # make sure database is up to date before running tests
 ActiveRecord::Migration.maintain_test_schema!

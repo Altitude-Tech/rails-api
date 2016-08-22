@@ -8,8 +8,7 @@ module V1
   class DataControllerTest < ActionController::TestCase
     # base data hash to be manipulated as required
     BASE_DATA = {
-      DID: '5678',
-      DYPE: '1234',
+      DID: 4567,
       LOG_TIME: Time.now.to_i,
       TEMPERATURE: 25.37,
       PRESSURE: 1009.30,
@@ -54,18 +53,6 @@ module V1
       post :create, body: data.to_json
 
       assert_response :bad_request
-      assert_equal(expected, response.body)
-    end
-
-    ##
-    # Test error handling for missing device type key in JSON request body
-    ##
-    test 'missing device type' do
-      data = BASE_DATA.deep_dup.except(:DYPE)
-      expected = '{"error":"Missing key in request body: \"dype\"."}'
-
-      post :create, body: data.to_json
-
       assert_equal(expected, response.body)
     end
 

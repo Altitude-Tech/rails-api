@@ -18,8 +18,18 @@ GAS_PM25 = 6
 ##
 # Sensors
 ##
-SENSOR_MQ2_HASH = Digest::SHA1.hexdigest('mq2')
-SENSOR_MQ7_HASH = Digest::SHA1.hexdigest('mq7')
-SENSOR_MQ135_HASH = Digest::SHA1.hexdigest('mq135')
+SENSOR_MQ2 = 'mq2'.freeze
+SENSOR_MQ7 = 'mq7'.freeze
+SENSOR_MQ135 = 'mq135'.freeze
+
+SENSOR_MQ2_HASH = Digest::SHA1.hexdigest(SENSOR_MQ2)
+SENSOR_MQ7_HASH = Digest::SHA1.hexdigest(SENSOR_MQ7)
+SENSOR_MQ135_HASH = Digest::SHA1.hexdigest(SENSOR_MQ135)
 
 SENSOR_HASHES = [SENSOR_MQ2_HASH, SENSOR_MQ7_HASH, SENSOR_MQ135_HASH].freeze
+
+SENSOR_MAP = {
+  SENSOR_MQ2_HASH => SENSOR_MQ2,
+  SENSOR_MQ7_HASH => SENSOR_MQ7,
+  SENSOR_MQ135_HASH => SENSOR_MQ135
+}.freeze

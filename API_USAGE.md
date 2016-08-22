@@ -90,6 +90,10 @@ For all others, include the key in the JSON request body with the name `key`:
 
 	Retrieves a list of devices. Limited to admins.
 
+* `GET /v1/devices/:id`
+
+	Retrieves a single device.
+
 ## Users
 * `POST /v1/users`
 

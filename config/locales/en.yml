@@ -28,10 +28,10 @@ en:
   activerecord:
     attributes:
       device:
-        device_id: did
-        device_type: dype
+        device_id: device_id
+        device_type: device_type
       datum:
-        device_id: did
+        device_id: device_id
         log_time: log_time
         sensor_data: sensor_data
         sensor_error: sensor_error
@@ -53,25 +53,25 @@ en:
               greater_than_or_equal_to: must be a number between 0 and 1.
               less_than_or_equal_to: must be a number between 0 and 1.
 
-  # error message for validate_int
-  int_outside_limits: 'Number outside limits'
-
   # custom validator errors
   invalid_hex: must be a hexadecimal number.
   invalid_sensor: is an unrecognised value.
+  invalid_device: is an unrecognised value.
 
-  # errors for model callbacks
+  # simple messages for us in v1 api and children
+  v1_api_success: 'Success.'
 
-
-  # errors for base api methods
-  base_api_missing_body: 'Missing request body.'
-  base_api_json_parse_error: 'There was a problem in the JSON you submitted: %{msg}'
+  # errors for v1 api methods
+  v1_api_int_outside_limits: 'Number outside limits.'
+  v1_api_missing_body: 'Missing request body.'
+  v1_api_missing_key: 'Missing key in request body: "%{key}".'
+  v1_api_json_parse_error: 'There was a problem in the JSON you submitted: %{msg}'
 
   # errors for data api methods
-  data_missing_key: 'Missing key in request body: "%{key}".'
+  data_invalid_device: 'Device not found with device_id: "%{device}".'
   data_invalid_time: '"log_time" must be unix time in seconds.'
 
-  # errors for devices api: /api/devices
+  # errors for devices api
   devices_not_found:  Device not found.
   devices_no_more: No more devices were found.
   devices_error_limit: Limit must be an integer between 1 and %{max}.

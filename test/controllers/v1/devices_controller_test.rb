@@ -7,135 +7,273 @@ require 'test_helper'
 module V1
   class DevicesControllerTest < ActionController::TestCase
     ##
+    #
+    ##
+    BASE_DATA = {
+      device_id: 2345,
+      device_type: Device::TYPE_TEST
+    }.freeze
+
+    ##
     # Test successful selection of all devices using fixtures
     ##
-    test 'get all devices' do
-      expected = '{"devices":[{"device_id":"1234","device_type":"abcd"},' \
-                 '{"device_id":"4567","device_type":"cdef"}]}'
+    test 'index get all devices' do
+      expected = {
+        devices: [
+          {
+            device_id: '1234',
+            device_type: Device::TYPE_TEST,
+            device_name: Device::TYPE_TEST_RAW
+          },
+          {
+            device_id: '4567',
+            device_type: Device::TYPE_TEST,
+            device_name: Device::TYPE_TEST_RAW
+          }
+        ]
+      }
 
       get(:index)
 
       assert_response(:success)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test error handling of invalid argument for start parameter
     ##
-    test 'invalid start' do
-      expected = '{"error":"Start must be an integer greater than 1."}'
+    test 'index invalid start' do
+      expected = { error: I18n.t(:devices_error_start) }
 
       get(:index, params: { start: 'invalid' })
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test error handling of too low value of start parameter
     ##
-    test 'too low start' do
-      expected = '{"error":"Start must be an integer greater than 1."}'
+    test 'index too low start' do
+      expected = { error: I18n.t(:devices_error_start) }
 
       get(:index, params: { start: 0 })
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test error handling of invalid argument for limit parameter
     ##
-    test 'invalid limit' do
-      expected = '{"error":"Limit must be an integer between 1 and 500."}'
+    test 'index invalid limit' do
+      expected = { error: I18n.t(:devices_error_limit, max: 500) }
 
       get(:index, params: { limit: 'invalid' })
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test error handling of too low value of limit parameter
     ##
-    test 'too low limit' do
-      expected = '{"error":"Limit must be an integer between 1 and 500."}'
+    test 'index too low limit' do
+      expected = { error: I18n.t(:devices_error_limit, max: 500) }
 
       get(:index, params: { limit: 0 })
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test error handling of too high value of limit parameter
     ##
-    test 'too high limit' do
-      expected = '{"error":"Limit must be an integer between 1 and 500."}'
+    test 'index too high limit' do
+      expected = { error: I18n.t(:devices_error_limit, max: 500) }
 
       get(:index, params: { limit: 501 })
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test success of lower limit parameter
     ##
-    test 'lower limit' do
-      expected = '{"devices":[{"device_id":"1234","device_type":"abcd"}]}'
+    test 'index lower limit' do
+      expected = {
+        devices: [
+          {
+            device_id: '1234',
+            device_type: Device::TYPE_TEST,
+            device_name: Device::TYPE_TEST_RAW
+          }
+        ]
+      }
 
       get(:index, params: { limit: 1 })
 
       assert_response(:success)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test success of upper limit parameter
     ##
-    test 'upper limit' do
-      get(:index, params: { limit: 500 })
+    test 'index upper limit' do
+      expected = {
+        devices: [
+          {
+            device_id: '1234',
+            device_type: Device::TYPE_TEST,
+            device_name: Device::TYPE_TEST_RAW
+          },
+          {
+            device_id: '4567',
+            device_type: Device::TYPE_TEST,
+            device_name: Device::TYPE_TEST_RAW
+          }
+        ]
+      }
 
-      expected = '{"devices":[{"device_id":"1234","device_type":"abcd"},' \
-                 '{"device_id":"4567","device_type":"cdef"}]}'
+      get(:index, params: { limit: 500 })
 
       assert_response(:success)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test retrieving out-of-bounds indicies
     ##
-    test 'out-of-bounds' do
-      get(:index, params: { start: 3 })
+    test 'index out-of-bounds' do
+      expected = { error: I18n.t(:devices_no_more) }
 
-      expected = '{"error":"No more devices were found."}'
+      get(:index, params: { start: 3 })
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
+    end
+
+    ##
+    # Test invalid device id
+    ##
+    test 'show get invalid device' do
+      expected = { error: I18n.t(:devices_not_found) }
+
+      get(:show, params: { id: 'invalid' })
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test successful selection by device id
     ##
-    test 'get device' do
-      expected = '{"device_id":"1234","device_type":"abcd"}'
+    test 'show get device' do
+      expected = {
+        device_id: '1234',
+        device_type: Device::TYPE_TEST,
+        device_name: Device::TYPE_TEST_RAW
+      }
 
       get(:show, params: { id: 1234 })
 
       assert_response(:success)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
+    end
+
+    test 'create successful' do
+      data = BASE_DATA.deep_dup
+      expected = {
+        result: I18n.t(:v1_api_success)
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_response(:success)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected.to_json, response.body)
+    end
+
+    ##
+    #
+    ##
+    test 'create invalid device id' do
+      data = BASE_DATA.deep_dup
+      data[:device_id] = 'invalid'
+      expected = {
+        error: 'Validation failed: device_id is an unrecognised value.'
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected.to_json, response.body)
+    end
+
+    ##
+    #
+    ##
+    test 'create missing device id' do
+      data = BASE_DATA.deep_dup
+      data.delete(:device_id)
+      expected = {
+        error: I18n.t(:v1_api_missing_key, key: 'device_id')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected.to_json, response.body)
+    end
+
+    ##
+    #
+    ##
+    test 'create invalid device type' do
+      data = BASE_DATA.deep_dup
+      data[:device_type] = 'invalid'
+      expected = {
+        error: 'Validation failed: device_type is an unrecognised value.'
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected.to_json, response.body)
+    end
+
+    ##
+    #
+    ##
+    test 'create missing device type' do
+      data = BASE_DATA.deep_dup
+      data.delete(:device_type)
+      expected = {
+        error: I18n.t(:v1_api_missing_key, key: 'device_type')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected.to_json, response.body)
     end
   end
 end
