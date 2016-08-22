@@ -6,7 +6,7 @@ Rails.application.initialize!
 
 # @todo revisit this, look for a better method
 class Logger
-  def format_message(_severity, timestamp, _progname, msg)
-    "#{timestamp} (#{$PID}) #{msg}\n"
+  def format_message(severity, timestamp, _progname, msg)
+    "[#{timestamp}] [#{severity}] #{msg}\n"
   end
 end
