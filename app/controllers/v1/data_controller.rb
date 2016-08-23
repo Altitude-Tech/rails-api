@@ -8,36 +8,19 @@ module V1
   class DataController < V1ApiController
     before_action :set_json
 
-    rescue_from(ActiveRecord::RecordNotFound, with: :render_error)
-
-    ##
-    # Keys permitted in create request body json
-    ##
-    CREATE_KEYS = [
-      :did,
-      :log_time,
-      :temperature,
-      :humidity,
-      :pressure,
-      :data
-    ].freeze
-    CREATE_DATA_KEYS = [
-      :sensor_type,
-      :sensor_error,
-      :sensor_data
-    ].freeze
+    rescue_from(ActiveRecord::RecordNotFound, with: :record_not_found_error)
 
     ##
     #
     ##
     def show
-      device = get_device(params['device_id'])
-    rescue ActiveRecord::RecordNotFound => e
-      render_error(e.message) && return
-    else
-      logger.debug(device)
-      data = device.data
-      logger.debug(data)
+      device = Device.find_by!(device_id: params[:device_id])
+
+      logger.debug(device.to_json)
+      data = device.datum
+      logger.debug(data.to_json)
+
+      # order <http://stackoverflow.com/questions/9197649/rails-sort-by-join-table-data>
 
       render json: { device: device.device_id }
     end
@@ -46,17 +29,17 @@ module V1
     # Creates a new data entry.
     ##
     def create
-      begin
-        check_keys(@json, CREATE_KEYS)
+      #begin
+      #  check_keys(@json, CREATE_KEYS)
 
-        @json[:data].each do |data|
-          check_keys(data, CREATE_DATA_KEYS)
-        end
-      rescue KeyError => e
-        render_error(e) && return
-      end
+      #  @json[:data].each do |data|
+      #    check_keys(data, CREATE_DATA_KEYS)
+      #  end
+      #rescue KeyError => e
+      #  render_error(e) && return
+      #end
 
-      insert_to_db
+      #insert_to_db
     end
 
     private

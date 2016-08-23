@@ -48,6 +48,15 @@ module V1ApiErrorHandler
   end
 
   ##
+  #
+  ##
+  def record_not_found_error(exc)
+    logger.debug(exc.model.to_json)
+    logger.debug(exc.model.class.name)
+    normal_error(exc)
+  end
+
+  ##
   # Error handler for ActiveModel::UnknownAttributeError
   ##
   def unknown_attr_error(exc)
