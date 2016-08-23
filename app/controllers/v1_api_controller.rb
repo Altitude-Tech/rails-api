@@ -8,6 +8,16 @@ class V1ApiController < ApplicationController
   protected
 
   ##
+  #
+  ##
+  def render_error(exc)
+    logger.debug('error json')
+    logger.debug(exc.to_json)
+    @error = exc.message
+    render('v1/error', status: :bad_request) && return
+  end
+
+  ##
   # Validate an argument is an integer and within defined limits
   ##
   def validate_int(num, min, max)
@@ -23,31 +33,6 @@ class V1ApiController < ApplicationController
     raise ArgumentError, t(:v1_api_int_outside_limits) if not_between
 
     return num
-  end
-
-  ##
-  # Check required keys exist
-  ##
-  def check_keys(hash, keys)
-    keys.each do |key|
-      raise KeyError, t(:v1_api_missing_key, key: key) unless hash.key?(key)
-    end
-  end
-
-  ##
-  # Render an error message as json
-  ##
-  def render_error(msg)
-    error = { error: msg }
-    render(json: error, status: :bad_request)
-  end
-
-  ##
-  # Render a success message as json
-  ##
-  def render_success(msg)
-    success = { success: msg }
-    render(json: success)
   end
 
   ##
@@ -73,6 +58,7 @@ class V1ApiController < ApplicationController
   # Attempt to parse the request body
   ##
   def parse_request
+    logger.debug(params.to_h)
     body = request.body.read
     render_error(t(:v1_api_missing_body)) && return if body.blank?
 

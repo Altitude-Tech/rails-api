@@ -24,20 +24,9 @@ class Device < ApplicationRecord
   ##
   #
   ##
-  def attrs
-    name = TYPES_MAP[device_type]
-
-    return {
-      device_id: device_id,
-      device_type: device_type,
-      device_name: name
-    }
-  end
-
-  ##
-  #
-  ##
   def name
     return TYPES_MAP[device_type]
   end
+
+
 end

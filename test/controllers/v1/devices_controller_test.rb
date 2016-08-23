@@ -215,7 +215,7 @@ module V1
       data = BASE_DATA.deep_dup
       data[:device_id] = 'invalid'
       expected = {
-        error: 'Validation failed: device_id is an unrecognised value.'
+        error: 'Validation failed: device_id must be a hexadecimal number.'
       }
 
       post(:create, body: data.to_json)
@@ -270,6 +270,24 @@ module V1
       }
 
       post(:create, body: data.to_json)
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
+      assert_equal(expected.to_json, response.body)
+    end
+
+    ##
+    #
+    ##
+    test 'create unknown param' do
+      data = BASE_DATA.deep_dup
+      data[:foo] = 'bar'
+      expected = {}
+
+      post(:create, body: data.to_json)
+
+      Rails.logger.debug(response.body)
+      puts(response.body)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)

@@ -8,6 +8,8 @@ module V1
   class DataController < V1ApiController
     before_action :set_json
 
+    rescue_from(ActiveRecord::RecordNotFound, with: render_error)
+
     ##
     # Keys permitted in create request body json
     ##
@@ -29,16 +31,10 @@ module V1
     #
     ##
     def show
-      logger.debug('show')
-      logger.debug(params)
-      logger.debug(params['device_id'])
-
-      begin
-        device = get_device(params['device_id'])
-      rescue ActiveRecord::RecordNotFound => e
-        render_error(e.message) && return
-      end
-
+      device = get_device(params['device_id'])
+    rescue ActiveRecord::RecordNotFound => e
+      render_error(e.message) && return
+    else
       logger.debug(device)
       data = device.data
       logger.debug(data)
