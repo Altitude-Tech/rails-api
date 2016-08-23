@@ -44,7 +44,7 @@ module V1
     # Test error handling of invalid argument for start parameter
     ##
     test 'index invalid start' do
-      expected = { error: I18n.t(:devices_error_start) }
+      expected = { error: I18n.t('controller.v1_devices.error.start') }
 
       get(:index, params: { start: 'invalid' })
 
@@ -57,7 +57,7 @@ module V1
     # Test error handling of too low value of start parameter
     ##
     test 'index too low start' do
-      expected = { error: I18n.t(:devices_error_start) }
+      expected = { error: I18n.t('controller.v1_devices.error.start') }
 
       get(:index, params: { start: 0 })
 
@@ -70,7 +70,7 @@ module V1
     # Test error handling of invalid argument for limit parameter
     ##
     test 'index invalid limit' do
-      expected = { error: I18n.t(:devices_error_limit, max: 500) }
+      expected = { error: I18n.t('controller.v1_devices.error.limit', max: 500) }
 
       get(:index, params: { limit: 'invalid' })
 
@@ -83,7 +83,7 @@ module V1
     # Test error handling of too low value of limit parameter
     ##
     test 'index too low limit' do
-      expected = { error: I18n.t(:devices_error_limit, max: 500) }
+      expected = { error: I18n.t('controller.v1_devices.error.limit', max: 500) }
 
       get(:index, params: { limit: 0 })
 
@@ -96,7 +96,7 @@ module V1
     # Test error handling of too high value of limit parameter
     ##
     test 'index too high limit' do
-      expected = { error: I18n.t(:devices_error_limit, max: 500) }
+      expected = { error: I18n.t('controller.v1_devices.error.limit', max: 500) }
 
       get(:index, params: { limit: 501 })
 
@@ -198,7 +198,7 @@ module V1
     test 'create successful' do
       data = BASE_DATA.deep_dup
       expected = {
-        result: I18n.t(:v1_api_success)
+        result: I18n.t('controller.v1.message.success')
       }
 
       post(:create, body: data.to_json)
@@ -215,7 +215,7 @@ module V1
       data = BASE_DATA.deep_dup
       data[:device_id] = 'invalid'
       expected = {
-        error: 'Validation failed: device_id must be a hexadecimal number.'
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
       }
 
       post(:create, body: data.to_json)
@@ -232,7 +232,7 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:device_id)
       expected = {
-        error: I18n.t(:v1_api_missing_key, key: 'device_id')
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
       }
 
       post(:create, body: data.to_json)
@@ -249,7 +249,7 @@ module V1
       data = BASE_DATA.deep_dup
       data[:device_type] = 'invalid'
       expected = {
-        error: 'Validation failed: device_type is an unrecognised value.'
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_type')
       }
 
       post(:create, body: data.to_json)
@@ -266,7 +266,7 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:device_type)
       expected = {
-        error: I18n.t(:v1_api_missing_key, key: 'device_type')
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_type')
       }
 
       post(:create, body: data.to_json)
@@ -282,12 +282,13 @@ module V1
     test 'create unknown param' do
       data = BASE_DATA.deep_dup
       data[:foo] = 'bar'
-      expected = {}
+      expected = {
+        error: I18n.t('controller.v1.error.unknown_key', key: 'foo')
+      }
 
       post(:create, body: data.to_json)
 
       Rails.logger.debug(response.body)
-      puts(response.body)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)

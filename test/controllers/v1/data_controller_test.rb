@@ -25,10 +25,12 @@ module V1
     ##
     test 'no request body' do
       post :create
-      expected = '{"error":"Missing request body."}'
+      expected = {
+        error: I18n.t('controller.v1.error.missing_request_body')
+      }
 
       assert_response :bad_request
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##

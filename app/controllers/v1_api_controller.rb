@@ -1,21 +1,24 @@
 ##
 # Application controller
 ##
+
+require 'exceptions'
+require 'v1_api_error_handler'
+
+##
+#
+##
 class V1ApiController < ApplicationController
   before_action :parse_request, only: [:create, :update]
   before_action :set_json
 
-  protected
+  rescue_from(StandardError, with: :standard_error)
+  rescue_from(Exceptions::V1ApiError, with: :standard_error)
+  rescue_from(JSON::ParserError, with: :json_parser_error)
 
-  ##
-  #
-  ##
-  def render_error(exc)
-    logger.debug('error json')
-    logger.debug(exc.to_json)
-    @error = exc.message
-    render('v1/error', status: :bad_request) && return
-  end
+  include V1ApiErrorHandler
+
+  protected
 
   ##
   # Validate an argument is an integer and within defined limits
@@ -28,9 +31,10 @@ class V1ApiController < ApplicationController
       raise ArgumentError, e
     end
 
-    not_between = (num < min) || (num > max)
-
-    raise ArgumentError, t(:v1_api_int_outside_limits) if not_between
+    if num < min || num > max
+      msg = t('controller.v1.error.int_outside_limits')
+      raise Exceptions::V1ApiError, msg
+    end
 
     return num
   end
@@ -58,16 +62,15 @@ class V1ApiController < ApplicationController
   # Attempt to parse the request body
   ##
   def parse_request
-    logger.debug(params.to_h)
     body = request.body.read
-    render_error(t(:v1_api_missing_body)) && return if body.blank?
 
-    begin
-      @json = JSON.parse(body)
-      @json = normalize_keys(@json)
-    rescue JSON::ParserError => e
-      render_error(t(:v1_api_json_parse_error, msg: e.message)) && return
+    if body.blank?
+      msg = I18n.t('controller.v1.error.missing_request_body')
+      raise Exceptions::V1ApiError, msg
     end
+
+    @json = JSON.parse(body)
+    @json = normalize_keys(@json)
   end
 
   ##

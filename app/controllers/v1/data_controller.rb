@@ -8,7 +8,7 @@ module V1
   class DataController < V1ApiController
     before_action :set_json
 
-    rescue_from(ActiveRecord::RecordNotFound, with: render_error)
+    rescue_from(ActiveRecord::RecordNotFound, with: :render_error)
 
     ##
     # Keys permitted in create request body json

@@ -27,6 +27,4 @@ class Device < ApplicationRecord
   def name
     return TYPES_MAP[device_type]
   end
-
-
 end

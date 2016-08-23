@@ -9,7 +9,7 @@ class V1ApiControllerTest < ActionController::TestCase
   # Test error handling for input below lower limit
   ##
   test 'integer too low' do
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::V1ApiError) do
       V1ApiController.new.send(:validate_int, 0, 1, 5)
     end
   end
@@ -18,7 +18,7 @@ class V1ApiControllerTest < ActionController::TestCase
   # Test error handling for input above upper limit
   ##
   test 'integer too high' do
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::V1ApiError) do
       V1ApiController.new.send(:validate_int, 6, 1, 5)
     end
   end
