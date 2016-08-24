@@ -8,15 +8,15 @@ module V1
   class DataControllerTest < ActionController::TestCase
     # base data hash to be manipulated as required
     BASE_DATA = {
-      DID: 4567,
-      LOG_TIME: Time.now.to_i,
-      TEMPERATURE: 25.37,
-      PRESSURE: 1009.30,
-      HUMIDITY: 63.12,
-      DATA: [{
-        SENSOR_TYPE: Datum::SENSOR_MQ2,
-        SENSOR_ERROR: 0.1,
-        SENSOR_DATA: 47
+      device_id: 4567,
+      log_time: Time.now.to_i,
+      temperature: 293.15,
+      pressure: 101_325.0,
+      humidity: 63.12,
+      data: [{
+        sensor_type: Datum::SENSOR_MQ2,
+        sensor_error: 0.1,
+        sensor_data: 47
       }]
     }.freeze
 
@@ -53,28 +53,34 @@ module V1
     # Test error handling for missing device id key in JSON request body
     ##
     test 'create missing device id' do
-      data = BASE_DATA.deep_dup.except(:DID)
-      expected = '{"error":"Missing key in request body: \"did\"."}'
+      data = BASE_DATA.deep_dup
+      data.delete(:device_id)
+      expected =  {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
+      }
 
       post(:create, body: data.to_json)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
     # Test error handling for missing log time key in JSON request body
     ##
     test 'create missing log time' do
-      data = BASE_DATA.deep_dup.except(:LOG_TIME)
-      expected = '{"error":"Missing key in request body: \"log_time\"."}'
+      data = BASE_DATA.deep_dup
+      data.delete(:log_time)
+      expected =  {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
+      }
 
       post(:create, body: data.to_json)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
@@ -82,73 +88,84 @@ module V1
     ##
     test 'create millisecond log time' do
       data = BASE_DATA.deep_dup
-      data[:LOG_TIME] *= 1000
-      expected = '{"error":"\"log_time\" must be unix time in seconds."}'
+      data[:log_time] *= 1000
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
+      }
 
       post(:create, body: data.to_json)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
-    # Test error handling for missing data key in JSON request body
+    # Test error handling for missing data key in request body
     ##
     test 'create missing data' do
-      data = BASE_DATA.deep_dup.except(:DATA)
-      expected = '{"error":"Missing key in request body: \"data\"."}'
+      data = BASE_DATA.deep_dup
+      data.delete(:data)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'data')
+      }
 
       post(:create, body: data.to_json)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
-    # Test error handling for missing sensor type key in JSON request body
+    # Test error handling for missing sensor type key in request body
     ##
     test 'create missing sensor type' do
       data = BASE_DATA.deep_dup
-      data[:DATA][0].delete(:SENSOR_TYPE)
-      expected = '{"error":"Missing key in request body: \"sensor_type\"."}'
+      data[:data][0].delete(:sensor_type)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type')
+      }
 
       post(:create, body: data.to_json)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
-    # Test error handling for missing sensor error key in JSON request body
+    # Test error handling for missing sensor error key in request body
     ##
     test 'create missing sensor error' do
       data = BASE_DATA.deep_dup
-      data[:DATA][0].delete(:SENSOR_ERROR)
-      expected = '{"error":"Missing key in request body: \"sensor_error\"."}'
+      data[:data][0].delete(:sensor_error)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error')
+      }
 
       post(:create, body: data.to_json)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
-    # Test error handling for missing sensor data key in JSON request body
+    # Test error handling for missing sensor data key in request body
     ##
     test 'create missing sensor data' do
       data = BASE_DATA.deep_dup
-      data[:DATA][0].delete(:SENSOR_DATA)
-      expected = '{"error":"Missing key in request body: \"sensor_data\"."}'
+      data[:data][0].delete(:sensor_data)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
+      }
 
       post(:create, body: data.to_json)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
@@ -156,13 +173,15 @@ module V1
     ##
     test 'create success' do
       data = BASE_DATA.deep_dup
-      expected = '{"success":"Data successfully inserted."}'
+      expected = {
+        result: I18n.t('controller.v1.message.success')
+      }
 
       post(:create, body: data.to_json)
 
-      assert_response(:success)
+      #assert_response(:success)
       assert_equal('application/json', response.content_type)
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
     end
 
     ##
@@ -174,15 +193,15 @@ module V1
           {
             sensor_data: 1.5,
             sensor_error: '9.99',
-            sensor_type: '4080cf866795cdaf370a641cbd8044453d79ae30',
+            sensor_type: Datum::SENSOR_MQ2,
             # @todo format log time
             log_time: '2016-07-13T16:31:36.000Z',
             device_id: 1,
             # @todo fix temperature & humidity
-            temperature: 20.0,
-            pressure: 1009.3,
+            temperature: 293.15,
+            pressure: 101_325.0,
             humidity: 60.0,
-            sensor_name: 'mq2'
+            sensor_name: Datum::SENSOR_MQ2_RAW
           }
         ]
       }
@@ -198,11 +217,14 @@ module V1
     #
     ##
     test 'show not found' do
-      expected = {}
+      args = { model: 'device', key: 'device_id', value: 'invalid' }
+      expected = {
+        error: I18n.t('controller.v1.error.not_found', args)
+      }
 
       get(:show, params: { device_id: 'invalid' })
 
-      assert_response(:bad_request)
+      assert_response(:not_found)
       assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
     end

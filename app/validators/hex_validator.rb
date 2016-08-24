@@ -1,9 +1,16 @@
 ##
 # Validator for hexadecimal strings
 ##
-class HexValidator < ActiveModel::EachValidator
+class HexValidator < BaseValidator
+  ##
+  #
+  ##
   def validate_each(record, attribute, value)
+    value = get_raw_value(record, attribute, value)
     hex_regex = /\A[a-f0-9]+\Z/i
-    record.errors.add attribute, I18n.t(:invalid_hex) unless value =~ hex_regex
+    condition = value =~ hex_regex
+
+    msg = I18n.t('validator.hex')
+    record.errors.add(attribute, msg) unless condition
   end
 end

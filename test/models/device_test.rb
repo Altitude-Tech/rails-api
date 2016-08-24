@@ -102,7 +102,7 @@ class DeviceTest < ActiveSupport::TestCase
   ##
   # Test successful creation
   ##
-  test 'successful insert' do
+  test 'successful create' do
     data = BASE_DATA.deep_dup
 
     Device.create!(data)

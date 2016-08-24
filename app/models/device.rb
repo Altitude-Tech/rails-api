@@ -2,10 +2,12 @@
 # Represents a device
 ##
 class Device < ApplicationRecord
-  has_many :datum
+  has_many(:datum)
 
-  validates :device_id, uniqueness: true, hex: true
-  validates :device_type, device: true, presence: true
+  before_validation(:debug_type_casting)
+
+  validates(:device_id, uniqueness: true, hex: true)
+  validates(:device_type, device_type: true)
 
   # constants
   TYPE_TEST_RAW = 'test'.freeze

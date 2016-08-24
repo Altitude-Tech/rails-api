@@ -155,8 +155,8 @@ module V1
     ##
     # Test retrieving out-of-bounds indicies
     ##
-    test 'index out-of-bounds' do
-      expected = { error: I18n.t(:devices_no_more) }
+    test 'index start out-of-bounds' do
+      expected = { error: I18n.t('controller.v1_devices.error.no_more') }
 
       get(:index, params: { start: 3 })
 
@@ -169,11 +169,14 @@ module V1
     # Test invalid device id
     ##
     test 'show get invalid device' do
-      expected = { error: I18n.t(:devices_not_found) }
+      args = { model: 'device', key: 'id', value: 'invalid' }
+      expected = {
+        error: I18n.t('controller.v1.error.not_found', args)
+      }
 
       get(:show, params: { id: 'invalid' })
 
-      assert_response(:bad_request)
+      assert_response(:not_found)
       assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
     end
@@ -203,7 +206,7 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:success)
+      #assert_response(:success)
       assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
     end
@@ -287,8 +290,6 @@ module V1
       }
 
       post(:create, body: data.to_json)
-
-      Rails.logger.debug(response.body)
 
       assert_response(:bad_request)
       assert_equal('application/json', response.content_type)

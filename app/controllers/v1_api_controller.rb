@@ -3,7 +3,8 @@
 ##
 
 require 'exceptions'
-require 'v1_api_error_handler'
+require 'v1/error_handler'
+require 'v1/param_handler'
 
 ##
 #
@@ -14,30 +15,15 @@ class V1ApiController < ApplicationController
 
   rescue_from(StandardError, with: :standard_error)
   rescue_from(Exceptions::V1ApiError, with: :normal_error)
+  rescue_from(Exceptions::V1ApiNotFoundError, with: :not_found_error)
   rescue_from(JSON::ParserError, with: :json_parser_error)
+  rescue_from(ActiveModel::UnknownAttributeError, with: :unknown_attr_error)
+  rescue_from(ActiveRecord::RecordInvalid, with: :record_invalid_error)
 
-  include V1ApiErrorHandler
+  include ErrorHandler
+  include ParamHandler
 
   protected
-
-  ##
-  # Validate an argument is an integer and within defined limits
-  ##
-  def validate_int(num, min, max)
-    begin
-      num = Integer(num)
-    # for catching nil
-    rescue TypeError => e
-      raise ArgumentError, e
-    end
-
-    if num < min || num > max
-      msg = t('controller.v1.error.int_outside_limits')
-      raise Exceptions::V1ApiError, msg
-    end
-
-    return num
-  end
 
   ##
   # Check request IP address matches a whitelisted IP
@@ -80,15 +66,19 @@ class V1ApiController < ApplicationController
     ret = {}
 
     hash.each do |k, v|
+      # don't modify symbols
       k = k.is_a?(String) ? k.downcase.parameterize(separator: '_').to_sym : k
 
       if v.is_a?(Array)
+        # make a new array for the values
+        # as it didn;t work properly without it
         new_v = []
 
         v.each do |el|
           new_v.append(el.is_a?(Hash) ? normalize_keys(el) : el)
         end
 
+        # @todo handle nested arrays?
         v = new_v
       end
 

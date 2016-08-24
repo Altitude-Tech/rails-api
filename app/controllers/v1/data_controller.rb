@@ -1,6 +1,12 @@
 ##
 #
 ##
+
+require 'exceptions'
+
+##
+#
+##
 module V1
   ##
   #
@@ -16,29 +22,29 @@ module V1
     def show
       device = Device.find_by!(device_id: params[:device_id])
       @data = device.datum
-      # order <http://stackoverflow.com/questions/9197649/rails-sort-by-join-table-data>
-    rescue ActiveRecord::RecordNotFound => exc
-      to_raise = Exceptions::V1ApiNotFoundError.new(exc, 'device_id', params[:device_id])
-      to_raise.set_backtrace(exc.backtrace)
-
-      raise to_raise
+      # @todo order?
+      # <http://stackoverflow.com/questions/9197649/rails-sort-by-join-table-data>
+    rescue ActiveRecord::RecordNotFound => e
+      raise Exceptions::V1ApiNotFoundError.new(e, 'device_id', params[:device_id])
     end
 
     ##
     # Creates a new data entry.
     ##
     def create
-      #begin
-      #  check_keys(@json, CREATE_KEYS)
+      data = get_data(@json)
 
-      #  @json[:data].each do |data|
-      #    check_keys(data, CREATE_DATA_KEYS)
-      #  end
-      #rescue KeyError => e
-      #  render_error(e) && return
-      #end
-
-      #insert_to_db
+      Datum.transaction do
+        data.each do |d|
+          Datum.create!(d)
+        end
+      end
+    rescue NoMethodError
+      msg = t('controller.v1.error.invalid_value', key: 'data')
+      raise Exceptions::V1ApiError, msg
+    else
+      @result = t('controller.v1.message.success')
+      render('v1/result')
     end
 
     private
@@ -46,14 +52,41 @@ module V1
     ##
     #
     ##
+    def get_data(raw_data)
+      base_data_keys = %i(log_time pressure humidity temperature)
+      sensor_data_keys = %i(sensor_error sensor_data sensor_type)
+      ret = []
+
+      # device_id as a hash is exposed to end users
+      # not the internal id in the database
+      device = get_device(raw_data[:device_id])
+
+      base_data = raw_data.select do |k, _|
+        base_data_keys.include?(k)
+      end
+
+      base_data[:device_id] = device.id
+
+      raw_data[:data].each do |d|
+        data = d.select do |k, _|
+          sensor_data_keys.include?(k)
+        end
+
+        ret.append(data.merge(base_data))
+      end
+
+      return ret
+    end
+
+    ##
+    # @todo handle this with V1ApiNotFoundError
+    ##
     def get_device(device_id)
       device_data = { device_id: device_id }
-
-      begin
-        return Device.find_by!(device_data)
-      rescue ActiveRecord::RecordNotFound
-        raise ActiveRecord::RecordNotFound, t(:data_invalid_device, device: device_id)
-      end
+      return Device.find_by!(device_data)
+    rescue ActiveRecord::RecordNotFound => e
+      msg = t('controller.v1.error.invalid_value', key: 'device_id')
+      raise Exceptions::V1ApiError, msg
     end
 
     ##
@@ -61,6 +94,10 @@ module V1
     # convert the integer to nil and then claims validation failed.
     #
     # See <http://stackoverflow.com/a/29941161>
+    #
+    # @todo report bug / make a workaround?
+    #
+    # @todo add min & max time here
     ##
     def format_log_time(time)
       # catch out any non-integers
@@ -70,63 +107,6 @@ module V1
     else
       # convert unix time to sql datetime format
       return Time.at(time).utc.to_s(:db)
-    end
-
-    ##
-    #
-    ##
-    def make_base_data
-      device = get_device(@json[:did])
-
-      data = @json.select do |k, _|
-        [:log_time, :temperature, :humidity, :pressure].include?(k)
-      end
-
-      data[:device_id] = device.id
-      data[:log_time] = format_log_time(data[:log_time])
-
-      return data
-    end
-
-    ##
-    # Attempt to create an entry for data and handle any thrown errors
-    #
-    # @todo remove outer transaction when device isn't created if missing
-    #       and move it to `insert_each`
-    ##
-    def insert_to_db
-      Datum.transaction do
-        base_data = make_base_data
-        sensor_data = @json[:data]
-
-        insert_each(sensor_data, base_data)
-      end
-    rescue ArgumentError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
-      render_error(e.message)
-    rescue ActiveRecord::StatementInvalid
-      # should be invalid log time
-      # although other errors could occur
-      render_error(t(:data_invalid_time))
-    else
-      begin
-        render_success('Data successfully inserted.')
-      rescue TypeError => e
-        render_error(e.message)
-      end
-    end
-
-    ##
-    # Attempt to insert each entry into the database
-    ##
-    def insert_each(sensor_data, base_data)
-      raise ArgumentError, '"data" value must be an array.' unless
-        sensor_data.is_a?(Array)
-
-      sensor_data.each do |d|
-        data = d.merge(base_data)
-
-        Datum.create!(data)
-      end
     end
   end
 end

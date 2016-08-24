@@ -1,28 +1,35 @@
 ##
 #
 ##
-module V1ApiErrorHandler
+module ErrorHandler
   protected
 
   ##
   # Renders error json as the response
   ##
-  def render_error(error)
+  def render_error(error, status = :bad_request)
     @error = error
-    render('v1/error', status: :bad_request)
+    render('v1/error', status: status)
   end
 
   ##
   # Error handler for StandardError
   ##
   def standard_error(exc)
+    Rails.logger.debug("RAILS_ENV: #{ENV['RAILS_ENV']}")
     # don't squash the error in test mode
     # makes for really confusing error messages
     raise exc if ENV['RAILS_ENV'] == 'test'
 
-    msg = ENV['RAILS_ENV'] == 'production' ?
-      I18n.t('controller.api.v1.error.unhandled_error') :
-      exc.message
+    msg =
+      if ENV['RAILS_ENV'] == 'production'
+        I18n.t('controller.v1.error.unhandled_error')
+      else
+        exc.message
+      end
+
+    # @todo use mailers here?
+    Rails.logger.error(exc.message)
 
     render_error(msg)
   end
@@ -55,13 +62,10 @@ module V1ApiErrorHandler
   #
   ##
   def not_found_error(exc)
-    logger.debug(exc.model.to_json)
-    logger.debug(exc.id)
-    logger.debug(exc.primary_key)
-    logger.debug(exc.key)
-    logger.debug(exc.value)
+    args = { model: exc.model.downcase, key: exc.key, value: exc.value }
+    msg = I18n.t('controller.v1.error.not_found', args)
     # @todo send back not found status?
-    normal_error(exc)
+    render_error(msg, :not_found)
   end
 
   ##

@@ -33,10 +33,10 @@ en:
     users: []
 
   # validators
-  validators:
-    invalid_hex: must be a hexadecimal number.
-    invalid_sensor: is an unrecognised value.
-    invalid_device: is an unrecognised value.
+  validator:
+    unrecognised: is an unrecognised value.
+    hex: must be a hexadecimal number.
+    log_time: 'must be in unix time in seconds'
 
   # controllers
   controller:
@@ -51,7 +51,7 @@ en:
         invalid_value: '"%{key}" is missing or an unrecognised value.'
         missing_key: '"%{key}" was not found.'
         unknown_key: '"%{key}" is an unrecognised key.'
-        not_found: 'Could not find %{record} with %{key}: "%{value}".'
+        not_found: 'Could not find %{model} with %{key}: "%{value}".'
 
     v1_data:
       foo: bar
@@ -60,14 +60,9 @@ en:
       error:
         limit: '"limit" must be an integer between 1 and %{max}.'
         start: '"start" must be an integer greater than 1.'
+        no_more: No more devices were found.
 
     v1_users:
       foo: bar
 
-  # errors for data api methods
-  data_invalid_device: 'Device not found with device_id: "%{device}".'
-  data_invalid_time: '"log_time" must be unix time in seconds.'
 
-  # errors for devices api
-  devices_not_found:  Device not found.
-  devices_no_more: No more devices were found.

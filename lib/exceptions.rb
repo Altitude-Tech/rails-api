@@ -11,7 +11,7 @@ module Exceptions
   ##
   #
   ##
-  class V1ApiNotFoundError
+  class V1ApiNotFoundError < V1ApiError
     attr_reader :model, :id, :primary_key, :key, :value
 
     ##

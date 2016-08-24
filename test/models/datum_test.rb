@@ -5,12 +5,13 @@
 require 'test_helper'
 
 class DatumTest < ActiveSupport::TestCase
+  DEVICE = Device.first!
   BASE_DATA = {
     sensor_type: Datum::SENSOR_MQ2,
-    sensor_error: 0.0,
-    sensor_data: 1,
-    log_time: Time.now.utc.to_s(:db),
-    device_id: 1234,
+    sensor_error: 0.2,
+    sensor_data: 10,
+    log_time: Time.now.to_i,
+    device_id: DEVICE.id,
     temperature: 25.37,
     pressure: 1009.30,
     humidity: 63.12
@@ -101,11 +102,69 @@ class DatumTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test error handling for too high sensor data
+  ##
+  test 'too high sensor data' do
+    data = BASE_DATA.deep_dup
+    data[:sensor_data] = 4096
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
   # Test error handling for invalid value for sensor data
   ##
   test 'invalid sensor data' do
     data = BASE_DATA.deep_dup
     data[:sensor_data] = 'invalid'
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
+  # Test behaviour for integer float sensor data
+  ##
+  test 'integer float sensor data' do
+    data = BASE_DATA.deep_dup
+    data[:sensor_data] = 100.0
+
+    Datum.create!(data)
+  end
+
+  ##
+  # Test error handling for integer float as a string sensor data
+  ##
+  test 'integer float string sensor data' do
+    data = BASE_DATA.deep_dup
+    data[:sensor_data] = '100.0'
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling for non integer float sensor data
+  ##
+  test 'non integer float sensor data' do
+    data = BASE_DATA.deep_dup
+    data[:sensor_data] = 100.5
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling for non integer float as a string sensor data
+  ##
+  test 'non integer float string sensor data' do
+    data = BASE_DATA.deep_dup
+    data[:sensor_data] = '100.5'
 
     assert_raises(ActiveRecord::RecordInvalid) do
       Datum.create!(data)
@@ -149,18 +208,40 @@ class DatumTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test error handling for log time more than 30 days old
+  ##
+  test 'too low log time' do
+    now = Time.now.utc
+    data = BASE_DATA.deep_dup
+    data[:log_time] = now - 31.days
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling for log time in the future
+  ##
+  test 'too high log time' do
+    now = Time.now.utc
+    data = BASE_DATA.deep_dup
+    data[:log_time] = now + 1.days
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
   # Test error handling for unix time in milliseconds
   # Should only accept unix time in seconds
   ##
   test 'invalid millisecond log time' do
-    device = Device.first!
-    time = Time.at(Time.now.to_i * 1000).utc.to_s(:db)
-
     data = BASE_DATA.deep_dup
-    data[:log_time] = time
-    data[:device_id] = device.id
+    data[:log_time] = Time.now.to_i * 1000
 
-    assert_raises(ActiveRecord::StatementInvalid) do
+    assert_raises(ActiveRecord::RecordInvalid) do
       Datum.create!(data)
     end
   end
@@ -265,10 +346,7 @@ class DatumTest < ActiveSupport::TestCase
   # Test successful creation
   ##
   test 'successful create' do
-    device = Device.first!
-
     data = BASE_DATA.deep_dup
-    data[:device_id] = device.id
 
     Datum.create!(data)
   end
