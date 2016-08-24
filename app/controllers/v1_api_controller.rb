@@ -13,7 +13,7 @@ class V1ApiController < ApplicationController
   before_action :set_json
 
   rescue_from(StandardError, with: :standard_error)
-  rescue_from(Exceptions::V1ApiError, with: :standard_error)
+  rescue_from(Exceptions::V1ApiError, with: :normal_error)
   rescue_from(JSON::ParserError, with: :json_parser_error)
 
   include V1ApiErrorHandler

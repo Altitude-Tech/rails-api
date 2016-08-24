@@ -8,21 +8,20 @@ module V1
   class DataController < V1ApiController
     before_action :set_json
 
-    rescue_from(ActiveRecord::RecordNotFound, with: :record_not_found_error)
+    rescue_from(Exceptions::V1ApiNotFoundError, with: :not_found_error)
 
     ##
     #
     ##
     def show
       device = Device.find_by!(device_id: params[:device_id])
-
-      logger.debug(device.to_json)
-      data = device.datum
-      logger.debug(data.to_json)
-
+      @data = device.datum
       # order <http://stackoverflow.com/questions/9197649/rails-sort-by-join-table-data>
+    rescue ActiveRecord::RecordNotFound => exc
+      to_raise = Exceptions::V1ApiNotFoundError.new(exc, 'device_id', params[:device_id])
+      to_raise.set_backtrace(exc.backtrace)
 
-      render json: { device: device.device_id }
+      raise to_raise
     end
 
     ##

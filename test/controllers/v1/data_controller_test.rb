@@ -14,7 +14,7 @@ module V1
       PRESSURE: 1009.30,
       HUMIDITY: 63.12,
       DATA: [{
-        SENSOR_TYPE: SENSOR_MQ2_HASH,
+        SENSOR_TYPE: Datum::SENSOR_MQ2,
         SENSOR_ERROR: 0.1,
         SENSOR_DATA: 47
       }]
@@ -24,12 +24,14 @@ module V1
     # Test error handling for no request body
     ##
     test 'create no request body' do
-      post :create
       expected = {
         error: I18n.t('controller.v1.error.missing_request_body')
       }
 
-      assert_response :bad_request
+      post(:create)
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
     end
 
@@ -37,11 +39,13 @@ module V1
     # Test error handling for invalid json in the request body
     ##
     test 'create invalid request body' do
-      post :create, body: 'invalid'
       expected = '{"error":"There was a problem in the JSON you submitted: ' \
                  '784: unexpected token at \'invalid\'"}'
 
-      assert_response :bad_request
+      post(:create, body: 'invalid')
+
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -52,9 +56,10 @@ module V1
       data = BASE_DATA.deep_dup.except(:DID)
       expected = '{"error":"Missing key in request body: \"did\"."}'
 
-      post :create, body: data.to_json
+      post(:create, body: data.to_json)
 
-      assert_response :bad_request
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -65,8 +70,10 @@ module V1
       data = BASE_DATA.deep_dup.except(:LOG_TIME)
       expected = '{"error":"Missing key in request body: \"log_time\"."}'
 
-      post :create, body: data.to_json
+      post(:create, body: data.to_json)
 
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -78,8 +85,10 @@ module V1
       data[:LOG_TIME] *= 1000
       expected = '{"error":"\"log_time\" must be unix time in seconds."}'
 
-      post :create, body: data.to_json
+      post(:create, body: data.to_json)
 
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -90,8 +99,10 @@ module V1
       data = BASE_DATA.deep_dup.except(:DATA)
       expected = '{"error":"Missing key in request body: \"data\"."}'
 
-      post :create, body: data.to_json
+      post(:create, body: data.to_json)
 
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -103,8 +114,10 @@ module V1
       data[:DATA][0].delete(:SENSOR_TYPE)
       expected = '{"error":"Missing key in request body: \"sensor_type\"."}'
 
-      post :create, body: data.to_json
+      post(:create, body: data.to_json)
 
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -116,8 +129,10 @@ module V1
       data[:DATA][0].delete(:SENSOR_ERROR)
       expected = '{"error":"Missing key in request body: \"sensor_error\"."}'
 
-      post :create, body: data.to_json
+      post(:create, body: data.to_json)
 
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -131,6 +146,8 @@ module V1
 
       post(:create, body: data.to_json)
 
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -141,8 +158,10 @@ module V1
       data = BASE_DATA.deep_dup
       expected = '{"success":"Data successfully inserted."}'
 
-      post :create, body: data.to_json
+      post(:create, body: data.to_json)
 
+      assert_response(:success)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
     end
 
@@ -150,10 +169,28 @@ module V1
     #
     ##
     test 'show success' do
-      expected = {}
+      expected = {
+        data: [
+          {
+            sensor_data: 1.5,
+            sensor_error: '9.99',
+            sensor_type: '4080cf866795cdaf370a641cbd8044453d79ae30',
+            # @todo format log time
+            log_time: '2016-07-13T16:31:36.000Z',
+            device_id: 1,
+            # @todo fix temperature & humidity
+            temperature: 20.0,
+            pressure: 1009.3,
+            humidity: 60.0,
+            sensor_name: 'mq2'
+          }
+        ]
+      }
 
       get(:show, params: { device_id: 1234 })
 
+      assert_response(:success)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
     end
 
@@ -165,6 +202,8 @@ module V1
 
       get(:show, params: { device_id: 'invalid' })
 
+      assert_response(:bad_request)
+      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
     end
   end

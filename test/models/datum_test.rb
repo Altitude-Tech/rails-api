@@ -6,7 +6,7 @@ require 'test_helper'
 
 class DatumTest < ActiveSupport::TestCase
   BASE_DATA = {
-    sensor_type: SENSOR_MQ2_HASH,
+    sensor_type: Datum::SENSOR_MQ2,
     sensor_error: 0.0,
     sensor_data: 1,
     log_time: Time.now.utc.to_s(:db),

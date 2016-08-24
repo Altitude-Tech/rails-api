@@ -16,6 +16,10 @@ module V1ApiErrorHandler
   # Error handler for StandardError
   ##
   def standard_error(exc)
+    # don't squash the error in test mode
+    # makes for really confusing error messages
+    raise exc if ENV['RAILS_ENV'] == 'test'
+
     msg = ENV['RAILS_ENV'] == 'production' ?
       I18n.t('controller.api.v1.error.unhandled_error') :
       exc.message
@@ -50,9 +54,13 @@ module V1ApiErrorHandler
   ##
   #
   ##
-  def record_not_found_error(exc)
+  def not_found_error(exc)
     logger.debug(exc.model.to_json)
-    logger.debug(exc.model.class.name)
+    logger.debug(exc.id)
+    logger.debug(exc.primary_key)
+    logger.debug(exc.key)
+    logger.debug(exc.value)
+    # @todo send back not found status?
     normal_error(exc)
   end
 

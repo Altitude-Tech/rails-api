@@ -50,7 +50,8 @@ en:
         json_parse_error: 'There was a problem in the JSON you submitted: %{msg}'
         invalid_value: '"%{key}" is missing or an unrecognised value.'
         missing_key: '"%{key}" was not found.'
-        unknown_key: '"%{key} is an unrecognised key.'
+        unknown_key: '"%{key}" is an unrecognised key.'
+        not_found: 'Could not find %{record} with %{key}: "%{value}".'
 
     v1_data:
       foo: bar
