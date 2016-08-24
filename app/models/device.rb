@@ -1,5 +1,5 @@
 ##
-# Model class representing a device
+# Model representing a device
 ##
 class Device < ApplicationRecord
   ##

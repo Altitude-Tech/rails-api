@@ -1,5 +1,5 @@
 ##
-# Represents a device's data
+# Model representing a device's data
 ##
 class Datum < ApplicationRecord
   ##
