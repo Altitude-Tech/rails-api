@@ -2,11 +2,19 @@
 # Represents a device's data
 ##
 class Datum < ApplicationRecord
-  belongs_to :device
+  ##
+  # Relationships
+  ##
+  belongs_to(:device)
 
-  before_validation(:convert_raw_log_time)
+  ##
+  # Callbacks
+  ##
   before_create(:convert_to_si_units)
 
+  ##
+  # Validations
+  ##
   validates(:sensor_type, sensor_type: true)
   validates(:sensor_error, numericality: {
               greater_than_or_equal_to: 0,
@@ -20,7 +28,7 @@ class Datum < ApplicationRecord
   validates(:humidity, numericality: { greater_than_or_equal_to: 0 })
 
   ##
-  # Sensors
+  # Constants
   ##
   SENSOR_MQ2_RAW = 'mq2'.freeze
   SENSOR_MQ7_RAW = 'mq7'.freeze
@@ -39,28 +47,37 @@ class Datum < ApplicationRecord
   }.freeze
 
   ##
-  # Get a string representing the sensor's name
+  # Get the unhashed string representation of a sensor type
   ##
   def sensor_name
     return SENSOR_MAP[self.sensor_type]
   end
 
-  private
-
   ##
-  #
+  # Convert log_time from unix to mysql format
   ##
-  def convert_raw_log_time
-    log_time = self.log_time.nil? ? self.log_time_before_type_cast : self.log_time
-    log_time = Integer(log_time)
-
-    self.log_time = Time.at(log_time).utc.to_s(:db)
+  def log_time=(log_time)
+    log_time = Time.at(Integer(log_time)).utc.to_s(:db)
+    self[:log_time] = log_time
   rescue TypeError, ArgumentError
-    nil
+    self[:log_time] = nil
   end
 
   ##
-  # @todo fix me?, possibly not working according to tests
+  # Format log time before it gets output
+  ##
+  def log_time
+    return Time.parse(self[:log_time].to_s).utc.to_formatted_s
+  rescue ArgumentError
+    return nil
+  end
+
+  private
+
+  ##
+  # Convert certain attributes to their SI units
+  #
+  # @todo fix me? add tests at least
   ##
   def convert_to_si_units
     # convert pressure from hecto-pascals to pascals

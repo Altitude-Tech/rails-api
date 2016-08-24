@@ -61,6 +61,8 @@ class V1ApiController < ApplicationController
 
   ##
   # Normalise keys to lowercase symbols
+  #
+  # Does not handle arrays within arrays
   ##
   def normalize_keys(hash)
     ret = {}
@@ -78,7 +80,6 @@ class V1ApiController < ApplicationController
           new_v.append(el.is_a?(Hash) ? normalize_keys(el) : el)
         end
 
-        # @todo handle nested arrays?
         v = new_v
       end
 

@@ -17,7 +17,7 @@ module V1
     rescue_from(Exceptions::V1ApiNotFoundError, with: :not_found_error)
 
     ##
-    #
+    # Get a single device's data
     ##
     def show
       device = Device.find_by!(device_id: params[:device_id])
@@ -50,7 +50,7 @@ module V1
     private
 
     ##
-    #
+    # Flatten/split the raw data hashes into 3 hashes representing each sensor's data
     ##
     def get_data(raw_data)
       base_data_keys = %i(log_time pressure humidity temperature)
@@ -79,7 +79,7 @@ module V1
     end
 
     ##
-    # @todo handle this with V1ApiNotFoundError
+    # Get the device by it's device_id
     ##
     def get_device(device_id)
       device_data = { device_id: device_id }
@@ -87,26 +87,6 @@ module V1
     rescue ActiveRecord::RecordNotFound
       msg = t('controller.v1.error.invalid_value', key: 'device_id')
       raise Exceptions::V1ApiError, msg
-    end
-
-    ##
-    # This has to happen before creation, otherwise rails will silently
-    # convert the integer to nil and then claims validation failed.
-    #
-    # See <http://stackoverflow.com/a/29941161>
-    #
-    # @todo report bug / make a workaround?
-    #
-    # @todo add min & max time here
-    ##
-    def format_log_time(time)
-      # catch out any non-integers
-      time = Integer(time)
-    rescue TypeError, ArgumentError
-      raise ArgumentError, t(:data_invalid_time)
-    else
-      # convert unix time to sql datetime format
-      return Time.at(time).utc.to_s(:db)
     end
   end
 end

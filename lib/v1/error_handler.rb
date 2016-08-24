@@ -59,12 +59,13 @@ module ErrorHandler
   end
 
   ##
+  # Error handler for ActiveRecord::RecordNotFound
   #
+  # Usually only catches error in `show` methods
   ##
   def not_found_error(exc)
     args = { model: exc.model.downcase, key: exc.key, value: exc.value }
     msg = I18n.t('controller.v1.error.not_found', args)
-    # @todo send back not found status?
     render_error(msg, :not_found)
   end
 

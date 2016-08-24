@@ -191,17 +191,15 @@ module V1
       expected = {
         data: [
           {
+            device_id: 1,
+            sensor_name: Datum::SENSOR_MQ2_RAW,
+            sensor_type: Datum::SENSOR_MQ2,
             sensor_data: 1.5,
             sensor_error: '9.99',
-            sensor_type: Datum::SENSOR_MQ2,
-            # @todo format log time
-            log_time: '2016-07-13T16:31:36.000Z',
-            device_id: 1,
-            # @todo fix temperature & humidity
             temperature: 293.15,
             pressure: 101_325.0,
             humidity: 60.0,
-            sensor_name: Datum::SENSOR_MQ2_RAW
+            log_time: '2016-07-13 16:31:36 UTC'
           }
         ]
       }
