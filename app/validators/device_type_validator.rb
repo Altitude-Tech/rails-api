@@ -6,10 +6,7 @@ class DeviceTypeValidator < BaseValidator
   #
   ##
   def validate_each(record, attribute, value)
-    Rails.logger.debug("attribute: #{value}")
-    Rails.logger.debug(value.class)
     value = get_raw_value(record, attribute, value)
-    Rails.logger.debug("attribute: #{value}")
 
     is_valid = Device::TYPES.include?(value)
     not_prod = ENV['RAILS_ENV'] != 'production'

@@ -6,11 +6,11 @@ class ApplicationRecord < ActiveRecord::Base
 
   protected
 
+  ##
+  #
+  ##
   def debug_type_casting
-    Rails.logger.debug('before:')
-    Rails.logger.debug(self.attributes)
-
-    Rails.logger.debug('after:')
-    Rails.logger.debug(self.attributes_before_type_cast)
+    Rails.logger.debug("before: #{attributes_before_type_cast}")
+    Rails.logger.debug("after: #{attributes}")
   end
 end

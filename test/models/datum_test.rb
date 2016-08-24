@@ -226,7 +226,7 @@ class DatumTest < ActiveSupport::TestCase
   test 'too high log time' do
     now = Time.now.utc
     data = BASE_DATA.deep_dup
-    data[:log_time] = now + 1.days
+    data[:log_time] = now + 1.day
 
     assert_raises(ActiveRecord::RecordInvalid) do
       Datum.create!(data)

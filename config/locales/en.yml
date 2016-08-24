@@ -20,12 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: Hello world
-  # errors for post api: /api
-  errors:
-    messages:
-      taken: is already in use
-
   # models
   models:
     data: []
@@ -36,7 +30,7 @@ en:
   validator:
     unrecognised: is an unrecognised value.
     hex: must be a hexadecimal number.
-    log_time: 'must be in unix time in seconds'
+    log_time: 'must be in unix time in seconds.'
 
   # controllers
   controller:

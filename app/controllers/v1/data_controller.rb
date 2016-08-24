@@ -84,7 +84,7 @@ module V1
     def get_device(device_id)
       device_data = { device_id: device_id }
       return Device.find_by!(device_data)
-    rescue ActiveRecord::RecordNotFound => e
+    rescue ActiveRecord::RecordNotFound
       msg = t('controller.v1.error.invalid_value', key: 'device_id')
       raise Exceptions::V1ApiError, msg
     end

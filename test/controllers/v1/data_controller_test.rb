@@ -30,9 +30,9 @@ module V1
 
       post(:create)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -44,9 +44,9 @@ module V1
 
       post(:create, body: 'invalid')
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -55,15 +55,15 @@ module V1
     test 'create missing device id' do
       data = BASE_DATA.deep_dup
       data.delete(:device_id)
-      expected =  {
+      expected = {
         error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
       }
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -72,15 +72,15 @@ module V1
     test 'create missing log time' do
       data = BASE_DATA.deep_dup
       data.delete(:log_time)
-      expected =  {
+      expected = {
         error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
       }
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -95,9 +95,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -112,9 +112,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -129,9 +129,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -146,9 +146,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -163,9 +163,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -179,9 +179,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      #assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:success)
     end
 
     ##
@@ -208,9 +208,9 @@ module V1
 
       get(:show, params: { device_id: 1234 })
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:success)
     end
 
     ##
@@ -224,9 +224,9 @@ module V1
 
       get(:show, params: { device_id: 'invalid' })
 
-      assert_response(:not_found)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:not_found)
     end
   end
 end

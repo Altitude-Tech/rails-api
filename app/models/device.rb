@@ -4,8 +4,6 @@
 class Device < ApplicationRecord
   has_many(:datum)
 
-  before_validation(:debug_type_casting)
-
   validates(:device_id, uniqueness: true, hex: true)
   validates(:device_type, device_type: true)
 

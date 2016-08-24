@@ -9,7 +9,7 @@ class LogTimeValidator < BaseValidator
     now = Time.now.utc
     limit = now - 30.days
 
-    condition = (limit..now).include?(value)
+    condition = (limit..now).cover?(value)
   rescue NoMethodError
     condition = false
   ensure

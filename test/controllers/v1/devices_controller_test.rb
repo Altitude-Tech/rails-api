@@ -35,9 +35,9 @@ module V1
 
       get(:index)
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:success)
     end
 
     ##
@@ -48,9 +48,9 @@ module V1
 
       get(:index, params: { start: 'invalid' })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -61,9 +61,9 @@ module V1
 
       get(:index, params: { start: 0 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -74,9 +74,9 @@ module V1
 
       get(:index, params: { limit: 'invalid' })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -87,9 +87,9 @@ module V1
 
       get(:index, params: { limit: 0 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -100,9 +100,9 @@ module V1
 
       get(:index, params: { limit: 501 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -121,9 +121,9 @@ module V1
 
       get(:index, params: { limit: 1 })
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:success)
     end
 
     ##
@@ -147,9 +147,9 @@ module V1
 
       get(:index, params: { limit: 500 })
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:success)
     end
 
     ##
@@ -160,9 +160,9 @@ module V1
 
       get(:index, params: { start: 3 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -176,9 +176,9 @@ module V1
 
       get(:show, params: { id: 'invalid' })
 
-      assert_response(:not_found)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:not_found)
     end
 
     ##
@@ -193,9 +193,9 @@ module V1
 
       get(:show, params: { id: 1234 })
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:success)
     end
 
     test 'create successful' do
@@ -206,9 +206,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      #assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:success)
     end
 
     ##
@@ -223,9 +223,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -240,9 +240,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -257,9 +257,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -274,9 +274,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -291,9 +291,9 @@ module V1
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
   end
 end
