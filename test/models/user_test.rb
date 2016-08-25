@@ -49,4 +49,40 @@ class UserTest < ActiveSupport::TestCase
       User.create!(data)
     end
   end
+
+  ##
+  # Test error handling for invalid email address
+  ##
+  test 'create invalid email' do
+    data = BASE_DATA.deep_dup
+    data[:email] = 'invalid'
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling for missing email address
+  ##
+  test 'create missing email' do
+    data = BASE_DATA.deep_dup
+    data.delete(:email)
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling for missing name
+  ##
+  test 'create missing name' do
+    data = BASE_DATA.deep_dup
+    data.delete(:name)
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
 end
