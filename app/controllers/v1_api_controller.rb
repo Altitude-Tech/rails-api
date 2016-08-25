@@ -10,9 +10,15 @@ require 'v1/param_handler'
 #
 ##
 class V1ApiController < ApplicationController
-  before_action :parse_request, only: [:create, :update]
-  before_action :set_json
+  ##
+  # Pre-process incoming requests to the API
+  ##
+  before_action(:parse_request, only: [:create, :update])
+  before_action(:set_json)
 
+  ##
+  # Error handling functions
+  ##
   rescue_from(StandardError, with: :standard_error)
   rescue_from(Exceptions::V1ApiError, with: :normal_error)
   rescue_from(Exceptions::V1ApiNotFoundError, with: :not_found_error)
