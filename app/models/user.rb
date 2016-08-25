@@ -11,4 +11,14 @@ class User < ApplicationRecord
   validates(:email, format: { with: /@/ })
   validates(:password, length: { minimum: 8 })
   validates(:password_digest, presence: true)
+
+  ##
+  #
+  ##
+  def authenticate!(password)
+    user = authenticate(password)
+
+    raise ArgumentError, 'incorrect password' if user == false
+    return user
+  end
 end

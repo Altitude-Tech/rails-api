@@ -91,9 +91,10 @@ class UserTest < ActiveSupport::TestCase
   ##
   test 'authenticate successful' do
     password = 'password'
+    user = User.find_by_email('bert@example.com')
     expected = true
 
-    actual = User.find_by_email('bert@example.com').authenticate(password)
+    actual = user.authenticate(password)
 
     assert_instance_of(User, actual)
     assert_equal('Bert Sesame', actual.name)
@@ -104,10 +105,38 @@ class UserTest < ActiveSupport::TestCase
   ##
   test 'authenticate incorrect' do
     password = 'invalid'
+    user = User.find_by_email('bert@example.com')
     expected = false
 
-    actual = User.find_by_email('bert@example.com').authenticate(password)
+    actual = user.authenticate(password)
 
     assert_equal(expected, actual)
+  end
+
+  ##
+  # Test successful authentication of user with error raising method
+  ##
+  test 'authenticate successful with error' do
+    password = 'password'
+    user = User.find_by_email('bert@example.com')
+    expected = true
+
+    actual = user.authenticate!(password)
+
+    assert_instance_of(User, actual)
+    assert_equal('Bert Sesame', actual.name)
+  end
+
+  ##
+  # Test incorrect authentication of user with error raigin metho
+  ##
+  test 'authenticate incorrect with error' do
+    password = 'invalid'
+    user = User.find_by_email('bert@example.com')
+    expected = false
+
+    assert_raises(ArgumentError) do
+      user.authenticate!(password)
+    end
   end
 end
