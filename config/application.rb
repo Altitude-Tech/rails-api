@@ -1,6 +1,10 @@
+##
+#
+##
 require_relative 'boot'
 
 require 'rails/all'
+require_relative '../lib/custom_log_formatter'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -20,5 +24,9 @@ module Api
 
     # use UTC as time zone
     config.time_zone = 'UTC'
+
+    # format logs to show a timestamp and severity for dev/prod
+    # and just severity for test
+    config.log_formatter = CustomLogFormatter.new
   end
 end
