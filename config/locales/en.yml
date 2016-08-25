@@ -30,7 +30,8 @@ en:
   validator:
     unrecognised: is an unrecognised value.
     hex: must be a hexadecimal number.
-    log_time: 'must be in unix time in seconds.'
+    log_time_invalid: 'must be in unix time in seconds.'
+    log_time_out_of_range: 'outside permitted limits.'
 
   # controllers
   controller:

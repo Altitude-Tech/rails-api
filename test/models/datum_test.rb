@@ -201,9 +201,15 @@ class DatumTest < ActiveSupport::TestCase
   test 'missing log time' do
     data = BASE_DATA.deep_dup
     data.delete(:log_time)
+    expected = 'Validation failed: Log time must be in unix time in seconds.'
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+      begin
+        Datum.create!(data)
+      rescue ActiveRecord::RecordInvalid => e
+        assert_equal(expected, e.message)
+        raise e
+      end
     end
   end
 
@@ -214,9 +220,15 @@ class DatumTest < ActiveSupport::TestCase
     now = Time.now.utc
     data = BASE_DATA.deep_dup
     data[:log_time] = now - 31.days
+    expected = 'Validation failed: Log time outside permitted limits.'
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+      begin
+        Datum.create!(data)
+      rescue ActiveRecord::RecordInvalid => e
+        assert_equal(expected, e.message)
+        raise e
+      end
     end
   end
 
@@ -227,9 +239,15 @@ class DatumTest < ActiveSupport::TestCase
     now = Time.now.utc
     data = BASE_DATA.deep_dup
     data[:log_time] = now + 1.day
+    expected = 'Validation failed: Log time outside permitted limits.'
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+      begin
+        Datum.create!(data)
+      rescue ActiveRecord::RecordInvalid => e
+        assert_equal(expected, e.message)
+        raise e
+      end
     end
   end
 
@@ -240,9 +258,15 @@ class DatumTest < ActiveSupport::TestCase
   test 'invalid millisecond log time' do
     data = BASE_DATA.deep_dup
     data[:log_time] = Time.now.to_i * 1000
+    expected = 'Validation failed: Log time must be in unix time in seconds.'
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+      begin
+        Datum.create!(data)
+      rescue ActiveRecord::RecordInvalid => e
+        assert_equal(expected, e.message)
+        raise e
+      end
     end
   end
 
