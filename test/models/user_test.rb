@@ -18,11 +18,35 @@ class UserTest < ActiveSupport::TestCase
   }.freeze
 
   ##
-  #
+  # Test successful creation
   ##
-  #test 'successful create' do
-  #  data = BASE_DATA.deep_dup
+  test 'create success' do
+    data = BASE_DATA.deep_dup
 
-  #  User.create!(data)
-  #end
+    User.create!(data)
+  end
+
+  ##
+  # Test error handling of no password
+  ##
+  test 'create no password' do
+    data = BASE_DATA.deep_dup
+    data.delete(:password)
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling password below minimum length
+  ##
+  test 'create too short password' do
+    data = BASE_DATA.deep_dup
+    data[:password] = 'short'
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
 end
