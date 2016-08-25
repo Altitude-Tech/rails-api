@@ -5,7 +5,10 @@
 require 'test_helper'
 
 class DatumTest < ActiveSupport::TestCase
-  DEVICE = Device.first!
+  ##
+  #
+  ##
+  DEVICE = Device.find(1)
   BASE_DATA = {
     sensor_type: Datum::SENSOR_MQ2,
     sensor_error: 0.2,
