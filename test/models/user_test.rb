@@ -85,4 +85,29 @@ class UserTest < ActiveSupport::TestCase
       User.create!(data)
     end
   end
+
+  ##
+  # Test successful authentication of user
+  ##
+  test 'authenticate successful' do
+    password = 'password'
+    expected = true
+
+    actual = User.find_by_email('bert@example.com').authenticate(password)
+
+    assert_instance_of(User, actual)
+    assert_equal('Bert Sesame', actual.name)
+  end
+
+  ##
+  # Test incorrect authentication of user
+  ##
+  test 'authenticate incorrect' do
+    password = 'invalid'
+    expected = false
+
+    actual = User.find_by_email('bert@example.com').authenticate(password)
+
+    assert_equal(expected, actual)
+  end
 end
