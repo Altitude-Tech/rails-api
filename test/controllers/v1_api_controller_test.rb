@@ -74,7 +74,6 @@ class V1ApiControllerTest < ActionController::TestCase
     error_regex = /@error="(.*?)"/
     msg = I18n.t('controller.v1.error.unhandled_error')
 
-    old_env = ENV['RAILS_ENV']
     ENV['RAILS_ENV'] = 'production'
 
     begin
@@ -101,7 +100,6 @@ class V1ApiControllerTest < ActionController::TestCase
     error_regex = /@error="(.*?)"/
     msg = I18n.t('controller.v1.error.unhandled_error')
 
-    old_env = ENV['RAILS_ENV']
     ENV['RAILS_ENV'] = 'production'
 
     begin
