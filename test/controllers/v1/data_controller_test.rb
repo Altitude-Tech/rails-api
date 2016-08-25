@@ -36,7 +36,7 @@ module V1
     end
 
     ##
-    # Test error handling for invalid json in the request body
+    # Test error handling for invalid json
     ##
     test 'create invalid request body' do
       expected = '{"error":"There was a problem in the JSON you submitted: ' \
@@ -50,7 +50,7 @@ module V1
     end
 
     ##
-    # Test error handling for missing device id key in JSON request body
+    # Test error handling for missing device id key
     ##
     test 'create missing device id' do
       data = BASE_DATA.deep_dup
@@ -67,11 +67,45 @@ module V1
     end
 
     ##
-    # Test error handling for missing log time key in JSON request body
+    # Test error handling for invalid device id
+    ##
+    test 'create invalid device_id' do
+      data = BASE_DATA.deep_dup
+      data[:device_id] = 'invalid'
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for missing log_time
     ##
     test 'create missing log time' do
       data = BASE_DATA.deep_dup
       data.delete(:log_time)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for invalid log_time
+    ##
+    test 'create invalid log_time' do
+      data = BASE_DATA.deep_dup
+      data[:log_time] = 'invalid'
       expected = {
         error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
       }
@@ -101,7 +135,109 @@ module V1
     end
 
     ##
-    # Test error handling for missing data key in request body
+    # Test error handling for missing temperature key
+    ##
+    test 'create missing temperature' do
+      data = BASE_DATA.deep_dup
+      data.delete(:temperature)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'temperature')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for invalid temperature
+    ##
+    test 'create invalid temperature' do
+      data = BASE_DATA.deep_dup
+      data[:temperature] = 'invalid'
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'temperature')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for missing humidity
+    ##
+    test 'create missing humidity' do
+      data = BASE_DATA.deep_dup
+      data.delete(:humidity)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'humidity')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for invalid humidity
+    ##
+    test 'create invalid humidity' do
+      data = BASE_DATA.deep_dup
+      data[:humidity] = 'invalid'
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'humidity')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for missing pressure
+    ##
+    test 'create missing pressure' do
+      data = BASE_DATA.deep_dup
+      data.delete(:pressure)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'pressure')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for invalid pressure
+    ##
+    test 'create invalid pressure' do
+      data = BASE_DATA.deep_dup
+      data[:pressure] = 'invalid'
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'pressure')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for missing data
     ##
     test 'create missing data' do
       data = BASE_DATA.deep_dup
@@ -118,7 +254,24 @@ module V1
     end
 
     ##
-    # Test error handling for missing sensor type key in request body
+    # Test error handling for invalid data
+    ##
+    test 'create invalid data' do
+      data = BASE_DATA.deep_dup
+      data[:data] = 'invalid'
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'data')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for missing sensor_type
     ##
     test 'create missing sensor type' do
       data = BASE_DATA.deep_dup
@@ -135,7 +288,24 @@ module V1
     end
 
     ##
-    # Test error handling for missing sensor error key in request body
+    # Test error handling for invalid sensor_type
+    ##
+    test 'create invalid sensor_type' do
+      data = BASE_DATA.deep_dup
+      data[:data][0][:sensor_type] = 'invalid'
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for missing sensor_error
     ##
     test 'create missing sensor error' do
       data = BASE_DATA.deep_dup
@@ -152,11 +322,45 @@ module V1
     end
 
     ##
-    # Test error handling for missing sensor data key in request body
+    # Test error handling for invalid sensor_error
+    ##
+    test 'create invalid sensor_error' do
+      data = BASE_DATA.deep_dup
+      data[:data][0][:sensor_error] = 'invalid'
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for missing sensor_data
     ##
     test 'create missing sensor data' do
       data = BASE_DATA.deep_dup
       data[:data][0].delete(:sensor_data)
+      expected = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for invalid sensor_data
+    ##
+    test 'create invalid sensor_data' do
+      data = BASE_DATA.deep_dup
+      data[:data][0][:sensor_data] = 'invalid'
       expected = {
         error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
       }
@@ -181,11 +385,70 @@ module V1
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:success)
+      assert_response(:ok)
     end
 
     ##
-    #
+    # Test multiple create with error
+    ##
+    test 'create multiple with error' do
+      expected1 = {
+        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
+      }
+      expected2 = {
+        data: []
+      }
+
+      # create a new device first
+      device_id = 6789
+      Device.create!(device_id: device_id, device_type: Device::TYPE_TEST)
+
+      data = BASE_DATA.deep_dup
+      data[:device_id] = device_id
+      child_data = data[:data][0]
+
+      data[:data].append(child_data.clone)
+      data[:data][1][:sensor_data] = 'invalid'
+
+      Rails.logger.debug(data)
+
+      post(:create, body: data.to_json)
+
+      # make sure the first request failed
+      assert_equal(expected1.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+
+      # double check nothing was inserted
+      get(:show, params: { device_id: device_id })
+
+      assert_equal(expected2.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
+    end
+
+    ##
+    # Test multiple successful create
+    ##
+    test 'create multiple success' do
+      data = BASE_DATA.deep_dup
+      child_data = data[:data][0]
+      data[:data].append(child_data.clone)
+      expected = {
+        result: I18n.t('controller.v1.message.success')
+      }
+
+      Rails.logger.debug(data)
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
+    end
+
+    ##
+    # Test show method success
     ##
     test 'show success' do
       expected = {
@@ -208,11 +471,11 @@ module V1
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:success)
+      assert_response(:ok)
     end
 
     ##
-    #
+    # Test show error handling for invalid device id
     ##
     test 'show not found' do
       args = { model: 'device', key: 'device_id', value: 'invalid' }

@@ -10,7 +10,7 @@ class Datum < ApplicationRecord
   ##
   # Callbacks
   ##
-  before_create(:convert_to_si_units)
+  # before_create(:convert_to_si_units)
 
   ##
   # Validations
@@ -24,8 +24,13 @@ class Datum < ApplicationRecord
   validates(:log_time, log_time: true)
   validates(:device_id, presence: true)
   validates(:temperature, numericality: true)
-  validates(:pressure, numericality: { greater_than_or_equal_to: 0 })
-  validates(:humidity, numericality: { greater_than_or_equal_to: 0 })
+  validates(:pressure, numericality: {
+              greater_than_or_equal_to: 0
+            })
+  validates(:humidity, numericality: {
+              greater_than_or_equal_to: 0,
+              less_than_or_equal_to: 100
+            })
 
   ##
   # Constants

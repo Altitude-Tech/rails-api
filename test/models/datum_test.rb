@@ -343,6 +343,50 @@ class DatumTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test error handling for too low humidity
+  ##
+  test 'too low humidity' do
+    data = BASE_DATA.deep_dup
+    data[:humidity] = -1
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
+  # Test success for lower limit humidity
+  ##
+  test 'lower limit humidity' do
+    data = BASE_DATA.deep_dup
+    data[:humidity] = 0
+
+    Datum.create!(data)
+  end
+
+  ##
+  # Test error handling for too high humidity
+  ##
+  test 'too high humidity' do
+    data = BASE_DATA.deep_dup
+    data[:humidity] = 101
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Datum.create!(data)
+    end
+  end
+
+  ##
+  # Test success for upper limit humidity
+  ##
+  test 'upper limit humidity' do
+    data = BASE_DATA.deep_dup
+    data[:humidity] = 100
+
+    Datum.create!(data)
+  end
+
+  ##
   # Test successful creation
   ##
   test 'successful create' do

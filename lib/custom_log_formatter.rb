@@ -8,7 +8,7 @@ class CustomLogFormatter < Logger::Formatter
   # Outputs the time, severity and message in development and production
   # Outputs the severity and message in test
   ##
-  def call(severity, time, program_name, message)
+  def call(severity, time, _program_name, message)
     message = message_to_s(message)
 
     return "[#{severity}] #{message}\n" if ENV['RAILS_ENV'] == 'test'
@@ -19,7 +19,7 @@ class CustomLogFormatter < Logger::Formatter
   # Format the message object to handle non-strings being logged
   ##
   def message_to_s(obj)
-    return "#{obj}" if obj.is_a?(String)
+    return obj if obj.is_a?(String)
     return obj.inspect
   end
 end

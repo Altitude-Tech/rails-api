@@ -37,7 +37,7 @@ module V1
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:success)
+      assert_response(:ok)
     end
 
     ##
@@ -123,7 +123,7 @@ module V1
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:success)
+      assert_response(:ok)
     end
 
     ##
@@ -149,7 +149,7 @@ module V1
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:success)
+      assert_response(:ok)
     end
 
     ##
@@ -195,7 +195,7 @@ module V1
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:success)
+      assert_response(:ok)
     end
 
     test 'create successful' do
@@ -208,7 +208,7 @@ module V1
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:success)
+      assert_response(:ok)
     end
 
     ##
