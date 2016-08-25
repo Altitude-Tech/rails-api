@@ -8,10 +8,6 @@ class DatumTest < ActiveSupport::TestCase
   ##
   #
   ##
-<<<<<<< HEAD
-  DEVICE = Device.find(1)
-=======
->>>>>>> dev
   BASE_DATA = {
     sensor_type: Datum::SENSOR_MQ2,
     sensor_error: 0.2,
