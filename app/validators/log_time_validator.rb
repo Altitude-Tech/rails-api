@@ -9,7 +9,7 @@ class LogTimeValidator < BaseValidator
     now = Time.now.utc
     limit = now - 30.days
     # the maximum time that can be stored in unix time assuming unisigned 32 bit ints
-    max_unix = Time.at(2**32 -1).utc
+    max_unix = Time.at(2**32 - 1).utc
 
     msg_invalid = I18n.t('validator.log_time_invalid')
     msg_range = I18n.t('validator.log_time_out_of_range')
