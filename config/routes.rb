@@ -1,12 +1,22 @@
 Rails.application.routes.draw do
   # api v1
   namespace :v1 do
+    # simple routes
+    resources :data, only: [:create]
+    resources :devices, only: [:create, :index, :show]
+    resources :users, only: [:create, :index]
+
+    # extra data routes
     controller :data do
-      match 'data', to: 'data#create', via: :post
-      match 'data/:device_id', to: 'data#show', as: :device_id, via: :get
+      match 'data/:device_id', to: 'data#show', via: :get
     end
 
-    resources :devices, only: [:create, :index, :show]
-    resources :users, only: [:create, :index, :show, :update]
+    # extra users routes
+    controller :users do
+      match 'users/:email', to: 'users#show', via: :get
+      match 'users/:email', to: 'users#update', via: [:patch, :put]
+      match 'users/authenticate', to: 'users#authenticate', via: [:post]
+      match 'users/change_password', to: 'users#change_password', via: [:patch, :put]
+    end
   end
 end
