@@ -21,4 +21,11 @@ class User < ApplicationRecord
     raise ArgumentError, 'incorrect password' if user == false
     return user
   end
+
+  ##
+  #
+  ##
+  def update(params=nil)
+    super(params)
+  end
 end
