@@ -18,7 +18,7 @@ class UserTest < ActiveSupport::TestCase
   }.freeze
 
   ##
-  # Test successful creation
+  # Test create success
   ##
   test 'create success' do
     data = BASE_DATA.deep_dup
@@ -27,7 +27,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test error handling of no password
+  # Test create error handling of no password
   ##
   test 'create no password' do
     data = BASE_DATA.deep_dup
@@ -39,7 +39,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test error handling password below minimum length
+  # Test create error handling password below minimum length
   ##
   test 'create too short password' do
     data = BASE_DATA.deep_dup
@@ -51,7 +51,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test error handling for invalid email address
+  # Test create error handling for invalid email address
   ##
   test 'create invalid email' do
     data = BASE_DATA.deep_dup
@@ -63,7 +63,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test error handling for missing email address
+  # Test create error handling for missing email address
   ##
   test 'create missing email' do
     data = BASE_DATA.deep_dup
@@ -75,7 +75,13 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test error handling for missing name
+  # Test create error handling for in use email address
+  ##
+  test 'create in use email' do
+  end
+
+  ##
+  # Test create error handling for missing name
   ##
   test 'create missing name' do
     data = BASE_DATA.deep_dup
@@ -134,5 +140,47 @@ class UserTest < ActiveSupport::TestCase
     assert_raises(ArgumentError) do
       user.authenticate!(password)
     end
+  end
+
+  ##
+  # Test update success for name
+  ##
+  test 'update name success' do
+  end
+
+  ##
+  # Test update success for email
+  ##
+  test 'update email success' do
+  end
+
+  ##
+  # Test update with invalid email
+  ##
+  test 'update email invalid' do
+  end
+
+  ##
+  # Test update with in use email
+  ##
+  test 'update email in use' do
+  end
+
+  ##
+  #
+  ##
+  test 'change_password success' do
+  end
+
+  ##
+  #
+  ##
+  test 'change_password incorrect old password' do
+  end
+
+  ##
+  #
+  ##
+  test 'change_password invalid new password' do
   end
 end

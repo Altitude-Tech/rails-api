@@ -29,22 +29,15 @@ module V1
     # Get details for a specific user
     ##
     def show
-      logger.debug(@json[:email])
+      @user = User.find_by_email!(@json[:email])
     end
 
     ##
     # For updating a user's name or email
     ##
     def update
-      msg = 'This access point does not support changing a password.'
-      raise V1ApiError, msg if @json.key?(:password)
-
       user = User.find_by_email!(@json[:email])
-
-      attrs = @json.slice(:new_email, :name)
-      attrs[:email] = attrs.delete(:new_email)
-
-      user.update!(attrs)
+      user.update!(@params)
 
       @result = t('controller.v1.message.success')
       render('v1/result')
