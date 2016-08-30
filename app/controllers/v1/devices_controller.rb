@@ -1,5 +1,11 @@
 ##
-# Devices api controller
+#
+##
+
+require 'exceptions'
+
+##
+#
 ##
 module V1
   ##
@@ -7,81 +13,36 @@ module V1
   ##
   class DevicesController < V1ApiController
     ##
-    #
-    ##
-    CREATE_KEYS = [:device_id, :device_type].freeze
-
-    ##
-    #
+    # Register a new device
     ##
     def create
-      begin
-        check_keys(@json, CREATE_KEYS)
-      rescue KeyError => e
-        render_error(e.message) && return
-      end
+      Device.create!(@json)
 
-      data = @json.select do |k, _|
-        CREATE_KEYS.include?(k)
-      end
-
-      begin
-        Device.create!(data)
-      rescue ActiveRecord::RecordInvalid => e
-        @error = e.message
-        render('v1/error', status: :bad_request) && return
-      end
-
-      @result = t(:v1_api_success)
+      @result = t('controller.v1.message.success')
       render('v1/result')
     end
 
     ##
-    #
+    # Get a list of devices
     ##
     def index
-      limit = extract_int_param('limit', 10, 1, 500)
-      start = extract_int_param('start', 1, 1, Float::INFINITY)
-
-      return if limit == false || start == false
+      limit = extract_int_param('limit', 10, 1, 500, 'devices')
+      start = extract_int_param('start', 1, 1, Float::INFINITY, 'devices')
 
       @devices = Device.where('id >= ?', start).order('id').limit(limit)
 
-      unless @devices.any?
-        @error = t(:devices_no_more)
-        render('v1/error', status: :bad_request) && return
-      end
+      raise Exceptions::V1ApiError, t('controller.v1_devices.error.no_more') unless @devices.any?
     end
 
     ##
-    #
+    # Get details about a specific device
     ##
     def show
       # look up by device_id rather than id (primary key in the database)
       # as it's the indentification people are more likely to have
       @device = Device.find_by!(device_id: params[:id])
-    rescue ActiveRecord::RecordNotFound
-      @error = t(:devices_not_found)
-      render('v1/error', status: :bad_request) && return
-    end
-
-    private
-
-    ##
-    #
-    ##
-    def extract_int_param(param, default, min, max)
-      val = params[param] || default
-
-      begin
-        validate_int(val, min, max)
-      rescue ArgumentError
-        msg = "devices_error_#{param}"
-        @error = param == 'limit' ? t(msg, max: max) : t(msg)
-
-        render('v1/error', status: :bad_request)
-        return false
-      end
+    rescue ActiveRecord::RecordNotFound => e
+      raise Exceptions::V1ApiNotFoundError.new(e, 'id', params[:id])
     end
   end
 end

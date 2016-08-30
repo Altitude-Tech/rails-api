@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  # api docs
-  apipie
-
   # api v1
   namespace :v1 do
     controller :data do

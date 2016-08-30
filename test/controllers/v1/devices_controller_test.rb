@@ -35,74 +35,74 @@ module V1
 
       get(:index)
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
     end
 
     ##
     # Test error handling of invalid argument for start parameter
     ##
     test 'index invalid start' do
-      expected = { error: I18n.t(:devices_error_start) }
+      expected = { error: I18n.t('controller.v1_devices.error.start') }
 
       get(:index, params: { start: 'invalid' })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
     # Test error handling of too low value of start parameter
     ##
     test 'index too low start' do
-      expected = { error: I18n.t(:devices_error_start) }
+      expected = { error: I18n.t('controller.v1_devices.error.start') }
 
       get(:index, params: { start: 0 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
     # Test error handling of invalid argument for limit parameter
     ##
     test 'index invalid limit' do
-      expected = { error: I18n.t(:devices_error_limit, max: 500) }
+      expected = { error: I18n.t('controller.v1_devices.error.limit', max: 500) }
 
       get(:index, params: { limit: 'invalid' })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
     # Test error handling of too low value of limit parameter
     ##
     test 'index too low limit' do
-      expected = { error: I18n.t(:devices_error_limit, max: 500) }
+      expected = { error: I18n.t('controller.v1_devices.error.limit', max: 500) }
 
       get(:index, params: { limit: 0 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
     # Test error handling of too high value of limit parameter
     ##
     test 'index too high limit' do
-      expected = { error: I18n.t(:devices_error_limit, max: 500) }
+      expected = { error: I18n.t('controller.v1_devices.error.limit', max: 500) }
 
       get(:index, params: { limit: 501 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -121,9 +121,9 @@ module V1
 
       get(:index, params: { limit: 1 })
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
     end
 
     ##
@@ -147,35 +147,38 @@ module V1
 
       get(:index, params: { limit: 500 })
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
     end
 
     ##
     # Test retrieving out-of-bounds indicies
     ##
-    test 'index out-of-bounds' do
-      expected = { error: I18n.t(:devices_no_more) }
+    test 'index start out-of-bounds' do
+      expected = { error: I18n.t('controller.v1_devices.error.no_more') }
 
       get(:index, params: { start: 3 })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
     # Test invalid device id
     ##
     test 'show get invalid device' do
-      expected = { error: I18n.t(:devices_not_found) }
+      args = { model: 'device', key: 'id', value: 'invalid' }
+      expected = {
+        error: I18n.t('controller.v1.error.not_found', args)
+      }
 
       get(:show, params: { id: 'invalid' })
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:not_found)
     end
 
     ##
@@ -190,22 +193,22 @@ module V1
 
       get(:show, params: { id: 1234 })
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
     end
 
     test 'create successful' do
       data = BASE_DATA.deep_dup
       expected = {
-        result: I18n.t(:v1_api_success)
+        result: I18n.t('controller.v1.message.success')
       }
 
       post(:create, body: data.to_json)
 
-      assert_response(:success)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
     end
 
     ##
@@ -215,14 +218,14 @@ module V1
       data = BASE_DATA.deep_dup
       data[:device_id] = 'invalid'
       expected = {
-        error: 'Validation failed: device_id is an unrecognised value.'
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
       }
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -232,14 +235,14 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:device_id)
       expected = {
-        error: I18n.t(:v1_api_missing_key, key: 'device_id')
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
       }
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -249,14 +252,14 @@ module V1
       data = BASE_DATA.deep_dup
       data[:device_type] = 'invalid'
       expected = {
-        error: 'Validation failed: device_type is an unrecognised value.'
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_type')
       }
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
 
     ##
@@ -266,14 +269,31 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:device_type)
       expected = {
-        error: I18n.t(:v1_api_missing_key, key: 'device_type')
+        error: I18n.t('controller.v1.error.invalid_value', key: 'device_type')
       }
 
       post(:create, body: data.to_json)
 
-      assert_response(:bad_request)
-      assert_equal('application/json', response.content_type)
       assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    #
+    ##
+    test 'create unknown param' do
+      data = BASE_DATA.deep_dup
+      data[:foo] = 'bar'
+      expected = {
+        error: I18n.t('controller.v1.error.unknown_key', key: 'foo')
+      }
+
+      post(:create, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
     end
   end
 end

@@ -102,25 +102,9 @@ class DeviceTest < ActiveSupport::TestCase
   ##
   # Test successful creation
   ##
-  test 'successful insert' do
+  test 'successful create' do
     data = BASE_DATA.deep_dup
 
     Device.create!(data)
-  end
-
-  ##
-  #
-  ##
-  test 'get device attrs' do
-    expected = {
-      device_id: '1234',
-      device_type: Device::TYPE_TEST,
-      device_name: Device::TYPE_TEST_RAW
-    }
-    d = Device.find_by!(device_id: 1234)
-
-    Rails.logger.debug(d)
-
-    assert_equal(expected, d.attrs)
   end
 end

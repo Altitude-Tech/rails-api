@@ -1,54 +1,35 @@
 ##
 # Application controller
 ##
+
+require 'exceptions'
+require 'v1/error_handler'
+require 'v1/param_handler'
+
+##
+#
+##
 class V1ApiController < ApplicationController
-  before_action :parse_request, only: [:create, :update]
-  before_action :set_json
+  ##
+  # Pre-process incoming requests to the API
+  ##
+  before_action(:parse_request, only: [:create, :update])
+  before_action(:set_json)
+
+  ##
+  # Error handling functions
+  ##
+  rescue_from(StandardError, with: :standard_error)
+  rescue_from(Exceptions::V1ApiError, with: :normal_error)
+  rescue_from(Exceptions::V1ApiNotFoundError, with: :not_found_error)
+  rescue_from(JSON::ParserError, with: :json_parser_error)
+  rescue_from(ActiveModel::UnknownAttributeError, with: :unknown_attr_error)
+  rescue_from(ActiveRecord::RecordInvalid, with: :record_invalid_error)
+
+  include ErrorHandler
+  include ParamHandler
 
   protected
-
-  ##
-  # Validate an argument is an integer and within defined limits
-  ##
-  def validate_int(num, min, max)
-    begin
-      num = Integer(num)
-    # for catching nil
-    rescue TypeError => e
-      raise ArgumentError, e
-    end
-
-    not_between = (num < min) || (num > max)
-
-    raise ArgumentError, t(:v1_api_int_outside_limits) if not_between
-
-    return num
-  end
-
-  ##
-  # Check required keys exist
-  ##
-  def check_keys(hash, keys)
-    keys.each do |key|
-      raise KeyError, t(:v1_api_missing_key, key: key) unless hash.key?(key)
-    end
-  end
-
-  ##
-  # Render an error message as json
-  ##
-  def render_error(msg)
-    error = { error: msg }
-    render(json: error, status: :bad_request)
-  end
-
-  ##
-  # Render a success message as json
-  ##
-  def render_success(msg)
-    success = { success: msg }
-    render(json: success)
-  end
 
   ##
   # Check request IP address matches a whitelisted IP
@@ -74,26 +55,31 @@ class V1ApiController < ApplicationController
   ##
   def parse_request
     body = request.body.read
-    render_error(t(:v1_api_missing_body)) && return if body.blank?
 
-    begin
-      @json = JSON.parse(body)
-      @json = normalize_keys(@json)
-    rescue JSON::ParserError => e
-      render_error(t(:v1_api_json_parse_error, msg: e.message)) && return
+    if body.blank?
+      msg = I18n.t('controller.v1.error.missing_request_body')
+      raise Exceptions::V1ApiError, msg
     end
+
+    @json = JSON.parse(body)
+    @json = normalize_keys(@json)
   end
 
   ##
   # Normalise keys to lowercase symbols
+  #
+  # Does not handle arrays within arrays
   ##
   def normalize_keys(hash)
     ret = {}
 
     hash.each do |k, v|
+      # don't modify symbols
       k = k.is_a?(String) ? k.downcase.parameterize(separator: '_').to_sym : k
 
       if v.is_a?(Array)
+        # make a new array for the values
+        # as it didn;t work properly without it
         new_v = []
 
         v.each do |el|

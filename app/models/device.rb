@@ -1,13 +1,21 @@
 ##
-# Represents a device
+# Model representing a device
 ##
 class Device < ApplicationRecord
-  has_many :datum
+  ##
+  # Relationships
+  ##
+  has_many(:datum)
 
-  validates :device_id, uniqueness: true, hex: true
-  validates :device_type, device: true, presence: true
+  ##
+  # Validations
+  ##
+  validates(:device_id, uniqueness: true, hex: true)
+  validates(:device_type, device_type: true)
 
-  # constants
+  ##
+  # Constants
+  ##
   TYPE_TEST_RAW = 'test'.freeze
   TYPE_SENSLY_RAW = 'sensly'.freeze
 
@@ -22,20 +30,7 @@ class Device < ApplicationRecord
   }.freeze
 
   ##
-  #
-  ##
-  def attrs
-    name = TYPES_MAP[device_type]
-
-    return {
-      device_id: device_id,
-      device_type: device_type,
-      device_name: name
-    }
-  end
-
-  ##
-  #
+  # Get the unhashed string representation of a device type
   ##
   def name
     return TYPES_MAP[device_type]
