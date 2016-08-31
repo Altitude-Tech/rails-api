@@ -20,7 +20,7 @@ module V1
     # Get a single device's data
     ##
     def show
-      device = Device.find_by!(device_id: params[:device_id])
+      device = Device.find_by_device_id!(params[:device_id])
       @data = device.datum
       # @todo order?
       # <http://stackoverflow.com/questions/9197649/rails-sort-by-join-table-data>
