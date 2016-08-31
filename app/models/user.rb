@@ -17,7 +17,7 @@ class User < ApplicationRecord
   ##
   def self.create!(args)
     if args.key?(:password_digest)
-      msg = 'password_digest cannot be explicitly updated.'
+      msg = I18n.t('models.users.error.password_digest')
       raise ArgumentError, msg
     end
 
@@ -29,7 +29,7 @@ class User < ApplicationRecord
   ##
   def update!(args)
     if args.key?(:password_digest)
-      msg = 'password_digest cannot be explicitly updated.'
+      msg = I18n.t('models.users.error.password_digest')
       raise ArgumentError, msg
     end
 
@@ -43,7 +43,7 @@ class User < ApplicationRecord
     user = authenticate(password)
 
     if user == false
-      msg = 'incorrect password'
+      msg = I18n.t('models.users.error.password')
       raise ArgumentError, msg
     end
 
@@ -61,11 +61,13 @@ class User < ApplicationRecord
   ##
   #
   ##
-  def change_details!(params)
+  def update_details!(params)
     if params.key?(:password)
       msg = 'This method does not support changing passwords.'
       raise ArgumentError, msg
     end
+
+    params[:email] = params.delete(:new_email) if params.key?(:new_email)
 
     update!(params)
   end

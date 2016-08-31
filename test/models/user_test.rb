@@ -174,59 +174,58 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test change_details success for name
+  # Test update_details success for name
   ##
-  test 'change_details name success' do
+  test 'update_details name success' do
     name = 'Bob'
     user = User.first!
 
-    user.change_details!(name: name)
+    user.update_details!(name: name)
   end
 
   ##
-  # Test change_details success for email
+  # Test update_details success for email
   ##
-  test 'change_details email success' do
+  test 'update_details email success' do
     email = 'bert@sesame.com'
     user = User.first!
 
-    user.change_details!(email: email)
+    user.update_details!(new_email: email)
   end
 
   ##
-  # Test change_details with invalid email
+  # Test update_details with invalid email
   ##
-  test 'change_details email invalid' do
+  test 'update_details email invalid' do
     email = 'invalid'
     user = User.first!
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      user.change_details!(email: email)
+      user.update_details!(new_email: email)
     end
   end
 
   ##
-  # Test change_details with in use email
+  # Test update_details with in use email
   ##
-  test 'change_details email in use' do
-    email = 'invalid'
+  test 'update_details email in use' do
     user1 = User.find_by_email!('bert@example.com')
     user2 = User.find_by_email!('ernie@example.com')
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      user1.change_details!(email: user2.email)
+      user1.update_details!(new_email: user2.email)
     end
   end
 
   ##
-  # Test error handling of setting password in change_details
+  # Test error handling of setting password in update_details
   ##
-  test 'change_details set password' do
+  test 'update_details set password' do
     password = 'password'
     user = User.first!
 
     assert_raises(ArgumentError) do
-      user.change_details!(password: password)
+      user.update_details!(password: password)
     end
   end
 

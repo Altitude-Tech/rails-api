@@ -29,4 +29,10 @@ module Exceptions
       super(exc.message)
     end
   end
+
+  ##
+  #
+  ##
+  class V1ApiRecordInvalid < V1ApiError
+  end
 end

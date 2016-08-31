@@ -14,9 +14,9 @@ Rails.application.routes.draw do
     # extra users routes
     controller :users do
       match 'users/:email', to: 'users#show', via: :get
-      match 'users/:email', to: 'users#update', via: [:patch, :put]
-      match 'users/authenticate', to: 'users#authenticate', via: [:post]
       match 'users/change_password', to: 'users#change_password', via: [:patch, :put]
+      match 'users/login', to: 'users#login', via: [:post]
+      match 'users/update_details', to: 'users#update_details', via: [:patch, :put]
     end
   end
 end
