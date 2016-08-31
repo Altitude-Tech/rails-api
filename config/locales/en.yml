@@ -24,7 +24,12 @@ en:
   models:
     data: []
     devices: []
-    users: []
+    users:
+      error:
+        not_supported: 'This method does not support changing passwords.'
+        password: Incorrect password.
+        password_digest: '"password_digest" cannot be explicitly updated.'
+
 
   # validators
   validator:
@@ -48,9 +53,6 @@ en:
         unknown_key: '"%{key}" is an unrecognised key.'
         not_found: 'Could not find %{model} with %{key}: "%{value}".'
 
-    v1_data:
-      foo: bar
-
     v1_devices:
       error:
         limit: '"limit" must be an integer between 1 and %{max}.'
@@ -58,6 +60,10 @@ en:
         no_more: No more devices were found.
 
     v1_users:
-      foo: bar
+      error:
+        limit: '"limit" must be an integer between 1 and %{max}.'
+        start: '"start" must be an integer greater than 1.'
+        no_more: No more users were found.
+
 
 

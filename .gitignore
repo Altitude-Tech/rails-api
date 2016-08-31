@@ -10,9 +10,6 @@
 # ignore Gemfile.lock
 Gemfile.lock
 
-# ignore rvm config
-.versions.conf
-
 # ignore all logfiles and tempfiles
 # @todo fix this
 /log/*
@@ -24,9 +21,6 @@ Gemfile.lock
 /tmp/*/
 !/tmp/.keep
 !/tmp/*/.keep
-
-
-# ignore production puma stuff
 
 # ignore Byebug command history file.
 .byebug_history

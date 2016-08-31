@@ -77,4 +77,12 @@ module ErrorHandler
     msg = I18n.t('controller.v1.error.unknown_key', key: key)
     render_error(msg)
   end
+
+  ##
+  # Error handler for errors overriding ActiveRecord::RecordNotFound
+  ##
+  def alternate_record_invalid(exc)
+    msg = I18n.t('controller.v1.error.invalid_value', key: exc.message)
+    render_error(msg)
+  end
 end

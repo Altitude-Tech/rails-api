@@ -2,10 +2,10 @@ one:
   id : 1
   name: Bert Sesame
   email: bert@example.com
-  password_hash: MyString
+  password_digest: <%= BCrypt::Password.create("password", cost: BCrypt::Engine.cost) %>
 
 two:
   id: 2
   name: Ernie Sesame
   email: ernie@example.com
-  password_hash: MyString
+  password_digest: <%= BCrypt::Password.create("password", cost: BCrypt::Engine.cost) %>

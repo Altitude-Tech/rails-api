@@ -3,9 +3,9 @@
 one:
   id: 1
   device_id: 1234
-  device_type: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
+  device_type: <%= Device::TYPE_TEST %>
 
 two:
   id: 2
   device_id: 4567
-  device_type: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
+  device_type: <%= Device::TYPE_TEST %>

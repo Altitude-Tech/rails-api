@@ -1,36 +1,14 @@
 # README
 
 ## Setup
-* [Production](PRODUCTION_SETUP.md)
-* [Development](DEVELOPMENT_SETUP.md)
+For production setup, clone [`api-deploy`](https://github.com/matthwdell/api-deploy) and this repository to your home directory on the production server, and follow the instructions in `api-deploy`.
 
-Sometimes new gems or database changes will be made after your initial setup.
+For development setup, see the instructions in [`api-vagrant`](https://github.com/mattdowdell/api-vagrant). Note that running the test suite or rubocop will vary slightly from the below instructions. See the instructions in `api-vagrant` for more details on how to run these commands in your vagrant box.
 
-To install new gems:
-```
-$ bundler install
-```
-
-To update the database for development/tests:
-```
-$ rake db:migrate
-```
-
-To update the database in production:
-```
-$ DB_ADMIN=1 rake db:migrate
-```
-
-## Running tests
+## Tests
 To run the test suite:
 ```
 $ rake test
-```
-
-## Run the development server
-To start a development server:
-```
-$ rails server
 ```
 
 ## Rubocop
@@ -46,7 +24,7 @@ To send the result to `.rubocop_todo.yml`:
 $ rubocop --rails --auto-gen-config
 ```
 
-The generated config file can then be slowly worked through and corrected as needed.
+The generated config file can then beworked through and corrected as needed.
 
 To run rubocop with the config in `rubocop_todo.yml`:
 ```
