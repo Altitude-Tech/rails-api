@@ -78,6 +78,13 @@ class UserTest < ActiveSupport::TestCase
   # Test create error handling for in use email address
   ##
   test 'create in use email' do
+    user = User.first!
+    data = BASE_DATA.deep_dup
+    data[:email] = user.email
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
   end
 
   ##
@@ -93,11 +100,23 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test create error handling with password_digest
+  ##
+  test 'create password_digest' do
+    data = BASE_DATA.deep_dup
+    data[:password_digest] = 'password_digest'
+
+    assert_raises(ArgumentError) do
+      User.create!(data)
+    end
+  end
+
+  ##
   # Test successful authentication of user
   ##
   test 'authenticate successful' do
     password = 'password'
-    user = User.find_by_email('bert@example.com')
+    user = User.first!
 
     actual = user.authenticate(password)
 
@@ -110,7 +129,7 @@ class UserTest < ActiveSupport::TestCase
   ##
   test 'authenticate incorrect' do
     password = 'invalid'
-    user = User.find_by_email('bert@example.com')
+    user = User.first!
 
     actual = user.authenticate(password)
 
@@ -122,7 +141,7 @@ class UserTest < ActiveSupport::TestCase
   ##
   test 'authenticate successful with error' do
     password = 'password'
-    user = User.find_by_email('bert@example.com')
+    user = User.first!
 
     actual = user.authenticate!(password)
 
@@ -135,7 +154,7 @@ class UserTest < ActiveSupport::TestCase
   ##
   test 'authenticate incorrect with error' do
     password = 'invalid'
-    user = User.find_by_email('bert@example.com')
+    user = User.first!
 
     assert_raises(ArgumentError) do
       user.authenticate!(password)
@@ -143,44 +162,108 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test update success for name
+  # Test error handling for updating password_digest
   ##
-  test 'update name success' do
+  test 'update password_digest' do
+    password_digest = 'invalid_password'
+    user = User.first!
+
+    assert_raises(ArgumentError) do
+      user.update!(password_digest: password_digest)
+    end
   end
 
   ##
-  # Test update success for email
+  # Test change_details success for name
   ##
-  test 'update email success' do
+  test 'change_details name success' do
+    name = 'Bob'
+    user = User.first!
+
+    user.change_details!(name: name)
   end
 
   ##
-  # Test update with invalid email
+  # Test change_details success for email
   ##
-  test 'update email invalid' do
+  test 'change_details email success' do
+    email = 'bert@sesame.com'
+    user = User.first!
+
+    user.change_details!(email: email)
   end
 
   ##
-  # Test update with in use email
+  # Test change_details with invalid email
   ##
-  test 'update email in use' do
+  test 'change_details email invalid' do
+    email = 'invalid'
+    user = User.first!
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      user.change_details!(email: email)
+    end
   end
 
   ##
-  #
+  # Test change_details with in use email
+  ##
+  test 'change_details email in use' do
+    email = 'invalid'
+    user1 = User.find_by_email!('bert@example.com')
+    user2 = User.find_by_email!('ernie@example.com')
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      user1.change_details!(email: user2.email)
+    end
+  end
+
+  ##
+  # Test error handling of setting password in change_details
+  ##
+  test 'change_details set password' do
+    password = 'password'
+    user = User.first!
+
+    assert_raises(ArgumentError) do
+      user.change_details!(password: password)
+    end
+  end
+
+  ##
+  # Test change_password success
   ##
   test 'change_password success' do
+    old_password = 'password'
+    new_password = 'new_password'
+    user = User.first!
+
+    user.change_password!(old_password, new_password)
   end
 
   ##
-  #
+  # Test error handling of change_password with incorrect old_password
   ##
   test 'change_password incorrect old password' do
+    old_password = 'incorrect'
+    new_password = 'new_password'
+    user = User.first!
+
+    assert_raises(ArgumentError) do
+      user.change_password!(old_password, new_password)
+    end
   end
 
   ##
-  #
+  # Test error handling of change_password with invalid new_password
   ##
   test 'change_password invalid new password' do
+    old_password = 'password'
+    new_password = 'short'
+    user = User.first!
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      user.change_password!(old_password, new_password)
+    end
   end
 end

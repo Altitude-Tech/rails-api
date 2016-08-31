@@ -9,8 +9,32 @@ class User < ApplicationRecord
   ##
   validates(:name, presence: true)
   validates(:email, uniqueness: true, format: { with: /@/ })
-  validates(:password, length: { minimum: 8 })
+  validates(:password, length: { minimum: 8 }, allow_nil: true)
   validates(:password_digest, presence: true)
+
+  ##
+  # Override default method to prevent explicitly updating password_digest
+  ##
+  def self.create!(args)
+    if args.key?(:password_digest)
+      msg = 'password_digest cannot be explicitly updated.'
+      raise ArgumentError, msg
+    end
+
+    super(args)
+  end
+
+  ##
+  # Override default method to prevent explicitly updating password_digest
+  ##
+  def update!(args)
+    if args.key?(:password_digest)
+      msg = 'password_digest cannot be explicitly updated.'
+      raise ArgumentError, msg
+    end
+
+    super(args)
+  end
 
   ##
   #
@@ -27,30 +51,22 @@ class User < ApplicationRecord
   end
 
   ##
-  # @todo <alias_method :parent_method, :method>
+  #
   ##
-  def update(params=nil)
-    if params.key?(:password)
-      msg = 'password cannot be updated this way'
-      raise ArgumentError, msg
-    end
-
-    if params.key?[:new_email]
-      params[:email] = params.delete[:new_email]
-    end
-
-    super(params)
-  end
-
-  def update!(params=nil)
+  def change_password!(old_password, new_password)
+    authenticate!(old_password)
+    update!(password: new_password)
   end
 
   ##
   #
   ##
-  def change_password(old_password, new_password)
-    self.authenticate!(old_password)
+  def change_details!(params)
+    if params.key?(:password)
+      msg = 'This method does not support changing passwords.'
+      raise ArgumentError, msg
+    end
 
-
+    update!(params)
   end
 end
