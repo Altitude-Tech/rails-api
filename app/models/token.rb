@@ -14,10 +14,22 @@ class Key < ApplicationRecord
   ##
   # Constants
   ##
+
+  # api tokens for... (developers?)
+  # device tokens for registering devices (use qr codes?)
+  # email tokens for confirming an email change/registration (figure out how to deal with forgotten email)
+  # session tokens for sessions in sensly app/website
+  # password reset tokens for resetting a password
+
+  # @todo figure out public & private key for hmac
+
   TYPE_API = 1
   TYPE_DEVICE = 2
-  TYPE_PASSWORD_RESET = 3
-  TYPE_SESSION = 4
+  TYPE_EMAIL = 3
+  TYPE_PASSWORD_RESET = 4
+  TYPE_SESSION = 5
+
+  TYPES = [TYPE_API, TYPE_DEVICE, TYPE_EMAIL, TYPE_PASSWORD_RESET, TYPE_SESSION].freeze
 
   ##
   #
@@ -29,5 +41,11 @@ class Key < ApplicationRecord
   #
   ##
   def set_defaults
+  end
+
+  ##
+  #
+  ##
+  def valid?
   end
 end
