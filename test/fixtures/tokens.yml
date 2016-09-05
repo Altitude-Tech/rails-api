@@ -4,10 +4,10 @@ one:
   id: 1
   token: <%= SecureRandom.hex %>
   expires: <%= (Time.now.utc + 1.day).to_s(:db) %>
-  valid: true
+  enabled: true
 
 two:
   id: 2
   token: <%= SecureRandom.hex %>
-  expires: <%= (Time.now.utc + 1.day).to_s(:db) %>
+  expires: <%= (Time.now.utc - 1.day).to_s(:db) %>
   enabled: true

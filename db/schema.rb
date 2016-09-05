@@ -34,6 +34,14 @@ ActiveRecord::Schema.define(version: 20160905150835) do
     t.index ["device_id"], name: "index_devices_on_device_id", unique: true, using: :btree
   end
 
+  create_table "tokens", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "token",      null: false
+    t.datetime "expires"
+    t.boolean  "enabled",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",            null: false
     t.string   "email",           null: false

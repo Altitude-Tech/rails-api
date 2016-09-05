@@ -37,6 +37,7 @@ en:
     hex: must be a hexadecimal number.
     log_time_invalid: 'must be in unix time in seconds.'
     log_time_out_of_range: 'outside permitted limits.'
+    token_expires_invalid: 'must be in the future.'
 
   # controllers
   controller:

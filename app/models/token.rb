@@ -11,15 +11,15 @@ class Token < ApplicationRecord
   # Validations
   ##
   validates(:token, uniqueness: true)
-  # validates(:expires, allow_nil: true, token_expiry: true)
-  validates(:enabled, presence: true)
+  validates(:expires, token_expiry: true)
+  validates(:enabled, inclusion: { in: [true, false] })
 
   ##
   #
   ##
   def disable!
     self[:enabled] = false
-    self.save!
+    save(validate: false)
   end
 
   ##
@@ -27,19 +27,30 @@ class Token < ApplicationRecord
   ##
   def generate_token
     self[:token] = SecureRandom.hex
+
+    # set default value for enabled
+    self[:enabled] = true if self[:enabled].nil?
+  end
+
+  ##
+  #
+  ##
+  def active?
+    return self.enabled? && !self.expired?
   end
 
   ##
   #
   ##
   def enabled?
-    return self[:enabled]
+    return !!self[:enabled]
   end
 
   ##
   #
   ##
   def expired?
-    return self[:expires] > Time.now.utc
+    return false if self[:expires].nil?
+    return self[:expires] <= Time.now.utc
   end
 end
