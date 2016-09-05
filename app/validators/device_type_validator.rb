@@ -6,8 +6,6 @@ class DeviceTypeValidator < BaseValidator
   #
   ##
   def validate_each(record, attribute, value)
-    value = get_raw_value(record, attribute, value)
-
     is_valid = Device::TYPES.include?(value)
     not_prod = ENV['RAILS_ENV'] != 'production'
     is_test = value == Device::TYPE_TEST

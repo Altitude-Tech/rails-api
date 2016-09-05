@@ -35,6 +35,10 @@ class Datum < ApplicationRecord
   ##
   # Constants
   ##
+  SENSOR_MQ2_DB = 1
+  SENSOR_MQ7_DB = 2
+  SENSOR_MQ135_DB = 3
+
   SENSOR_MQ2_RAW = 'mq2'.freeze
   SENSOR_MQ7_RAW = 'mq7'.freeze
   SENSOR_MQ135_RAW = 'mq135'.freeze
@@ -43,19 +47,52 @@ class Datum < ApplicationRecord
   SENSOR_MQ7 = Digest::SHA1.hexdigest(SENSOR_MQ7_RAW)
   SENSOR_MQ135 = Digest::SHA1.hexdigest(SENSOR_MQ135_RAW)
 
+  # used during validation
+  #
+  # when the type is set it is converted into a integer from the hex digest
+  # but the validator goes through the access method below
+  # which converts it back into a hash just for that validation
   SENSORS = [SENSOR_MQ2, SENSOR_MQ7, SENSOR_MQ135].freeze
 
-  SENSOR_MAP = {
-    SENSOR_MQ2 => SENSOR_MQ2_RAW,
-    SENSOR_MQ7 => SENSOR_MQ7_RAW,
-    SENSOR_MQ135 => SENSOR_MQ135_RAW
+  SENSOR_MAP_DB_TO_RAW = {
+    SENSOR_MQ2_DB => SENSOR_MQ2_RAW,
+    SENSOR_MQ7_DB => SENSOR_MQ7_RAW,
+    SENSOR_MQ135_DB => SENSOR_MQ135_RAW
+  }.freeze
+
+  SENSOR_MAP_HASH_TO_DB = {
+    SENSOR_MQ2 => SENSOR_MQ2_DB,
+    SENSOR_MQ7 => SENSOR_MQ7_DB,
+    SENSOR_MQ135 => SENSOR_MQ135_DB
+  }.freeze
+
+  SENSOR_MAP_DB_TO_HASH = {
+    SENSOR_MQ2_DB => SENSOR_MQ2,
+    SENSOR_MQ7_DB => SENSOR_MQ7,
+    SENSOR_MQ135_DB => SENSOR_MQ135
   }.freeze
 
   ##
   # Get the unhashed string representation of a sensor type
   ##
   def sensor_name
-    return SENSOR_MAP[self.sensor_type]
+    return SENSOR_MAP_DB_TO_RAW[self[:sensor_type]]
+  end
+
+  ##
+  #
+  ##
+  def sensor_type=(sensor_type)
+    self[:sensor_type] = SENSOR_MAP_HASH_TO_DB[sensor_type]
+  rescue KeyError
+    self[:sensor_type] = nil
+  end
+
+  ##
+  #
+  ##
+  def sensor_type
+    return SENSOR_MAP_DB_TO_HASH[self[:sensor_type]]
   end
 
   ##
