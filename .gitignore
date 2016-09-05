@@ -28,6 +28,3 @@ Gemfile.lock
 # ignore rubocop todo
 .rubocop_todo.yml
 
-# ignore auto generated db schema
-# auto generated on `rake db:migrate`
-db/schema.rb
