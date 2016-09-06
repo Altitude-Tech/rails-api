@@ -1,8 +1,5 @@
 ##
 #
-#
-# @todo add a way of undoing update/change_password
-#       investigate <https://github.com/collectiveidea/audited>
 ##
 
 require 'exceptions'
