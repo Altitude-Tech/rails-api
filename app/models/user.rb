@@ -87,7 +87,7 @@ class User < ApplicationRecord
     params.delete(:email)
     not_allowed = params.slice!(*UPDATE_ATTRS)
 
-    if !not_allowed.empty?
+    unless not_allowed.empty?
       msg = I18n.t('models.users.error.not_supported', key: not_allowed.keys.first)
       raise ArgumentError, msg
     end

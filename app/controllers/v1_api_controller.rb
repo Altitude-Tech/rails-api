@@ -13,8 +13,11 @@ class V1ApiController < ApplicationController
   ##
   # Pre-process incoming requests to the API
   ##
-  before_action(:parse_request, only: [:create, :update])
   before_action(:set_json)
+  before_action do
+    methods = %w[POST PUT PATCH]
+    parse_request if methods.include?(request.request_method)
+  end
 
   ##
   # Error handling functions

@@ -24,9 +24,9 @@ module V1
     }.freeze
 
     ##
-    # Base data hash for change_password tests
+    # Base data hash for reset_password tests
     ##
-    CHANGE_PASSWORD_DATA = {
+    RESET_PASSWORD_DATA = {
       email: 'bert@example.com',
       password: 'password',
       new_password: 'new_password'
@@ -438,15 +438,15 @@ module V1
     end
 
     ##
-    # Test change_password success
+    # Test reset_password success
     ##
-    test 'change_password user success' do
-      data = CHANGE_PASSWORD_DATA.deep_dup
+    test 'reset_password user success' do
+      data = RESET_PASSWORD_DATA.deep_dup
       expected = {
         result: I18n.t('controller.v1.message.success')
       }
 
-      patch(:change_password, body: data.to_json)
+      patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -454,17 +454,17 @@ module V1
     end
 
     ##
-    # Test error handling for change_password with missing email
+    # Test error handling for reset_password with missing email
     ##
-    test 'change_password user missing email' do
-      data = CHANGE_PASSWORD_DATA.deep_dup
+    test 'reset_password user missing email' do
+      data = RESET_PASSWORD_DATA.deep_dup
       data.delete(:email)
       args = { model: 'user', key: 'email', value: '' }
       expected = {
         error: I18n.t('controller.v1.error.not_found', args)
       }
 
-      patch(:change_password, body: data.to_json)
+      patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -472,17 +472,17 @@ module V1
     end
 
     ##
-    # Test error handling for change_password with invalid email
+    # Test error handling for reset_password with invalid email
     ##
-    test 'change_password user not found email' do
-      data = CHANGE_PASSWORD_DATA.deep_dup
+    test 'reset_password user not found email' do
+      data = RESET_PASSWORD_DATA.deep_dup
       data[:email] = 'invalid'
       args = { model: 'user', key: 'email', value: 'invalid' }
       expected = {
         error: I18n.t('controller.v1.error.not_found', args)
       }
 
-      patch(:change_password, body: data.to_json)
+      patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -490,16 +490,16 @@ module V1
     end
 
     ##
-    # Test error handling for change_passwordwith missing password
+    # Test error handling for reset_passwordwith missing password
     ##
-    test 'change_password user missing password' do
-      data = CHANGE_PASSWORD_DATA.deep_dup
+    test 'reset_password user missing password' do
+      data = RESET_PASSWORD_DATA.deep_dup
       data.delete(:password)
       expected = {
         error: I18n.t('models.users.error.password')
       }
 
-      patch(:change_password, body: data.to_json)
+      patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -507,16 +507,16 @@ module V1
     end
 
     ##
-    # Test error handling for change_password with incorrect password
+    # Test error handling for reset_password with incorrect password
     ##
-    test 'change_password user incorrect password' do
-      data = CHANGE_PASSWORD_DATA.deep_dup
+    test 'reset_password user incorrect password' do
+      data = RESET_PASSWORD_DATA.deep_dup
       data[:password] = 'incorrect'
       expected = {
         error: I18n.t('models.users.error.password')
       }
 
-      patch(:change_password, body: data.to_json)
+      patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -524,16 +524,16 @@ module V1
     end
 
     ##
-    # Test error handling for change_password with missing new_password
+    # Test error handling for reset_password with missing new_password
     ##
-    test 'change_password user missing new_password' do
-      data = CHANGE_PASSWORD_DATA.deep_dup
+    test 'reset_password user missing new_password' do
+      data = RESET_PASSWORD_DATA.deep_dup
       data.delete(:new_password)
       expected = {
         error: I18n.t('controller.v1.error.invalid_value', key: 'new_password')
       }
 
-      patch(:change_password, body: data.to_json)
+      patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -541,16 +541,16 @@ module V1
     end
 
     ##
-    # Test error handling for change_password with invalid new_password
+    # Test error handling for reset_password with invalid new_password
     ##
-    test 'change_password user invalid new_password' do
-      data = CHANGE_PASSWORD_DATA.deep_dup
+    test 'reset_password user invalid new_password' do
+      data = RESET_PASSWORD_DATA.deep_dup
       data[:new_password] = 'short'
       expected = {
         error: I18n.t('controller.v1.error.invalid_value', key: 'new_password')
       }
 
-      patch(:change_password, body: data.to_json)
+      patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)

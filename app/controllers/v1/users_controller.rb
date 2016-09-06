@@ -16,11 +16,6 @@ module V1
   ##
   class UsersController < V1ApiController
     ##
-    # Pre-process incoming requests to the API
-    ##
-    before_action(:parse_request, only: [:create, :login, :update_details, :change_password, :logout])
-
-    ##
     # Error handling functions
     ##
     rescue_from(Exceptions::V1ApiRecordInvalid, with: :alternate_record_invalid)
@@ -76,7 +71,7 @@ module V1
     ##
     # Change a user's password
     ##
-    def change_password
+    def reset_password
       user = User.find_by_email!(@json[:email])
       user.change_password!(@json[:password], @json[:new_password])
 
