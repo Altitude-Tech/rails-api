@@ -72,7 +72,7 @@ class Token < ApplicationRecord
   # Callback method for generating a new token
   ##
   def generate_token
-    self[:token] = SecureRandom.hex
+    self[:token] = SecureRandom.hex if self[:token].nil?
 
     # set default value for enabled
     self[:enabled] = true if self[:enabled].nil?

@@ -72,4 +72,15 @@ class TokenTest < ActiveSupport::TestCase
       Token.create!(expires: 'invalid')
     end
   end
+
+  ##
+  #
+  ##
+  test 'token create duplicate' do
+    token = Token.first!
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Token.create(token: token.token)
+    end
+  end
 end
