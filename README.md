@@ -1,4 +1,12 @@
 # README
+API application built with Ruby on Rails for Sensly.
+
+## Branches
+* `master` is the branch used by production.
+* `dev` is the branch used for development. `master is periodically updated from this.
+* Other branches are used to develop new features or fix bugs, before being merged in `dev`.
+
+*To do: use tags for production releases*
 
 ## Setup
 For production setup, clone [`api-deploy`](https://github.com/matthwdell/api-deploy) and this repository to your home directory on the production server, and follow the instructions in `api-deploy`.
