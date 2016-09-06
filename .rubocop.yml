@@ -14,7 +14,7 @@ Style/FrozenStringLiteralComment:
 
 Style/Documentation:
   Exclude:
-    # don't require documenting largely auto generate migrations
+    # don't require documenting largely auto-generated migrations
     - 'db/migrate/*'
     # don't require class/module docs for tests
     - 'test/**/*'
