@@ -347,16 +347,19 @@ module V1
     test 'login user success' do
       data = LOGIN_DATA.deep_dup
       now = Time.now.utc
+      expected = {
+        result: I18n.t('controller.v1.message.success')
+      }
 
       post(:login, body: data.to_json)
-      body = JSON.parse(response.body)
 
-      assert_equal(true, body.key?('session'))
+      assert_equal(expected.to_json, response.body)
+
+      session_cookie = cookies.signed[:session]
 
       # test expiry of session token
-      token = Token.find_by_token!(body['session'])
-      expires = Time.parse(token.expires).utc
-      diff = ((expires - now) / 1.hour).round
+      token = Token.find_by_token!(session_cookie)
+      diff = ((token.expires - now) / 1.hour).round
 
       assert_equal(6, diff)
 

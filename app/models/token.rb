@@ -66,7 +66,7 @@ class Token < ApplicationRecord
   # Getter for expires attribute
   ##
   def expires
-    return Time.parse(self[:expires].to_s).utc.to_formatted_s
+    return Time.parse(self[:expires].to_s).utc
   rescue ArgumentError
     return nil
   end

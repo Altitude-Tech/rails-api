@@ -287,7 +287,7 @@ class UserTest < ActiveSupport::TestCase
     user = User.first!
     user.create_session_token!
     now = Time.now.utc
-    expires = Time.parse(user.session_token.expires).utc
+    expires = user.session_token.expires
     diff = ((expires - now) / 1.hour).round
 
     assert_instance_of(Token, user.session_token)

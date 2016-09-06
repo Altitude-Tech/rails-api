@@ -98,7 +98,16 @@ module V1
       user.authenticate!(@json[:password])
       user.create_session_token!
 
-      @session_token = user.session_token
+      cookies.signed[:session] = {
+        value: user.session_token.token,
+        expires: user.session_token.expires,
+        # @todo set this to true
+        secure: false,
+        httponly: true
+      }
+
+      @result = t('controller.v1.message.success')
+      render('v1/result')
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
     rescue ArgumentError => e

@@ -7,7 +7,7 @@ class TokenTest < ActiveSupport::TestCase
   test 'token active' do
     token = Token.first!
 
-    assert_equal(true, token.active?)
+    assert(token.active?)
   end
 
   ##
@@ -17,8 +17,8 @@ class TokenTest < ActiveSupport::TestCase
     token = Token.first!
     token.disable!
 
-    assert_equal(false, token.active?)
-    assert_equal(false, token.enabled?)
+    assert(!token.active?)
+    assert(!token.enabled?)
   end
 
   ##
@@ -27,8 +27,8 @@ class TokenTest < ActiveSupport::TestCase
   test 'token expired' do
     token = Token.find(2)
 
-    assert_equal(false, token.active?)
-    assert_equal(true, token.expired?)
+    assert(!token.active?)
+    assert(token.expired?)
   end
 
   ##
@@ -36,11 +36,10 @@ class TokenTest < ActiveSupport::TestCase
   ##
   test 'token create success' do
     expires = Time.now.utc + 1.day
-
     token = Token.create!(expires: expires)
 
-    assert_equal(expires.to_formatted_s, token.expires)
-    assert_equal(true, token.active?)
+    assert_equal(expires.to_s, token.expires.to_s)
+    assert(token.active?)
   end
 
   ##
@@ -60,8 +59,8 @@ class TokenTest < ActiveSupport::TestCase
   test 'token create non-expiring' do
     token = Token.create!
 
-    assert_equal(true, token.active?)
-    assert_equal(nil, token.expires)
+    assert(token.active?)
+    assert(token.expires.nil?)
   end
 
   ##
