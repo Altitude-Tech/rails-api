@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       match 'users/:email', to: 'users#show', via: :get
       match 'users/change_password', to: 'users#change_password', via: [:patch, :put]
       match 'users/login', to: 'users#login', via: [:post]
+      match 'users/logout', to: 'users#logout', via: [:post]
       match 'users/update_details', to: 'users#update_details', via: [:patch, :put]
     end
   end

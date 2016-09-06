@@ -12,10 +12,15 @@ class User < ApplicationRecord
   ##
   # Validations
   ##
-  validates(:name, presence: true)
-  validates(:email, uniqueness: true, format: { with: /@/ })
+  validates(:name, presence: true, length: { maximum: 255 })
+  validates(:email, uniqueness: true, format: { with: /@/ }, length: { maximum: 255 })
   validates(:password, length: { minimum: 8 }, allow_nil: true)
   validates(:password_digest, presence: true)
+
+  ##
+  # Constants
+  ##
+  UPDATE_ATTRS = [:name].freeze
 
   ##
   # Override default method to prevent explicitly updating password_digest
@@ -27,6 +32,17 @@ class User < ApplicationRecord
     end
 
     super(args)
+  end
+
+  ##
+  # Override default method to look up by token column instead
+  ##
+  def self.find_by_session_token!(session_token)
+    token = Token.find_by_token!(session_token)
+    user = token.user
+
+    raise ActiveRecord::RecordNotFound if user.nil?
+    return token.user
   end
 
   ##
@@ -67,12 +83,14 @@ class User < ApplicationRecord
   #
   ##
   def update_details!(params)
-    if params.key?(:password)
-      msg = 'This method does not support changing passwords.'
+    # don't try to update the email address as it won't vary
+    params.delete(:email)
+    not_allowed = params.slice!(*UPDATE_ATTRS)
+
+    if !not_allowed.empty?
+      msg = I18n.t('models.users.error.not_supported', key: not_allowed.keys.first)
       raise ArgumentError, msg
     end
-
-    params[:email] = params.delete(:new_email) if params.key?(:new_email)
 
     update!(params)
   end
@@ -93,5 +111,12 @@ class User < ApplicationRecord
   def session_token
     return nil if self[:session_token].nil?
     return Token.find(self[:session_token])
+  end
+
+  ##
+  # Test if the user has an active session token
+  ##
+  def logged_in?
+    return session_token && session_token.active?
   end
 end

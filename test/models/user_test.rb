@@ -51,6 +51,18 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test create error handling password above max length (set by bcrypt)
+  ##
+  test 'create too long password' do
+    data = BASE_DATA.deep_dup
+    data[:password] = 'x' * 73
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
+
+  ##
   # Test create error handling for invalid email address
   ##
   test 'create invalid email' do
@@ -88,11 +100,35 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test create error handling for too email
+  ##
+  test 'create too long email' do
+    data = BASE_DATA.deep_dup
+    data[:email] = '@' + ('x' * 256)
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
+
+  ##
   # Test create error handling for missing name
   ##
   test 'create missing name' do
     data = BASE_DATA.deep_dup
     data.delete(:name)
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      User.create!(data)
+    end
+  end
+
+  ##
+  # Test create error handling for too long name
+  ##
+  test 'create too long name' do
+    data = BASE_DATA.deep_dup
+    data[:name] = 'x' * 256
 
     assert_raises(ActiveRecord::RecordInvalid) do
       User.create!(data)
@@ -184,40 +220,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test update_details success for email
-  ##
-  test 'update_details email success' do
-    email = 'bert@sesame.com'
-    user = User.first!
-
-    user.update_details!(new_email: email)
-  end
-
-  ##
-  # Test update_details with invalid email
-  ##
-  test 'update_details email invalid' do
-    email = 'invalid'
-    user = User.first!
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      user.update_details!(new_email: email)
-    end
-  end
-
-  ##
-  # Test update_details with in use email
-  ##
-  test 'update_details email in use' do
-    user1 = User.find_by_email!('bert@example.com')
-    user2 = User.find_by_email!('ernie@example.com')
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      user1.update_details!(new_email: user2.email)
-    end
-  end
-
-  ##
   # Test error handling of setting password in update_details
   ##
   test 'update_details set password' do
@@ -226,6 +228,18 @@ class UserTest < ActiveSupport::TestCase
 
     assert_raises(ArgumentError) do
       user.update_details!(password: password)
+    end
+  end
+
+  ##
+  # Test error handling of setting password_digest in update_details
+  ##
+  test 'update_details set password_digest' do
+    password_digest = 'password_digest'
+    user = User.first!
+
+    assert_raises(ArgumentError) do
+      user.update_details!(password_digest: password_digest)
     end
   end
 
@@ -278,5 +292,39 @@ class UserTest < ActiveSupport::TestCase
 
     assert_instance_of(Token, user.session_token)
     assert_equal(6, diff)
+  end
+
+  ##
+  # Test find_by_session_token method success
+  ##
+  test 'find_by_session_token success' do
+    user = User.first!
+    user.create_session_token!
+    token = user.session_token.token
+
+    user2 = User.find_by_session_token!(token)
+
+    assert_instance_of(User, user2)
+    assert_equal(user, user2)
+  end
+
+  ##
+  # Test find_by_session_token method with invalid token
+  ##
+  test 'find_by_session_token invalid token' do
+    assert_raises(ActiveRecord::RecordNotFound) do
+      User.find_by_session_token!('invalid')
+    end
+  end
+
+  ##
+  # Test find_by_session_token method with non-linked token
+  ##
+  test 'find_by_session_token non-linked token' do
+    token = Token.first!
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      User.find_by_session_token!(token.token)
+    end
   end
 end

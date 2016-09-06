@@ -26,9 +26,10 @@ en:
     devices: []
     users:
       error:
-        not_supported: 'This method does not support changing passwords.'
+        not_supported: "\"%{key}\" cannot be updated using this method."
         password: Incorrect password.
         password_digest: '"password_digest" cannot be explicitly updated.'
+
 
 
   # validators

@@ -574,46 +574,7 @@ module V1
     end
 
     ##
-    # Test update_details success with new email
-    ##
-    test 'update_details user new_email success' do
-      data = {
-        email: 'bert@example.com',
-        new_email: 'bert@sesame.com'
-      }
-      expected = {
-        result: I18n.t('controller.v1.message.success')
-      }
-
-      patch(:update_details, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
-    end
-
-    ##
-    # Test error handling for update_details with not found email
-    ##
-    test 'update_details user email invalid' do
-      data = {
-        email: 'invalid',
-        new_email: 'bert@sesame.com'
-      }
-      args = { model: 'user', key: 'email', value: 'invalid' }
-      expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
-      }
-
-      patch(:update_details, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
-    end
-
-    ##
-    # Test error handling for update_details with missing email
+    # Test error handling for update_details with email
     ##
     test 'update_details user email missing' do
       data = {
@@ -632,25 +593,6 @@ module V1
     end
 
     ##
-    # Test error handling for update_details with invalid new_email
-    ##
-    test 'update_details user invalid new_email' do
-      data = {
-        email: 'bert@example.com',
-        new_email: 'invalid'
-      }
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'new_email')
-      }
-
-      patch(:update_details, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
     # Test error handling for update_details with password
     ##
     test 'update_details user password' do
@@ -659,7 +601,7 @@ module V1
         password: 'password'
       }
       expected = {
-        error: I18n.t('models.users.error.not_supported')
+        error: I18n.t('models.users.error.not_supported', key: 'password')
       }
 
       patch(:update_details, body: data.to_json)
@@ -678,7 +620,7 @@ module V1
         password_digest: 'password_digest'
       }
       expected = {
-        error: I18n.t('models.users.error.password_digest')
+        error: I18n.t('models.users.error.not_supported', key: 'password_digest')
       }
 
       patch(:update_details, body: data.to_json)
@@ -686,6 +628,64 @@ module V1
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
       assert_response(:bad_request)
+    end
+
+    ##
+    #
+    ##
+    test 'logout valid session_token' do
+      user = User.first!
+      user.create_session_token!
+      data = {
+        session: user.session_token.token
+      }
+      expected = {
+        result: I18n.t('controller.v1.message.success')
+      }
+
+      post(:logout, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
+    end
+
+    ##
+    #
+    ##
+    test 'logout invalid session_token' do
+      user = User.first!
+      user.create_session_token!
+      data = {
+        session: 'invalid'
+      }
+      expected = {
+        result: I18n.t('controller.v1.message.success')
+      }
+
+      post(:logout, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
+    end
+
+    ##
+    #
+    ##
+    test 'logout missing session_token' do
+      user = User.first!
+      user.create_session_token!
+      data = {}
+      expected = {
+        result: I18n.t('controller.v1.message.success')
+      }
+
+      post(:logout, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:ok)
     end
   end
 end

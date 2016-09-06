@@ -18,7 +18,7 @@ module V1
     ##
     # Pre-process incoming requests to the API
     ##
-    before_action(:parse_request, only: [:create, :login, :update_details, :change_password])
+    before_action(:parse_request, only: [:create, :login, :update_details, :change_password, :logout])
 
     ##
     # Error handling functions
@@ -103,6 +103,21 @@ module V1
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
     rescue ArgumentError => e
       raise Exceptions::V1ApiError, e.message
+    end
+
+    ##
+    # Invalidate a user's session id
+    ##
+    def logout
+      user = User.find_by_session_token!(@json[:session_token])
+      user.session_token.disable!
+    rescue ActiveRecord::RecordNotFound
+      # silently fail if the session token isn't valid
+      # to avoid people being able to guess session ids based on error responses
+      nil
+    ensure
+      @result = t('controller.v1.message.success')
+      render('v1/result')
     end
   end
 end
