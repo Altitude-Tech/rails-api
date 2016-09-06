@@ -36,14 +36,14 @@ class Token < ApplicationRecord
   #
   ##
   def active?
-    return self.enabled? && !self.expired?
+    return enabled? && !expired?
   end
 
   ##
   #
   ##
   def enabled?
-    return !!self[:enabled]
+    return self[:enabled]
   end
 
   ##
