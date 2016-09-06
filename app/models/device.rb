@@ -10,7 +10,7 @@ class Device < ApplicationRecord
   ##
   # Validations
   ##
-  validates(:device_id, uniqueness: true, hex: true)
+  validates(:device_id, uniqueness: true, hex: true, length: { maximum: 255 })
   validates(:device_type, device_type: true)
 
   ##

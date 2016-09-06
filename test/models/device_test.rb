@@ -37,14 +37,26 @@ class DeviceTest < ActiveSupport::TestCase
   end
 
   ##
-  # Test error handling for missing device type
+  # Test error handling for missing device_id
   ##
   test 'missing device_id' do
     data = BASE_DATA.deep_dup
     data.delete(:device_id)
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(device_type: 'abcd')
+      Device.create!(data)
+    end
+  end
+
+  ##
+  # Test error handling for too long device_id
+  ##
+  test 'too long device_id' do
+    data = BASE_DATA.deep_dup
+    data[:device_id] = 'a' * 256
+
+    assert_raises(ActiveRecord::RecordInvalid) do
+      Device.create!(data)
     end
   end
 
@@ -56,7 +68,7 @@ class DeviceTest < ActiveSupport::TestCase
     data[:device_type] = 'invalid'
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(device_id: '1452', device_type: 'invalid')
+      Device.create!(data)
     end
   end
 
@@ -68,7 +80,7 @@ class DeviceTest < ActiveSupport::TestCase
     data.delete(:device_type)
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(device_id: '1452')
+      Device.create!(data)
     end
   end
 
