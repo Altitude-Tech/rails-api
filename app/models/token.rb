@@ -3,6 +3,11 @@
 ##
 class Token < ApplicationRecord
   ##
+  # Associations
+  ##
+  has_one(:user, foreign_key: :session_token)
+
+  ##
   # Callbacks
   ##
   before_validation(:generate_token)

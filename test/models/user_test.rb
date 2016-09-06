@@ -265,4 +265,18 @@ class UserTest < ActiveSupport::TestCase
       user.change_password!(old_password, new_password)
     end
   end
+
+  ##
+  # Test generation of session token and when it expires
+  ##
+  test 'generate session_token' do
+    user = User.first!
+    user.create_session_token!
+    now = Time.now.utc
+    expires = Time.parse(user.session_token.expires).utc
+    diff = ((expires - now) / 1.hour).round
+
+    assert_instance_of(Token, user.session_token)
+    assert_equal(6, diff)
+  end
 end

@@ -80,7 +80,7 @@ class TokenTest < ActiveSupport::TestCase
     token = Token.first!
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      Token.create(token: token.token)
+      Token.create!(token: token.token)
     end
   end
 end

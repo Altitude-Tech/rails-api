@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906081130) do
+ActiveRecord::Schema.define(version: 20160906110757) do
 
   create_table "data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "sensor_type",                                     null: false
@@ -49,7 +49,10 @@ ActiveRecord::Schema.define(version: 20160906081130) do
     t.string   "password_digest", null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "session_token"
+    t.index ["session_token"], name: "fk_rails_5811ce5925", using: :btree
   end
 
   add_foreign_key "data", "devices"
+  add_foreign_key "users", "tokens", column: "session_token"
 end

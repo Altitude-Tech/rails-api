@@ -5,6 +5,11 @@ class User < ApplicationRecord
   has_secure_password
 
   ##
+  # Associations
+  ##
+  belongs_to(:token, foreign_key: :session_token, optional: true)
+
+  ##
   # Validations
   ##
   validates(:name, presence: true)
@@ -70,5 +75,23 @@ class User < ApplicationRecord
     params[:email] = params.delete(:new_email) if params.key?(:new_email)
 
     update!(params)
+  end
+
+  ##
+  # Generate a new session token
+  ##
+  def create_session_token!
+    expires = Time.now.utc + 6.hours
+    token = Token.create!(expires: expires)
+
+    update!(session_token: token.id)
+  end
+
+  ##
+  # Getter for session_token
+  ##
+  def session_token
+    return nil if self[:session_token].nil?
+    return Token.find(self[:session_token])
   end
 end

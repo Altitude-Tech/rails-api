@@ -1,1 +1,1 @@
-json.session(@session)
+json.session(@session_token.token)
