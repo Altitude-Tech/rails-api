@@ -15,7 +15,7 @@ class V1ApiController < ApplicationController
   ##
   before_action(:set_json)
   before_action do
-    methods = %w[POST PUT PATCH]
+    methods = %w(POST PUT PATCH)
     parse_request if methods.include?(request.request_method)
   end
 
