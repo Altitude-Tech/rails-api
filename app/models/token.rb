@@ -19,7 +19,7 @@ class Token < ApplicationRecord
   ##
   def disable!
     self[:enabled] = false
-    save(validate: false)
+    save!(validate: false)
   end
 
   ##
@@ -52,5 +52,25 @@ class Token < ApplicationRecord
   def expired?
     return false if self[:expires].nil?
     return self[:expires] <= Time.now.utc
+  end
+
+  ##
+  #
+  ##
+  def expires=(expires)
+    exp = Time.at(expires).utc.to_s(:db)
+    self[:expires] = exp
+  rescue TypeError, ArgumentError
+    # set the original value so we can access it in the validator
+    self[:expires] = expires
+  end
+
+  ##
+  #
+  ##
+  def expires
+    return Time.parse(self[:expires].to_s).utc.to_formatted_s
+  rescue ArgumentError
+    return nil
   end
 end
