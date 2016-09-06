@@ -43,7 +43,9 @@ class Device < ApplicationRecord
   }.freeze
 
   ##
+  # Setter for device_type attribute
   #
+  # Converts hash to an integer for storing in the database
   ##
   def device_type=(device_type)
     self[:device_type] = TYPE_MAP_HASH_TO_DB[device_type]
@@ -52,7 +54,9 @@ class Device < ApplicationRecord
   end
 
   ##
+  # Getter for device_type attribute
   #
+  # Converts the integer stored in the database to it's associated hash
   ##
   def device_type
     return TYPE_MAP_DB_TO_HASH[self[:device_type]]

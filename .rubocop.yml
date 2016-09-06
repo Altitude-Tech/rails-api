@@ -14,7 +14,7 @@ Style/FrozenStringLiteralComment:
 
 Style/Documentation:
   Exclude:
-    # don't require documenting largely auto generate migrations
+    # don't require documenting largely auto-generated migrations
     - 'db/migrate/*'
     # don't require class/module docs for tests
     - 'test/**/*'
@@ -28,8 +28,6 @@ Style/ClassAndModuleChildren:
     # standard rails class, don't mess with it for now
     - 'test/test_helper.rb'
 
-# Offense count: 1
-# Configuration parameters: CountComments.
 Metrics/ClassLength:
   Max: 150
   Exclude:
