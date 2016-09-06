@@ -96,8 +96,9 @@ module V1
     def login
       user = User.find_by_email!(@json[:email])
       user.authenticate!(@json[:password])
+      user.create_session_token!
 
-      @session = 'session'
+      @session_token = user.session_token
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
     rescue ArgumentError => e

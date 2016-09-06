@@ -346,13 +346,20 @@ module V1
     ##
     test 'login user success' do
       data = LOGIN_DATA.deep_dup
-      expected = {
-        session: 'session'
-      }
+      now = Time.now.utc
 
       post(:login, body: data.to_json)
+      body = JSON.parse(response.body)
 
-      assert_equal(expected.to_json, response.body)
+      assert_equal(true, body.key?('session'))
+
+      # test expiry of session token
+      token = Token.find_by_token!(body['session'])
+      expires = Time.parse(token.expires).utc
+      diff = ((expires - now) / 1.hour).round
+
+      assert_equal(6, diff)
+
       assert_equal('application/json', response.content_type)
       assert_response(:ok)
     end
