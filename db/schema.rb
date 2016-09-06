@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906110757) do
+ActiveRecord::Schema.define(version: 20160906145649) do
 
   create_table "data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "sensor_type",                                     null: false
@@ -34,6 +34,14 @@ ActiveRecord::Schema.define(version: 20160906110757) do
     t.index ["device_id"], name: "index_devices_on_device_id", unique: true, using: :btree
   end
 
+  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "admin",      null: false
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin"], name: "fk_rails_85f52bec55", using: :btree
+  end
+
   create_table "tokens", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "token",      null: false
     t.datetime "expires"
@@ -50,9 +58,13 @@ ActiveRecord::Schema.define(version: 20160906110757) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "session_token"
+    t.integer  "group_id"
+    t.index ["group_id"], name: "fk_rails_f40b3f4da6", using: :btree
     t.index ["session_token"], name: "fk_rails_5811ce5925", using: :btree
   end
 
   add_foreign_key "data", "devices"
+  add_foreign_key "groups", "users", column: "admin"
+  add_foreign_key "users", "groups"
   add_foreign_key "users", "tokens", column: "session_token"
 end

@@ -8,6 +8,8 @@ class User < ApplicationRecord
   # Associations
   ##
   belongs_to(:token, foreign_key: :session_token, optional: true)
+  belongs_to(:group, foreign_key: :group_id, optional: true)
+  has_one(:group, foreign_key: :admin)
 
   ##
   # Validations
