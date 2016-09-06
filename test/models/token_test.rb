@@ -32,38 +32,44 @@ class TokenTest < ActiveSupport::TestCase
   end
 
   ##
-  #
+  # Test successful token creation
   ##
   test 'token create success' do
     expires = Time.now.utc + 1.day
 
-    Token.create!(expires: expires)
+    token = Token.create!(expires: expires)
+
+    assert_equal(expires.to_formatted_s, token.expires)
+    assert_equal(true, token.active?)
   end
 
   ##
-  # Test error handling
+  # Test error handling for token creation with historic dates for expires
   ##
   test 'token create historic date' do
     historic = Time.now.utc - 1.day
 
     assert_raises(ActiveRecord::RecordInvalid) do
-      token = Token.create!(expires: historic)
+      Token.create!(expires: historic)
     end
   end
 
   ##
-  #
+  # Test creation for non-expiring tokens
   ##
   test 'token create non-expiring' do
     token = Token.create!
+
+    assert_equal(true, token.active?)
+    assert_equal(nil, token.expires)
   end
 
   ##
-  #
+  # Test error handling for token creation with invalid expires
   ##
   test 'token create invalid date' do
     assert_raises(ActiveRecord::RecordInvalid) do
-      token = Token.create!(expires: 'invalid')
+      Token.create!(expires: 'invalid')
     end
   end
 end
