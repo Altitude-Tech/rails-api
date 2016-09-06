@@ -69,7 +69,7 @@ module V1
     end
 
     ##
-    # Change a user's password
+    # Reset a user's password
     ##
     def reset_password
       user = User.find_by_email!(@json[:email])
@@ -86,7 +86,9 @@ module V1
     end
 
     ##
-    # Get a session id for a user
+    # Log a user in with their password and email
+    #
+    # Set a session_token for the user as a cookie
     ##
     def login
       user = User.find_by_email!(@json[:email])
@@ -110,7 +112,9 @@ module V1
     end
 
     ##
-    # Invalidate a user's session id
+    # Log a user out
+    #
+    # Deletes the session_token cookie and invalidates it's value in the database
     ##
     def logout
       user = User.find_by_session_token!(@json[:session_token])

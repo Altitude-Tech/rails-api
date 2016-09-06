@@ -60,7 +60,9 @@ class User < ApplicationRecord
   end
 
   ##
+  # Check a user's password matches the one held in the database
   #
+  # Raises an ArgumentError if the password does not match
   ##
   def authenticate!(password)
     user = authenticate(password)
@@ -74,7 +76,9 @@ class User < ApplicationRecord
   end
 
   ##
+  # Change a user's password
   #
+  # @todo revisit this logic when mailers are implemented for password resets
   ##
   def change_password!(old_password, new_password)
     authenticate!(old_password)
@@ -82,7 +86,7 @@ class User < ApplicationRecord
   end
 
   ##
-  #
+  # Update a whitelisted set of user details
   ##
   def update_details!(params)
     # don't try to update the email address as it won't vary

@@ -1,5 +1,5 @@
 ##
-#
+# Model representing a group of users
 ##
 class Group < ApplicationRecord
   ##
