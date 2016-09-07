@@ -9,9 +9,9 @@ API application built with Ruby on Rails for Sensly.
 *To do: use tags for production releases*
 
 ## Setup
-For production setup, clone [AltitudeTech/Production](https://github.com/AltitudeTech/Production) and this repository to your home directory on the production server, and follow the instructions in AltitudeTech/Production.
+For production setup, clone [Altitude-Tech/Production](https://github.com/Altitude-Tech/Production) and this repository to your home directory on the production server, and follow the instructions in Altitude-Tech/Production.
 
-For development setup, see the instructions in [AltitudeTech/Development](https://github.com/AltitudeTech/Development). Note that running the test suite or rubocop will vary slightly from the below instructions. See the instructions in `AltitudeTech/Development` for more details on how to run these commands in your vagrant box.
+For development setup, see the instructions in [Altitude-Tech/Development](https://github.com/Altitude-Tech/Development). Note that running the test suite or rubocop will vary slightly from the below instructions. See the instructions in Altitude-Tech/Development for more details on how to run these commands in your vagrant box.
 
 ## Tests
 To run the test suite:
