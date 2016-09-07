@@ -47,6 +47,13 @@ class Group < ApplicationRecord
     self[:admin] = admin.is_a?(User) ? admin.id : admin
   end
 
+  ##
+  # Test if a user is a group admin
+  ##
+  def admin?(user)
+    return self[:admin] == user.id
+  end
+
   private
 
   ##

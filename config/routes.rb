@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     controller :groups do
       match 'groups/add_users', to: 'groups#add_users', via: :post
       match 'groups/remove_users', to: 'groups#remove_users', via: :post
+      match 'groups/change_name', to: 'groups#change_name', via: [:patch, :post]
     end
 
     # extra users routes

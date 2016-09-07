@@ -49,12 +49,12 @@ en:
       error:
         unhandled_error: An unexpected error occurred.
         int_outside_limits: Number outside limits.
-        missing_body: Missing request body.
         json_parse_error: 'There was a problem in the JSON you submitted: %{msg}'
         invalid_value: '"%{key}" is missing or an unrecognised value.'
         missing_key: '"%{key}" was not found.'
         unknown_key: '"%{key}" is an unrecognised key.'
         not_found: 'Could not find %{model} with %{key}: "%{value}".'
+        logged_out: A valid session could not be found. Please log in and try again.
 
     v1_devices:
       error:

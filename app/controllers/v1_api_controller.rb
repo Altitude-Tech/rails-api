@@ -36,8 +36,6 @@ class V1ApiController < ApplicationController
 
   ##
   # Check request IP address matches a whitelisted IP
-  #
-  # @todo implement this
   ##
   def check_ip
     # @todo disable in development as well
@@ -60,8 +58,8 @@ class V1ApiController < ApplicationController
     body = request.body.read
 
     if body.blank?
-      msg = I18n.t('controller.v1.error.missing_request_body')
-      raise Exceptions::V1ApiError, msg
+      @json = {}
+      return
     end
 
     @json = JSON.parse(body)

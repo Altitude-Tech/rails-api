@@ -35,6 +35,12 @@ module Exceptions
   ##
   #
   ##
+  class GroupInGroupError < GroupError
+  end
+
+  ##
+  #
+  ##
   class UserPasswordDigestError < UserError
   end
 
@@ -82,5 +88,11 @@ module Exceptions
   #
   ##
   class V1ApiRecordInvalid < V1ApiError
+  end
+
+  ##
+  #
+  ##
+  class V1ApiInvalidSessionError < V1ApiError
   end
 end

@@ -21,21 +21,6 @@ module V1
     }.freeze
 
     ##
-    # Test error handling for no request body
-    ##
-    test 'create no request body' do
-      expected = {
-        error: I18n.t('controller.v1.error.missing_request_body')
-      }
-
-      post(:create)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
     # Test error handling for invalid json
     ##
     test 'create invalid request body' do
