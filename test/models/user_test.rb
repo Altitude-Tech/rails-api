@@ -3,6 +3,7 @@
 ##
 
 require 'test_helper'
+require 'exceptions'
 
 ##
 #
@@ -142,7 +143,7 @@ class UserTest < ActiveSupport::TestCase
     data = BASE_DATA.deep_dup
     data[:password_digest] = 'password_digest'
 
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::UserPasswordDigestError) do
       User.create!(data)
     end
   end
@@ -192,7 +193,7 @@ class UserTest < ActiveSupport::TestCase
     password = 'invalid'
     user = User.first!
 
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::UserAuthenticationError) do
       user.authenticate!(password)
     end
   end
@@ -204,7 +205,7 @@ class UserTest < ActiveSupport::TestCase
     password_digest = 'invalid_password'
     user = User.first!
 
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::UserPasswordDigestError) do
       user.update!(password_digest: password_digest)
     end
   end
@@ -226,7 +227,7 @@ class UserTest < ActiveSupport::TestCase
     password = 'password'
     user = User.first!
 
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::UserUpdateError) do
       user.update_details!(password: password)
     end
   end
@@ -238,7 +239,7 @@ class UserTest < ActiveSupport::TestCase
     password_digest = 'password_digest'
     user = User.first!
 
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::UserUpdateError) do
       user.update_details!(password_digest: password_digest)
     end
   end
@@ -262,7 +263,7 @@ class UserTest < ActiveSupport::TestCase
     new_password = 'new_password'
     user = User.first!
 
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::UserAuthenticationError) do
       user.change_password!(old_password, new_password)
     end
   end

@@ -1,4 +1,10 @@
 ##
+#
+##
+
+require 'exceptions'
+
+##
 # Model representing a user
 ##
 class User < ApplicationRecord
@@ -30,7 +36,7 @@ class User < ApplicationRecord
   def self.create!(args)
     if args.key?(:password_digest)
       msg = I18n.t('models.users.error.password_digest')
-      raise ArgumentError, msg
+      raise Exceptions::UserPasswordDigestError, msg
     end
 
     super(args)
@@ -53,7 +59,7 @@ class User < ApplicationRecord
   def update!(args)
     if args.key?(:password_digest)
       msg = I18n.t('models.users.error.password_digest')
-      raise ArgumentError, msg
+      raise Exceptions::UserPasswordDigestError, msg
     end
 
     super(args)
@@ -69,7 +75,7 @@ class User < ApplicationRecord
 
     if user == false
       msg = I18n.t('models.users.error.password')
-      raise ArgumentError, msg
+      raise Exceptions::UserAuthenticationError, msg
     end
 
     return user
@@ -95,7 +101,7 @@ class User < ApplicationRecord
 
     unless not_allowed.empty?
       msg = I18n.t('models.users.error.not_supported', key: not_allowed.keys.first)
-      raise ArgumentError, msg
+      raise Exceptions::UserUpdateError, msg
     end
 
     update!(params)

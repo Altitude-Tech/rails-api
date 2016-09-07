@@ -3,9 +3,57 @@
 ##
 module Exceptions
   ##
+  # Base Exception
+  ##
+  class SenslyError < StandardError
+  end
+
+  ##
+  # Base API Exception
+  ##
+  class ApiError < SenslyError
+  end
+
+  ##
+  # Base Model Exception
+  ##
+  class ModelError < SenslyError
+  end
+
+  ##
   #
   ##
-  class V1ApiError < StandardError
+  class UserError < ModelError
+  end
+
+  ##
+  #
+  ##
+  class GroupError < ModelError
+  end
+
+  ##
+  #
+  ##
+  class UserPasswordDigestError < UserError
+  end
+
+  ##
+  #
+  ##
+  class UserAuthenticationError < UserError
+  end
+
+  ##
+  #
+  ##
+  class UserUpdateError < UserError
+  end
+
+  ##
+  # Base API Exception for Api v1
+  ##
+  class V1ApiError < ApiError
   end
 
   ##

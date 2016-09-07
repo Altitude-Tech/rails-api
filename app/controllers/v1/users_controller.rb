@@ -49,7 +49,7 @@ module V1
     end
 
     ##
-    # Update a user's name or email
+    # Update a user's details
     ##
     def update_details
       user = User.find_by_email!(@json[:email])
@@ -57,12 +57,14 @@ module V1
 
       @result = t('controller.v1.message.success')
       render('v1/result')
+
+    # can't find user in database
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
-    rescue ArgumentError => e
+
+    # tried to update non-whitelisted attributes
+    rescue Exceptions::UserUpdateError => e
       raise Exceptions::V1ApiError, e.message
-    rescue ActiveRecord::RecordInvalid
-      raise Exceptions::V1ApiRecordInvalid, 'new_email'
     end
 
     ##
@@ -74,10 +76,16 @@ module V1
 
       @result = t('controller.v1.message.success')
       render('v1/result')
+
+    # can't find user in database
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
-    rescue ArgumentError => e
+
+    # couldn't authenticate user
+    rescue Exceptions::UserAuthenticationError => e
       raise Exceptions::V1ApiError, e.message
+
+    # new_password did not pass validation
     rescue ActiveRecord::RecordInvalid
       raise Exceptions::V1ApiRecordInvalid, 'new_password'
     end
@@ -102,9 +110,13 @@ module V1
 
       @result = t('controller.v1.message.success')
       render('v1/result')
+
+    # can't find user in database
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
-    rescue ArgumentError => e
+
+    # couldn't authenticate user
+    rescue Exceptions::UserAuthenticationError => e
       raise Exceptions::V1ApiError, e.message
     end
 
