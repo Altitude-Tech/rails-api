@@ -24,12 +24,16 @@ module V1
     # Test error handling for invalid json
     ##
     test 'create invalid request body' do
-      expected = '{"error":"There was a problem in the JSON you submitted: ' \
-                 '784: unexpected token at \'invalid\'"}'
+      expected = {
+        error: 1,
+        message: 'There was a problem in the JSON you submitted: 784: unexpected token at ' \
+          '\'invalid\'',
+        status: 400
+      }
 
       post(:create, body: 'invalid')
 
-      assert_equal(expected, response.body)
+      assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
       assert_response(:bad_request)
     end
@@ -41,7 +45,9 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:device_id)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'device_id'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -58,7 +64,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:device_id] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'device_id'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -75,7 +83,9 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:log_time)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'log_time'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -92,7 +102,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:log_time] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'log_time'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -109,7 +121,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:log_time] *= 1000
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'log_time'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -126,7 +140,9 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:temperature)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'temperature')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'temperature'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -143,7 +159,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:temperature] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'temperature')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'temperature'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -160,7 +178,9 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:humidity)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'humidity')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'humidity'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -177,7 +197,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:humidity] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'humidity')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'humidity'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -194,7 +216,9 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:pressure)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'pressure')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'pressure'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -211,7 +235,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:pressure] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'pressure')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'pressure'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -228,7 +254,9 @@ module V1
       data = BASE_DATA.deep_dup
       data.delete(:data)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'data')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'data'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -245,7 +273,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:data] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'data')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'data'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -262,7 +292,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:data][0].delete(:sensor_type)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -279,7 +311,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:data][0][:sensor_type] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -296,7 +330,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:data][0].delete(:sensor_error)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -313,7 +349,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:data][0][:sensor_error] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -330,7 +368,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:data][0].delete(:sensor_data)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -347,7 +387,9 @@ module V1
       data = BASE_DATA.deep_dup
       data[:data][0][:sensor_data] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -378,7 +420,9 @@ module V1
     ##
     test 'create multiple with error' do
       expected1 = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data'),
+        status: 400
       }
       expected2 = {
         data: []
@@ -394,8 +438,6 @@ module V1
 
       data[:data].append(child_data.clone)
       data[:data][1][:sensor_data] = 'invalid'
-
-      Rails.logger.debug(data)
 
       post(:create, body: data.to_json)
 
@@ -465,14 +507,16 @@ module V1
     test 'show not found' do
       args = { model: 'device', key: 'device_id', value: 'invalid' }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
+        error: 1,
+        message: I18n.t('controller.v1.error.not_found', args),
+        status: 400
       }
 
       get(:show, params: { device_id: 'invalid' })
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
+      assert_response(:bad_request)
     end
   end
 end

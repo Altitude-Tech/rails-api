@@ -58,7 +58,9 @@ module V1
         name: 'x' * 256
       }
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'name')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'name'),
+        status: 400
       }
 
       set_session_token!
@@ -74,7 +76,9 @@ module V1
     ##
     test 'create not logged in' do
       expected = {
-        error: I18n.t('controller.v1.error.logged_out')
+        error: 1,
+        message: I18n.t('controller.v1.error.logged_out'),
+        status: 400
       }
 
       post(:create)
@@ -89,7 +93,10 @@ module V1
     ##
     test 'create user in group' do
       expected = {
-        error: ''
+        error: 1,
+        # @todo fix message
+        message: '',
+        status: 400
       }
 
       set_session_token!(User.first!)

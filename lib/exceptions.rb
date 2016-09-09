@@ -95,4 +95,16 @@ module Exceptions
   ##
   class V1ApiInvalidSessionError < V1ApiError
   end
+
+  ##
+  #
+  ##
+  class V1ApiUnauthorisedError < V1ApiError
+  end
+
+  ##
+  #
+  ##
+  class V1ApiInvalidSessionError < V1ApiError
+  end
 end

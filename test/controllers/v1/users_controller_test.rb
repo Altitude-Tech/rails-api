@@ -55,7 +55,9 @@ module V1
       data = CREATE_DATA.deep_dup
       data[:email] = 'invalid'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'email')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'email'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -72,7 +74,9 @@ module V1
       data = CREATE_DATA.deep_dup
       data.delete(:email)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'email')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'email'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -90,7 +94,9 @@ module V1
       data = CREATE_DATA.deep_dup
       data[:email] = user.email
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'email')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'email'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -107,7 +113,9 @@ module V1
       data = CREATE_DATA.deep_dup
       data.delete(:name)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'name')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'name'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -124,7 +132,9 @@ module V1
       data = CREATE_DATA.deep_dup
       data[:password] = 'short'
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'password')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'password'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -141,7 +151,9 @@ module V1
       data = CREATE_DATA.deep_dup
       data.delete(:password)
       expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'password')
+        error: 1,
+        message: I18n.t('controller.v1.error.invalid_value', key: 'password'),
+        status: 400
       }
 
       post(:create, body: data.to_json)
@@ -149,164 +161,6 @@ module V1
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
       assert_response(:bad_request)
-    end
-
-    ##
-    # Test index for get all records
-    ##
-    test 'index user get all' do
-      expected = {
-        users: [
-          {
-            name: 'Bert Sesame',
-            email: 'bert@example.com'
-          },
-          {
-            name: 'Ernie Sesame',
-            email: 'ernie@example.com'
-          }
-        ]
-      }
-
-      get(:index)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
-    end
-
-    ##
-    # Test error handling for index with invalid start param
-    ##
-    test 'index user invalid start' do
-      expected = {
-        error: I18n.t('controller.v1_users.error.start')
-      }
-
-      get(:index, params: { start: 'invalid' })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for index with too low start param
-    ##
-    test 'index user too low start' do
-      expected = {
-        error: I18n.t('controller.v1_users.error.start')
-      }
-
-      get(:index, params: { start: 0 })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for index with out of bounds start param
-    ##
-    test 'index user out of bounds start' do
-      expected = {
-        error: I18n.t('controller.v1_users.error.no_more')
-      }
-
-      get(:index, params: { start: 3 })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for index with invalid limit param
-    ##
-    test 'index user invalid limit' do
-      expected = {
-        error: I18n.t('controller.v1_users.error.limit', max: 500)
-      }
-
-      get(:index, params: { limit: 'invalid' })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for index with too low limit param
-    ##
-    test 'index user too low limit' do
-      expected = {
-        error: I18n.t('controller.v1_users.error.limit', max: 500)
-      }
-
-      get(:index, params: { limit: 0 })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for index with too high limit param
-    ##
-    test 'index user too high limit' do
-      expected = {
-        error: I18n.t('controller.v1_users.error.limit', max: 500)
-      }
-
-      get(:index, params: { limit: 501 })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test index with start param at lower limit
-    ##
-    test 'index user lower limit' do
-      expected = {
-        users: [
-          {
-            name: 'Bert Sesame',
-            email: 'bert@example.com'
-          }
-        ]
-      }
-
-      get(:index, params: { limit: 1 })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
-    end
-
-    ##
-    # Test index with start param at upper limit
-    ##
-    test 'index user upper limit' do
-      expected = {
-        users: [
-          {
-            name: 'Bert Sesame',
-            email: 'bert@example.com'
-          },
-          {
-            name: 'Ernie Sesame',
-            email: 'ernie@example.com'
-          }
-        ]
-      }
-
-      get(:index, params: { limit: 500 })
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
     end
 
     ##
@@ -318,6 +172,7 @@ module V1
         email: 'bert@example.com'
       }
 
+      set_session_token!
       get(:show, params: { email: 'bert@example.com' })
 
       assert_equal(expected.to_json, response.body)
@@ -331,14 +186,16 @@ module V1
     test 'show user invalid email' do
       args = { model: 'user', key: 'email', value: 'invalid' }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
+        error: 1,
+        message: I18n.t('controller.v1.error.not_found', args),
+        status: 400
       }
 
       get(:show, params: { email: 'invalid' })
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
+      assert_response(:bad_request)
     end
 
     ##
@@ -375,14 +232,16 @@ module V1
       data[:email] = 'invalid'
       args = { model: 'user', key: 'email', value: 'invalid' }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
+        error: 1,
+        message: I18n.t('controller.v1.error.not_found', args),
+        status: 400
       }
 
       post(:login, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
+      assert_response(:bad_request)
     end
 
     ##
@@ -393,14 +252,16 @@ module V1
       data.delete(:email)
       args = { model: 'user', key: 'email', value: '' }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
+        error: 1,
+        message: I18n.t('controller.v1.error.not_found', args),
+        status: 400
       }
 
       post(:login, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
+      assert_response(:bad_request)
     end
 
     ##
@@ -410,7 +271,9 @@ module V1
       data = LOGIN_DATA.deep_dup
       data[:password] = 'incorrect'
       expected = {
-        error: I18n.t('models.users.error.password')
+        error: 1,
+        message: I18n.t('models.users.error.password'),
+        status: 400
       }
 
       post(:login, body: data.to_json)
@@ -427,7 +290,9 @@ module V1
       data = LOGIN_DATA.deep_dup
       data.delete(:password)
       expected = {
-        error: I18n.t('models.users.error.password')
+        error: 1,
+        message: I18n.t('models.users.error.password'),
+        status: 400
       }
 
       post(:login, body: data.to_json)
@@ -461,14 +326,16 @@ module V1
       data.delete(:email)
       args = { model: 'user', key: 'email', value: '' }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
+        error: 1,
+        message: I18n.t('controller.v1.error.not_found', args),
+        status: 400
       }
 
       patch(:reset_password, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
+      assert_response(:bad_request)
     end
 
     ##
@@ -479,24 +346,9 @@ module V1
       data[:email] = 'invalid'
       args = { model: 'user', key: 'email', value: 'invalid' }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
-      }
-
-      patch(:reset_password, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
-    end
-
-    ##
-    # Test error handling for reset_passwordwith missing password
-    ##
-    test 'reset_password user missing password' do
-      data = RESET_PASSWORD_DATA.deep_dup
-      data.delete(:password)
-      expected = {
-        error: I18n.t('models.users.error.password')
+        error: 1,
+        message: I18n.t('controller.v1.error.not_found', args),
+        status: 400
       }
 
       patch(:reset_password, body: data.to_json)
@@ -507,69 +359,17 @@ module V1
     end
 
     ##
-    # Test error handling for reset_password with incorrect password
+    # Test update success with new name
     ##
-    test 'reset_password user incorrect password' do
-      data = RESET_PASSWORD_DATA.deep_dup
-      data[:password] = 'incorrect'
-      expected = {
-        error: I18n.t('models.users.error.password')
-      }
-
-      patch(:reset_password, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for reset_password with missing new_password
-    ##
-    test 'reset_password user missing new_password' do
-      data = RESET_PASSWORD_DATA.deep_dup
-      data.delete(:new_password)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'new_password')
-      }
-
-      patch(:reset_password, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for reset_password with invalid new_password
-    ##
-    test 'reset_password user invalid new_password' do
-      data = RESET_PASSWORD_DATA.deep_dup
-      data[:new_password] = 'short'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'new_password')
-      }
-
-      patch(:reset_password, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test update_details success with new name
-    ##
-    test 'update_details user name success' do
-      data = {
-        email: 'bert@example.com',
-        name: 'Bob'
-      }
+    test 'update user name success' do
+      params = { email: 'bert@example.com' }
+      data = { name: 'Bob' }
       expected = {
         result: I18n.t('controller.v1.message.success')
       }
 
-      patch(:update_details, body: data.to_json)
+      set_session_token!
+      patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -577,37 +377,39 @@ module V1
     end
 
     ##
-    # Test error handling for update_details with email
+    # Test error handling for update with no session token
     ##
-    test 'update_details user email missing' do
-      data = {
-        new_email: 'bert@sesame.com'
-      }
-      args = { model: 'user', key: 'email', value: '' }
+    test 'update no session token' do
+      params = { email: 'bert@example.com' }
+      data = { name: 'Bob' }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
+        error: 1,
+        message: I18n.t('controller.v1.error.unauthorised'),
+        status: 400
       }
 
-      patch(:update_details, body: data.to_json)
+      patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
+      assert_response(:bad_request)
     end
 
+
     ##
-    # Test error handling for update_details with password
+    # Test error handling for update with invalid
     ##
-    test 'update_details user password' do
-      data = {
-        email: 'bert@example.com',
-        password: 'password'
-      }
+    test 'update invalid session token' do
+      params = { email: 'bert@example.com' }
+      data = { name: 'Bob' }
       expected = {
-        error: I18n.t('models.users.error.not_supported', key: 'password')
+        error: 1,
+        message: I18n.t('controller.v1.error.unauthorised'),
+        status: 400
       }
 
-      patch(:update_details, body: data.to_json)
+      set_session_token!('invalid')
+      patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -615,18 +417,59 @@ module V1
     end
 
     ##
-    # Test error handling for update_details with password_digest
+    # Test error handling for update with password
     ##
-    test 'update_details user password_digest' do
-      data = {
-        email: 'bert@example.com',
-        password_digest: 'password_digest'
-      }
+    test 'update user password' do
+      params = { email: 'bert@example.com' }
+      data = { password: 'password' }
       expected = {
-        error: I18n.t('models.users.error.not_supported', key: 'password_digest')
+        error: 1,
+        message: I18n.t('models.users.error.not_supported', key: 'password'),
+        status: 400
       }
 
-      patch(:update_details, body: data.to_json)
+      set_session_token!
+      patch(:update, params: params, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for update with password_digest
+    ##
+    test 'update user password_digest' do
+      params = { email: 'bert@example.com' }
+      data = { password_digest: 'password_digest' }
+      expected = {
+        error: 1,
+        message: I18n.t('models.users.error.not_supported', key: 'password_digest'),
+        status: 400
+      }
+
+      set_session_token!
+      patch(:update, params: params, body: data.to_json)
+
+      assert_equal(expected.to_json, response.body)
+      assert_equal('application/json', response.content_type)
+      assert_response(:bad_request)
+    end
+
+    ##
+    # Test error handling for update with random attribute
+    ##
+    test 'update user random attribute' do
+      params = { email: 'bert@example.com' }
+      data = { random: 'value' }
+      expected = {
+        error: 1,
+        message: I18n.t('models.users.error.not_supported', key: 'random'),
+        status: 400
+      }
+
+      set_session_token!
+      patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -637,16 +480,12 @@ module V1
     #
     ##
     test 'logout valid session_token' do
-      user = User.first!
-      user.create_session_token!
-      data = {
-        session: user.session_token.token
-      }
       expected = {
         result: I18n.t('controller.v1.message.success')
       }
 
-      post(:logout, body: data.to_json)
+      set_session_token!
+      post(:logout)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -657,16 +496,12 @@ module V1
     #
     ##
     test 'logout invalid session_token' do
-      user = User.first!
-      user.create_session_token!
-      data = {
-        session: 'invalid'
-      }
       expected = {
         result: I18n.t('controller.v1.message.success')
       }
 
-      post(:logout, body: data.to_json)
+      set_session_token!('invalid')
+      post(:logout)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
@@ -677,18 +512,31 @@ module V1
     #
     ##
     test 'logout missing session_token' do
-      user = User.first!
-      user.create_session_token!
-      data = {}
       expected = {
         result: I18n.t('controller.v1.message.success')
       }
 
-      post(:logout, body: data.to_json)
+      cookies.delete(:session_token)
+      post(:logout)
 
       assert_equal(expected.to_json, response.body)
       assert_equal('application/json', response.content_type)
       assert_response(:ok)
+    end
+
+    private
+
+    ##
+    #
+    ##
+    def set_session_token!(token = nil)
+      if token.nil?
+        user = User.first!
+        user.create_session_token!
+        token = user.session_token.token
+      end
+
+      cookies.signed[:session_token] = token
     end
   end
 end

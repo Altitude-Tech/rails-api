@@ -7,8 +7,16 @@ module ErrorHandler
   ##
   # Renders error json as the response
   ##
-  def render_error(error, status = :bad_request)
-    @error = error
+  def render_error(error, options = {})
+    code = options[:code] || 1
+    status = options[:status] || :bad_request
+
+    @error = {
+      error: code,
+      message: error,
+      status: Rack::Utils::SYMBOL_TO_STATUS_CODE[status]
+    }
+
     render('v1/error', status: status)
   end
 
@@ -66,7 +74,7 @@ module ErrorHandler
   def not_found_error(exc)
     args = { model: exc.model.downcase, key: exc.key, value: exc.value }
     msg = I18n.t('controller.v1.error.not_found', args)
-    render_error(msg, :not_found)
+    render_error(msg)
   end
 
   ##

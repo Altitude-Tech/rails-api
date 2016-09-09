@@ -55,6 +55,7 @@ en:
         unknown_key: '"%{key}" is an unrecognised key.'
         not_found: 'Could not find %{model} with %{key}: "%{value}".'
         logged_out: A valid session could not be found. Please log in and try again.
+        unauthorised: Access denied for requested action.
 
     v1_devices:
       error:

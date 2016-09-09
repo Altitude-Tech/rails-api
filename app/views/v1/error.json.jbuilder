@@ -1,1 +1,1 @@
-json.error(@error)
+json.call(@error, :error, :message, :status)

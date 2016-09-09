@@ -28,22 +28,15 @@ module V1
     end
 
     ##
-    # Get a list of users
-    ##
-    def index
-      limit = extract_int_param('limit', 10, 1, 500, 'users')
-      start = extract_int_param('start', 1, 1, Float::INFINITY, 'users')
-
-      @users = User.where('id >= ?', start).order('id').limit(limit)
-
-      raise Exceptions::V1ApiError, t('controller.v1_users.error.no_more') unless @users.any?
-    end
-
-    ##
     # Get a specific user's details
     ##
     def show
       @user = User.find_by_email!(params[:email])
+
+      unless @user == user_from_session!
+        msg = I18n.t('controller.v1.error.unauthorised')
+        raise Exceptions::V1ApiUnauthorisedError, msg
+      end
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', params[:email])
     end
@@ -51,8 +44,14 @@ module V1
     ##
     # Update a user's details
     ##
-    def update_details
-      user = User.find_by_email!(@json[:email])
+    def update
+      user = User.find_by_email!(params[:email])
+
+      unless user == user_from_session!
+        msg = I18n.t('controller.v1.error.unauthorised')
+        raise Exceptions::V1ApiUnauthorisedError, msg
+      end
+
       user.update_details!(@json)
 
       @result = t('controller.v1.message.success')
@@ -61,6 +60,11 @@ module V1
     # can't find user in database
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
+
+    # no valid session token was found
+    rescue Exceptions::V1ApiInvalidSessionError
+      msg = I18n.t('controller.v1.error.unauthorised')
+      raise Exceptions::V1ApiUnauthorisedError, msg
 
     # tried to update non-whitelisted attributes
     rescue Exceptions::UserUpdateError => e
@@ -72,7 +76,10 @@ module V1
     ##
     def reset_password
       user = User.find_by_email!(@json[:email])
-      user.change_password!(@json[:password], @json[:new_password])
+
+      # user.set_temporary_password!
+
+      # @todo add mailers
 
       @result = t('controller.v1.message.success')
       render('v1/result')
@@ -80,14 +87,12 @@ module V1
     # can't find user in database
     rescue ActiveRecord::RecordNotFound => e
       raise Exceptions::V1ApiNotFoundError.new(e, 'email', @json[:email])
+    end
 
-    # couldn't authenticate user
-    rescue Exceptions::UserAuthenticationError => e
-      raise Exceptions::V1ApiError, e.message
-
-    # new_password did not pass validation
-    rescue ActiveRecord::RecordInvalid
-      raise Exceptions::V1ApiRecordInvalid, 'new_password'
+    ##
+    #
+    ##
+    def change_password
     end
 
     ##
@@ -126,15 +131,27 @@ module V1
     # Deletes the session_token cookie and invalidates it's value in the database
     ##
     def logout
-      user = User.find_by_session_token!(@json[:session_token])
+      user = user_from_session!
       user.session_token.disable!
-    rescue ActiveRecord::RecordNotFound
+    rescue Exceptions::V1ApiInvalidSessionError
       # silently fail if the session token isn't valid
       # to avoid people being able to guess session ids based on error responses
       nil
     ensure
       @result = t('controller.v1.message.success')
       render('v1/result')
+    end
+
+    private
+
+    ##
+    #
+    ##
+    def user_from_session!
+      session = cookies.signed[:session_token]
+      return User.find_by_session_token!(session)
+    rescue ActiveRecord::RecordNotFound => e
+      raise Exceptions::V1ApiInvalidSessionError, e.message
     end
   end
 end

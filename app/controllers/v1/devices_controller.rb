@@ -23,18 +23,6 @@ module V1
     end
 
     ##
-    # Get a list of devices
-    ##
-    def index
-      limit = extract_int_param('limit', 10, 1, 500, 'devices')
-      start = extract_int_param('start', 1, 1, Float::INFINITY, 'devices')
-
-      @devices = Device.where('id >= ?', start).order('id').limit(limit)
-
-      raise Exceptions::V1ApiError, t('controller.v1_devices.error.no_more') unless @devices.any?
-    end
-
-    ##
     # Get details about a specific device
     ##
     def show
