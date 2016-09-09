@@ -172,7 +172,7 @@ module V1
         email: 'bert@example.com'
       }
 
-      set_session_token!
+      session_token!
       get(:show, params: { email: 'bert@example.com' })
 
       assert_equal(expected.to_json, response.body)
@@ -368,7 +368,7 @@ module V1
         result: I18n.t('controller.v1.message.success')
       }
 
-      set_session_token!
+      session_token!
       patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
@@ -408,7 +408,7 @@ module V1
         status: 400
       }
 
-      set_session_token!('invalid')
+      session_token!('invalid')
       patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
@@ -428,7 +428,7 @@ module V1
         status: 400
       }
 
-      set_session_token!
+      session_token!
       patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
@@ -448,7 +448,7 @@ module V1
         status: 400
       }
 
-      set_session_token!
+      session_token!
       patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
@@ -468,7 +468,7 @@ module V1
         status: 400
       }
 
-      set_session_token!
+      session_token!
       patch(:update, params: params, body: data.to_json)
 
       assert_equal(expected.to_json, response.body)
@@ -484,7 +484,7 @@ module V1
         result: I18n.t('controller.v1.message.success')
       }
 
-      set_session_token!
+      session_token!
       post(:logout)
 
       assert_equal(expected.to_json, response.body)
@@ -500,7 +500,7 @@ module V1
         result: I18n.t('controller.v1.message.success')
       }
 
-      set_session_token!('invalid')
+      session_token!('invalid')
       post(:logout)
 
       assert_equal(expected.to_json, response.body)
@@ -529,7 +529,7 @@ module V1
     ##
     #
     ##
-    def set_session_token!(token = nil)
+    def session_token!(token = nil)
       if token.nil?
         user = User.first!
         user.create_session_token!
