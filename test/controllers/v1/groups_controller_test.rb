@@ -34,7 +34,7 @@ module V1
     ##
     #
     ##
-    test 'create sucess with name' do
+    test 'create success with name' do
       data = {
         name: 'example'
       }

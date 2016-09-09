@@ -1,4 +1,10 @@
 ##
+#
+##
+
+require 'exceptions'
+
+##
 # Model representing a group of users
 ##
 class Group < ApplicationRecord
@@ -27,7 +33,11 @@ class Group < ApplicationRecord
     if params.is_a?(Hash) && params.key?(:admin) && params[:admin].is_a?(User)
       # don't let the user create their own group
       # if they're already in one
-      raise ArgumentError unless params[:admin].group_id.nil?
+      unless params[:admin].group_id.nil?
+        # @todo set message for this
+        msg = ''
+        raise Exceptions::GroupInGroupError, msg
+      end
     end
 
     super(params)

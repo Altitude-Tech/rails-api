@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'exceptions'
 
 class GroupTest < ActiveSupport::TestCase
   ##
@@ -62,7 +63,7 @@ class GroupTest < ActiveSupport::TestCase
   test 'create group in use admin' do
     user = User.first!
 
-    assert_raises(ArgumentError) do
+    assert_raises(Exceptions::GroupInGroupError) do
       Group.create!(admin: user)
     end
   end

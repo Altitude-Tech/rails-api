@@ -27,6 +27,8 @@ module V1
 
       @result = I18n.t('controller.v1.message.success')
       render('v1/result')
+    rescue Exceptions::GroupInGroupError => e
+      raise Exceptions::V1ApiError, e.message
     end
 
     ##
