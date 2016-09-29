@@ -1,441 +1,416 @@
-##
-# Datum model tests
-##
-
 require 'test_helper'
 
 class DatumTest < ActiveSupport::TestCase
   ##
-  #
+  # Data to create a new data point with.
   ##
-  BASE_DATA = {
-    sensor_type: Datum::SENSOR_MQ2,
-    sensor_error: 0.2,
-    sensor_data: 10,
-    log_time: Time.now.to_i,
-    temperature: 25.37,
-    pressure: 1009.30,
-    humidity: 63.12
+  CREATE_DATA = {
+    sensor_type: Datum::SENSOR_MQ2_HASH,
+    sensor_error: 0,
+    sensor_data: 0,
+    log_time: Time.now.utc.to_i,
+    temperature: 20.0,
+    pressure: 1000,
+    humidity: 0
   }.freeze
 
   ##
-  # Test error handling for invalid sensor type
+  # Test success of the `create!` method.
   ##
-  test 'invalid sensor_type' do
-    data = get_data
-    data[:sensor_type] = 'invalid'
+  test 'create! success' do
+    data = create_data
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    Datum.create! data
+  end
+
+  ##
+  # Test error handling for the `create!` method with a missing `device_id` attribute.
+  ##
+  test 'create! missing device_id' do
+    data = create_data
+    data.delete :device_id
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for missing sensor type
+  # Test error handling for the `create!` method with an invalid `device_id` attribute.
   ##
-  test 'missing sensor type' do
-    data = get_data
-    data.delete(:sensor_type)
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for too high sensor error
-  ##
-  test 'too high sensor error' do
-    data = get_data
-    data[:sensor_error] = 2
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for too low sensor error
-  ##
-  test 'too low sensor error' do
-    data = get_data
-    data[:sensor_error] = -1
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for invalid value for sensor error
-  ##
-  test 'invalid sensor error' do
-    data = get_data
-    data[:sensor_error] = 'invalid'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for missing sensor error
-  ##
-  test 'missing sensor error' do
-    data = get_data
-    data.delete(:sensor_error)
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for too low sensor data
-  ##
-  test 'too low sensor data' do
-    data = get_data
-    data[:sensor_data] = -1
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for too high sensor data
-  ##
-  test 'too high sensor data' do
-    data = get_data
-    data[:sensor_data] = 4096
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for invalid value for sensor data
-  ##
-  test 'invalid sensor data' do
-    data = get_data
-    data[:sensor_data] = 'invalid'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test behaviour for integer float sensor data
-  ##
-  test 'integer float sensor data' do
-    data = get_data
-    data[:sensor_data] = 100.0
-
-    Datum.create!(data)
-  end
-
-  ##
-  # Test error handling for integer float as a string sensor data
-  ##
-  test 'integer float string sensor data' do
-    data = get_data
-    data[:sensor_data] = '100.0'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for non integer float sensor data
-  ##
-  test 'non integer float sensor data' do
-    data = get_data
-    data[:sensor_data] = 100.5
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for non integer float as a string sensor data
-  ##
-  test 'non integer float string sensor data' do
-    data = get_data
-    data[:sensor_data] = '100.5'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for missing sensor data
-  ##
-  test 'missing sensor data' do
-    data = get_data
-    data.delete(:sensor_data)
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for invalid value for log time
-  ##
-  test 'invalid log time' do
-    data = get_data
-    data[:log_time] = 'invalid'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for missing log time
-  ##
-  test 'missing log time' do
-    data = get_data
-    data.delete(:log_time)
-    expected = 'Validation failed: Log time must be in unix time in seconds.'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      begin
-        Datum.create!(data)
-      rescue ActiveRecord::RecordInvalid => e
-        assert_equal(expected, e.message)
-        raise e
-      end
-    end
-  end
-
-  ##
-  # Test error handling for log time more than 30 days old
-  ##
-  test 'too low log time' do
-    now = Time.now.utc
-    data = get_data
-    data[:log_time] = now - 31.days
-    expected = 'Validation failed: Log time outside permitted limits.'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      begin
-        Datum.create!(data)
-      rescue ActiveRecord::RecordInvalid => e
-        assert_equal(expected, e.message)
-        raise e
-      end
-    end
-  end
-
-  ##
-  # Test error handling for log time in the future
-  ##
-  test 'too high log time' do
-    now = Time.now.utc
-    data = get_data
-    data[:log_time] = now + 1.day
-    expected = 'Validation failed: Log time outside permitted limits.'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      begin
-        Datum.create!(data)
-      rescue ActiveRecord::RecordInvalid => e
-        assert_equal(expected, e.message)
-        raise e
-      end
-    end
-  end
-
-  ##
-  # Test error handling for unix time in milliseconds
-  # Should only accept unix time in seconds
-  ##
-  test 'invalid millisecond log time' do
-    data = get_data
-    data[:log_time] = Time.now.to_i * 1000
-    expected = 'Validation failed: Log time must be in unix time in seconds.'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      begin
-        Datum.create!(data)
-      rescue ActiveRecord::RecordInvalid => e
-        assert_equal(expected, e.message)
-        raise e
-      end
-    end
-  end
-
-  ##
-  # Test error handling for invalid value for device id
-  ##
-  test 'invalid device id' do
-    data = get_data
+  test 'create! invalid device_id' do
+    data = create_data
     data[:device_id] = 'invalid'
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for missing device id
+  # Test error handling for the `create!` method with a missing `sensor_type` attribute.
   ##
-  test 'missing device id' do
-    data = get_data
-    data.delete(:device_id)
+  test 'create! missing sensor_type' do
+    data = create_data
+    data.delete :sensor_type
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for invalid temperature
+  # Test error handling for the `create!` method with an invalid `sensor_type` attribute.
   ##
-  test 'invalid temperature' do
-    data = get_data
+  test 'create! invalid sensor_type' do
+    data = create_data
+    data[:sensor_type] = 'invalid'
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a missing `sensor_error` attribute.
+  ##
+  test 'create! missing sensor_error' do
+    data = create_data
+    data.delete :sensor_error
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with an invalid `sensor_error` attribute.
+  ##
+  test 'create! invalid sensor_error' do
+    data = create_data
+    data[:sensor_error] = 'invalid'
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a too low `sensor_error` attribute.
+  ##
+  test 'create! too low sensor_error' do
+    data = create_data
+    data[:sensor_error] = -0.1
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a too high `sensor_error` attribute.
+  ##
+  test 'create! too high sensor_error' do
+    data = create_data
+    data[:sensor_error] = 1.1
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test success of `create!` method with a `sensor_error` attribute at the lower limit.
+  ##
+  test 'create! lower limit sensor error' do
+    data = create_data
+    data[:sensor_error] = 0.0
+
+    Datum.create! data
+  end
+
+  ##
+  # Test success of `create!` method with a `sensor_error` attribute at the upper limit.
+  ##
+  test 'create! upper limit sensor_error' do
+    data = create_data
+    data[:sensor_error] = 1.0
+
+    Datum.create! data
+  end
+
+  ##
+  # Test error handling for the `create!` method with a missing `sensor_data` attribute.
+  ##
+  test 'create! missing sensor_data' do
+    data = create_data
+    data.delete :sensor_data
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with an invalid `sensor_data` attribute.
+  ##
+  test 'create! invalid sensor_data' do
+    data = create_data
+    data[:sensor_data] = 'invalid'
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a too low `sensor_data` attribute.
+  ##
+  test 'create! too low sensor_data' do
+    data = create_data
+    data[:sensor_data] = -1
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a too high `sensor_data` attribute.
+  ##
+  test 'create! too high sensor_data' do
+    data = create_data
+    data[:sensor_data] = 4096
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test success of `create!` method with a `sensor_data` attribute at the lower limit.
+  ##
+  test 'create! lower limit sensor_data' do
+    data = create_data
+    data[:sensor_data] = 0
+
+    Datum.create! data
+  end
+
+  ##
+  # Test success of `create!` method with a `sensor_data` attribute at the upper limit.
+  ##
+  test 'create! upper limit sensor_data' do
+    data = create_data
+    data[:sensor_data] = 4095
+
+    Datum.create! data
+  end
+
+  ##
+  #  Test error handling for the `create!` method with a non-integer `sensor_data` attribute.
+  ##
+  test 'create! non-integer sensor_data' do
+    data = create_data
+    data[:sensor_data] = 1.1
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a missing `log_time` attribute.
+  ##
+  test 'create! missing log_time' do
+    data = create_data
+    data.delete :log_time
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with an invalid `log_time` attribute.
+  ##
+  test 'create! invalid log_time' do
+    data = create_data
+    data[:log_time] = 'invalid'
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a too low `log_time` attribute.
+  ##
+  test 'create! too low log_time' do
+    data = create_data
+    data[:log_time] = (Time.now.utc - 31.days).to_i
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with a too high `log_time` attribute.
+  ##
+  test 'create! too high log_time' do
+    data = create_data
+    data[:log_time] = (Time.now.utc + 1.day).to_i
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test success of `create!` method with a `log_time` attribute at the lower limit.
+  ##
+  test 'create! lower limit log_time' do
+    data = create_data
+    data[:log_time] = (Time.now.utc - 29.days).to_i
+
+    Datum.create! data
+  end
+
+  ##
+  # Test success of `create!` method with a `log_time` attribute at the upper limit.
+  ##
+  test 'create! upper limit log_time' do
+    data = create_data
+    data[:log_time] = (Time.now.utc - 5.minutes).to_i
+
+    Datum.create! data
+  end
+
+  ##
+  # Test error handling for the `create!` method with a missing `temperature` attribute.
+  ##
+  test 'create! missing temperature' do
+    data = create_data
+    data.delete :temperature
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
+    end
+  end
+
+  ##
+  # Test error handling for the `create!` method with an invalid `temperature` attribute.
+  ##
+  test 'create! invalid temperature' do
+    data = create_data
     data[:temperature] = 'invalid'
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for missing temperature
+  # Test error handling for the `create!` method with a missing `pressure` attribute.
   ##
-  test 'missing temperature' do
-    data = get_data
-    data.delete(:temperature)
+  test 'create! missing pressure' do
+    data = create_data
+    data.delete :pressure
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for invalid pressure
+  # Test error handling for the `create!` method with an invalid `pressure` attribute.
   ##
-  test 'invalid pressure' do
-    data = get_data
+  test 'create! invalid pressure' do
+    data = create_data
     data[:pressure] = 'invalid'
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for missing pressure
+  # Test error handling for the `create!` method with a missing `humidity` attribute.
   ##
-  test 'missing pressure' do
-    data = get_data
-    data.delete(:pressure)
+  test 'create! missing humidity' do
+    data = create_data
+    data.delete :humidity
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for invalid humidity
+  # Test error handling for the `create!` method with an invalid `humidity` attribute.
   ##
-  test 'invalid humidity' do
-    data = get_data
+  test 'create! invalid humidity' do
+    data = create_data
     data[:humidity] = 'invalid'
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for missing humidity
+  # Test error handling for the `create!` method with a too low `humidity` limit.
   ##
-  test 'missing humidity' do
-    data = get_data
-    data.delete(:humidity)
+  test 'create! too low humidity' do
+    data = create_data
+    data[:humidity] = -0.1
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test error handling for too low humidity
+  # Test error handling for the `create!` method with a too high `humidity` attribute.
   ##
-  test 'too low humidity' do
-    data = get_data
-    data[:humidity] = -1
+  test 'create! too high humidity' do
+    data = create_data
+    data[:humidity] = 100.1
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Datum.create! data
     end
   end
 
   ##
-  # Test success for lower limit humidity
+  # Test success of `create!` method with a `humidity` attribute at the lower limit.
   ##
-  test 'lower limit humidity' do
-    data = get_data
+  test 'create! lower limit humidity' do
+    data = create_data
     data[:humidity] = 0
 
-    Datum.create!(data)
+    Datum.create! data
   end
 
   ##
-  # Test error handling for too high humidity
+  # Test success of `create!` method with a `humidity` attribute at the upper limit.
   ##
-  test 'too high humidity' do
-    data = get_data
-    data[:humidity] = 101
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Datum.create!(data)
-    end
-  end
-
-  ##
-  # Test success for upper limit humidity
-  ##
-  test 'upper limit humidity' do
-    data = get_data
+  test 'create! upper limit humidity' do
+    data = create_data
     data[:humidity] = 100
 
-    Datum.create!(data)
-  end
-
-  ##
-  # Test successful creation
-  ##
-  test 'successful create' do
-    data = get_data
-
-    Datum.create!(data)
+    Datum.create! data
   end
 
   private
 
   ##
-  # Helper method for getting data with a valid device id
-  #
-  # Fixes an issue where if this set of tests is run first
-  # then a device is looked up before fixtures are loaded
-  # assuming it's defined with `BASE_DATA` above
-  #
-  # This solves that by lazy loading it per test
-  # which sucks, but works
+  # Helper method for getting data to create a new data point with.
   ##
-  def get_data
+  def create_data
     device = Device.first!
-
-    data = BASE_DATA.deep_dup
+    data = CREATE_DATA.deep_dup
     data[:device_id] = device.id
 
     return data

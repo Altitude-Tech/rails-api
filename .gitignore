@@ -4,36 +4,21 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Ignore bundler config.
+# ignore bundler config.
 /.bundle
 
-# ignore Gemfile.lock
-Gemfile.lock
-
-# ignore rvm config
-.versions.conf
-
-# ignore all logfiles and tempfiles
-# @todo fix this
+# ignore all logfiles and tempfiles.
 /log/*
-/log/*/
-#!/log/.keep
-#!/log/*/.keep
-
 /tmp/*
-/tmp/*/
+!/log/.keep
 !/tmp/.keep
-!/tmp/*/.keep
-
-
-# ignore production puma stuff
 
 # ignore Byebug command history file.
 .byebug_history
 
 # ignore rubocop todo
-.rubocop_todo.yml
+.rubocop_to.yml
 
-# ignore auto generated db schema
-# auto generated on `rake db:migrate`
-db/schema.rb
+# ignore generated gemfile
+Gemfile.lock
+

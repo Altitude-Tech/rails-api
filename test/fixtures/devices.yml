@@ -1,11 +1,12 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
+##
+# Sample device data for tests
+##
 one:
   id: 1
-  device_id: 1234
-  device_type: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
+  identity: 77834ac5938cbd0c119b22d8bf171824
+  device_type: 1
 
 two:
   id: 2
-  device_id: 4567
-  device_type: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
+  identity: 6b58d18a8df4600ec5c08a71da081b93
+  device_type: 1

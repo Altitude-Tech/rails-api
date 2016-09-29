@@ -1,20 +1,19 @@
 ##
-# Validator for device types
+# Validator for device type objects.
 ##
 class DeviceTypeValidator < BaseValidator
   ##
   #
   ##
   def validate_each(record, attribute, value)
-    value = get_raw_value(record, attribute, value)
+    # work with the raw value
+    # otherwise you end up working with the hash representations of the types
+    # and invalid/missing values are more confusing
+    raw_value = before_type_cast record, attribute
 
-    is_valid = Device::TYPES.include?(value)
-    not_prod = ENV['RAILS_ENV'] != 'production'
-    is_test = value == Device::TYPE_TEST
-
-    condition = is_valid || (not_prod && is_test)
-
-    msg = I18n.t('validator.unrecognised')
-    record.errors.add(attribute, msg) unless condition
+    unless Device::TYPES.include? raw_value
+      msg = 'is an invalid value'
+      record.errors.add(attribute, msg)
+    end
   end
 end

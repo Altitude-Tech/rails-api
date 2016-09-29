@@ -1,110 +1,142 @@
-##
-# Device model tests
-##
-
 require 'test_helper'
 
 class DeviceTest < ActiveSupport::TestCase
-  BASE_DATA = {
-    device_id: '1452',
-    device_type: Device::TYPE_TEST
+  ##
+  # Data for creating a new devoce entry.
+  ##
+  CREATE_DATA = {
+    device_type: Device::TYPE_MAIN_HASH
   }.freeze
 
   ##
-  # Test error handling of invalid value for device id
+  # Test sucess of the `create!` method.
   ##
-  test 'invalid device_id' do
-    data = BASE_DATA.deep_dup
-    data[:device_id] = 'invalid'
+  test 'create! success' do
+    data = CREATE_DATA.deep_dup
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(data)
+    device = Device.create! data
+  end
+
+  ##
+  # Test error handling for the `create!` method with a non-unique `identity` attribute.
+  ##
+  test 'create! non-unique identity' do
+    device = Device.first!
+    data = CREATE_DATA.deep_dup
+    data[:identity] = device.identity
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Device.create! data
     end
   end
 
   ##
-  # Test error handling for duplicate creation
-  #
-  # Uses fixtures as original record
+  # Test error handling for the `create!` method with a missing `device_type` attribute.
   ##
-  test 'duplicate device_id' do
-    data = BASE_DATA.deep_dup
-    data[:device_id] = '1234'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(data)
-    end
-  end
-
-  ##
-  # Test error handling for missing device type
-  ##
-  test 'missing device_id' do
-    data = BASE_DATA.deep_dup
-    data.delete(:device_id)
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(device_type: 'abcd')
-    end
-  end
-
-  ##
-  # Test error handling of invalid value for device type
-  ##
-  test 'invalid device_type' do
-    data = BASE_DATA.deep_dup
-    data[:device_type] = 'invalid'
-
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(device_id: '1452', device_type: 'invalid')
-    end
-  end
-
-  ##
-  # Test error handling of missing device type
-  ##
-  test 'missing device_type' do
-    data = BASE_DATA.deep_dup
+  test 'create! missing device_type' do
+    data = CREATE_DATA.deep_dup
     data.delete(:device_type)
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(device_id: '1452')
+    assert_raises ActiveRecord::RecordInvalid do
+      Device.create! data
     end
   end
 
   ##
-  # Test error handling of missing device id and device type
+  # Test error handling for the `create!` method with an invalid `device_type` attribute.
   ##
-  test 'missing device_id and device_type' do
-    data = {}
+  test 'create! invalid device_type' do
+    data = CREATE_DATA.deep_dup
+    data[:device_type] = 'invalid'
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(data)
+    assert_raises ActiveRecord::RecordInvalid do
+      Device.create! data
     end
   end
 
   ##
-  # Test error handling of test device in production
+  # Test success of the `register!` method.
   ##
-  test 'production device test' do
-    cur_env = ENV['RAILS_ENV']
-    ENV['RAILS_ENV'] = 'production'
+  test 'register! success' do
+    group = Group.first!
+    device = Device.first!
 
-    data = BASE_DATA.deep_dup
+    token = device.register! group
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Device.create!(data)
-    end
-
-    ENV['RAILS_ENV'] = cur_env
+    assert_equal token.token, device.token.token
+    assert device.token.active?
   end
 
   ##
-  # Test successful creation
+  # Test error handling for the `register!` method with an already registered device.
   ##
-  test 'successful create' do
-    data = BASE_DATA.deep_dup
+  test 'register! already registered' do
+    group = Group.first!
+    device = Device.first!
 
-    Device.create!(data)
+    device.register! group
+
+    assert_raises Record::DeviceRegistrationError do
+      device.register!
+    end
+  end
+
+  ##
+  # Test error handling for the `register!` method with a missing group.
+  ##
+  test 'register! missing group' do
+    device = Device.first!
+
+    assert_raises Record::DeviceRegistrationError do
+      device.register!
+    end
+  end
+
+  ##
+  # Test error handling for the `register!` method with a not found group.
+  ##
+  test 'register! not found group' do
+    device = Device.first!
+
+    assert_raises Record::DeviceRegistrationError do
+      device.register! 3
+    end
+  end
+
+  ##
+  # Test success of `authenticate!` method.
+  ##
+  test 'authenticate! success' do
+    group = Group.first!
+    device = Device.first!
+    token = device.register! group
+
+    device.authenticate! token.token
+  end
+
+  ##
+  # Test error handling for the `authenticate!` method with a missing `token` parameter.
+  ##
+  test 'authenticate! missing token' do
+    group = Group.first!
+    device = Device.first!
+    token = device.register! group
+
+    assert_raises Record::DeviceAuthError do
+      device.authenticate!
+    end
+  end
+
+  ##
+  # Test error handling for the `authenticate!` method with a missing `token` parameter.
+  ##
+  test 'authenticate! invalid token' do
+    group = Group.first!
+    device = Device.first!
+    token = device.register! group
+
+    assert_raises Record::DeviceAuthError do
+      device.authenticate! 'invalid'
+    end
   end
 end

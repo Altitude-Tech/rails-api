@@ -1,11 +1,16 @@
+##
+# Sample user data for tests.
+##
 one:
-  id : 1
-  name: Bert Sesame
-  email: bert@example.com
-  password_hash: MyString
+  id: 1
+  name: Bill
+  email: bill@example.com
+  password_digest: <%= BCrypt::Password.create("password", cost: BCrypt::Engine.cost) %>
+  group_id: 1
 
 two:
   id: 2
-  name: Ernie Sesame
-  email: ernie@example.com
-  password_hash: MyString
+  name: Ben
+  email: ben@example.com
+  password_digest: <%= BCrypt::Password.create("password", cost: BCrypt::Engine.cost) %>
+  group_id: 2

@@ -1,493 +1,825 @@
-##
-# DataController tests
-##
-
 require 'test_helper'
 
 module V1
   class DataControllerTest < ActionController::TestCase
-    # base data hash to be manipulated as required
-    BASE_DATA = {
-      device_id: 4567,
-      log_time: Time.now.to_i,
-      temperature: 293.15,
-      pressure: 101_325.0,
-      humidity: 63.12,
-      data: [{
-        sensor_type: Datum::SENSOR_MQ2,
-        sensor_error: 0.1,
-        sensor_data: 47
-      }]
+    ##
+    #
+    ##
+    CREATE_DATA = {
+      sensor_type: Datum::SENSOR_MQ2_HASH,
+      sensor_error: 0.0,
+      sensor_data: 1000,
+      humidity: 0,
+      pressure: 1000,
+      temperature: 20.0,
+      log_time: Time.now.utc.to_i
     }.freeze
 
     ##
-    # Test error handling for no request body
-    ##
-    test 'create no request body' do
-      expected = {
-        error: I18n.t('controller.v1.error.missing_request_body')
-      }
-
-      post(:create)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid json
-    ##
-    test 'create invalid request body' do
-      expected = '{"error":"There was a problem in the JSON you submitted: ' \
-                 '784: unexpected token at \'invalid\'"}'
-
-      post(:create, body: 'invalid')
-
-      assert_equal(expected, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing device id key
-    ##
-    test 'create missing device id' do
-      data = BASE_DATA.deep_dup
-      data.delete(:device_id)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid device id
-    ##
-    test 'create invalid device_id' do
-      data = BASE_DATA.deep_dup
-      data[:device_id] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'device_id')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing log_time
-    ##
-    test 'create missing log time' do
-      data = BASE_DATA.deep_dup
-      data.delete(:log_time)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid log_time
-    ##
-    test 'create invalid log_time' do
-      data = BASE_DATA.deep_dup
-      data[:log_time] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for log_time in milliseconds
-    ##
-    test 'create millisecond log time' do
-      data = BASE_DATA.deep_dup
-      data[:log_time] *= 1000
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'log_time')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing temperature key
-    ##
-    test 'create missing temperature' do
-      data = BASE_DATA.deep_dup
-      data.delete(:temperature)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'temperature')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid temperature
-    ##
-    test 'create invalid temperature' do
-      data = BASE_DATA.deep_dup
-      data[:temperature] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'temperature')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing humidity
-    ##
-    test 'create missing humidity' do
-      data = BASE_DATA.deep_dup
-      data.delete(:humidity)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'humidity')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid humidity
-    ##
-    test 'create invalid humidity' do
-      data = BASE_DATA.deep_dup
-      data[:humidity] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'humidity')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing pressure
-    ##
-    test 'create missing pressure' do
-      data = BASE_DATA.deep_dup
-      data.delete(:pressure)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'pressure')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid pressure
-    ##
-    test 'create invalid pressure' do
-      data = BASE_DATA.deep_dup
-      data[:pressure] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'pressure')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing data
-    ##
-    test 'create missing data' do
-      data = BASE_DATA.deep_dup
-      data.delete(:data)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'data')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid data
-    ##
-    test 'create invalid data' do
-      data = BASE_DATA.deep_dup
-      data[:data] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'data')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing sensor_type
-    ##
-    test 'create missing sensor type' do
-      data = BASE_DATA.deep_dup
-      data[:data][0].delete(:sensor_type)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid sensor_type
-    ##
-    test 'create invalid sensor_type' do
-      data = BASE_DATA.deep_dup
-      data[:data][0][:sensor_type] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_type')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing sensor_error
-    ##
-    test 'create missing sensor error' do
-      data = BASE_DATA.deep_dup
-      data[:data][0].delete(:sensor_error)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid sensor_error
-    ##
-    test 'create invalid sensor_error' do
-      data = BASE_DATA.deep_dup
-      data[:data][0][:sensor_error] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_error')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for missing sensor_data
-    ##
-    test 'create missing sensor data' do
-      data = BASE_DATA.deep_dup
-      data[:data][0].delete(:sensor_data)
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test error handling for invalid sensor_data
-    ##
-    test 'create invalid sensor_data' do
-      data = BASE_DATA.deep_dup
-      data[:data][0][:sensor_data] = 'invalid'
-      expected = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
-      }
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-    end
-
-    ##
-    # Test successful creation
+    # Test success of the `create` method.
     ##
     test 'create success' do
-      data = BASE_DATA.deep_dup
-      expected = {
-        result: I18n.t('controller.v1.message.success')
-      }
+      data = create_data
+      expected = { result: 'success' }
 
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
     end
 
     ##
-    # Test multiple create with error
+    # Test error handling for the `create` with a missing `identity` parameter.
     ##
-    test 'create multiple with error' do
-      expected1 = {
-        error: I18n.t('controller.v1.error.invalid_value', key: 'sensor_data')
+    test 'create missing identity' do
+      data = create_data
+      data.delete(:identity)
+      expected = {
+        error: 104,
+        message: '"identity" not found.',
+        status: 400
       }
-      expected2 = {
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `identity` parameter.
+    ##
+    test 'create invalid identity' do
+      data = create_data
+      data[:identity] = 'invalid'
+      expected = {
+        error: 104,
+        message: '"identity" not found.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `token` parameter.
+    ##
+    test 'create missing token' do
+      data = create_data
+      data.delete(:token)
+      expected = {
+        error: 108,
+        message: 'Not authorised.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `token` parameter.
+    ##
+    test 'create invalid token' do
+      data = create_data
+      data[:token] = 'invalid'
+      expected = {
+        error: 108,
+        message: 'Not authorised.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `sensor_type` parameter.
+    ##
+    test 'create missing sensor_type' do
+      data = create_data
+      data.delete(:sensor_type)
+      expected = {
+        error: 103,
+        message: '"sensor_type" can\'t be blank.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `sensor_type` parameter.
+    ##
+    test 'create invalid sensor_type' do
+      data = create_data
+      data[:sensor_type] = 'invalid'
+      expected = {
+        error: 103,
+        message: '"sensor_type" can\'t be blank.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `sensor_error` parameter.
+    ##
+    test 'create missing sensor_error' do
+      data = create_data
+      data.delete(:sensor_error)
+      expected = {
+        error: 103,
+        message: '"sensor_error" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `sensor_error` parameter.
+    ##
+    test 'create invalid sensor_error' do
+      data = create_data
+      data[:sensor_error] = 'invalid'
+      expected = {
+        error: 103,
+        message: '"sensor_error" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too low `sensor_error` parameter.
+    ##
+    test 'create too low sensor_error' do
+      data = create_data
+      data[:sensor_error] = -1
+      expected = {
+        error: 103,
+        message: '"sensor_error" must be greater than or equal to 0.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too high `sensor_error` parameter.
+    ##
+    test 'create too high sensor_error' do
+      data = create_data
+      data[:sensor_error] = 2
+      expected = {
+        error: 103,
+        message: '"sensor_error" must be less than or equal to 1.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test success of `create` method with a `sensor_error` parameter at the lower limit.
+    ##
+    test 'create lower limit sensor_error' do
+      data = create_data
+      data[:sensor_error] = 0
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test success of `create` method with a `sensor_error` parameter at the upper limit.
+    ##
+    test 'create upper limit sensor_error' do
+      data = create_data
+      data[:sensor_error] = 1
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `sensor_data` parameter.
+    ##
+    test 'create missing sensor_data' do
+      data = create_data
+      data.delete(:sensor_data)
+      expected = {
+        error: 103,
+        message: '"sensor_data" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `sensor_data` parameter.
+    ##
+    test 'create invalid sensor_data' do
+      data = create_data
+      data[:sensor_data] = 'invalid'
+      expected = {
+        error: 103,
+        message: '"sensor_data" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too low `sensor_data` parameter.
+    ##
+    test 'create too low sensor_data' do
+      data = create_data
+      data[:sensor_data] = -1
+      expected = {
+        error: 103,
+        message: '"sensor_data" must be greater than or equal to 0.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too high `sensor_data` parameter.
+    ##
+    test 'create too high sensor_data' do
+      data = create_data
+      data[:sensor_data] = 4096
+      expected = {
+        error: 103,
+        message: '"sensor_data" must be less than 4096.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test success of `create` method with a `sensor_data` parameter at the lower limit.
+    ##
+    test 'create lower limit sensor_data' do
+      data = create_data
+      data[:sensor_data] = 0
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test success of `create` method with a `sensor_data` parameter at the upper limit.
+    ##
+    test 'create upper limit sensor_data' do
+      data = create_data
+      data[:sensor_data] = 4095
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test error handling for the `create` with a non-integer `sensor_data` parameter.
+    ##
+    test 'create non-integer sensor_data' do
+      data = create_data
+      data[:sensor_data] = 0.1
+      expected = {
+        error: 103,
+        message: '"sensor_data" must be an integer.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `log_time` parameter.
+    ##
+    test 'create missing log_time' do
+      data = create_data
+      data.delete(:log_time)
+      expected = {
+        error: 103,
+        message: '"log_time" is an invalid value.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `log_time` parameter.
+    ##
+    test 'create invalid log_time' do
+      data = create_data
+      data[:log_time] = 'invalid'
+      expected = {
+        error: 103,
+        message: '"log_time" is an invalid value.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too low `log_time` parameter.
+    ##
+    test 'create too low log_time' do
+      data = create_data
+      data[:log_time] = (Time.now.utc - 31.days).to_i
+      expected = {
+        error: 103,
+        message: '"log_time" is below the minimum allowed value.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too high `log_time` parameter.
+    ##
+    test 'create too high log_time' do
+      data = create_data
+      data[:log_time] = (Time.now.utc + 1.day).to_i
+      expected = {
+        error: 103,
+        message: '"log_time" is above the maximum allowed value.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test success of `create` method with a `log_time` parameter at the lower limit.
+    ##
+    test 'create lower limit log_time' do
+      data = create_data
+      data[:log_time] = (Time.now.utc - 30.days).to_i
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test success of `create` method with a `log_time` parameter at the upper limit.
+    ##
+    test 'create upper limit log_time' do
+      data = create_data
+      data[:log_time] = Time.now.utc.to_i
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `temperature` parameter.
+    ##
+    test 'create missing temperature' do
+      data = create_data
+      data.delete(:temperature)
+      expected = {
+        error: 103,
+        message: '"temperature" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `temperature` parameter.
+    ##
+    test 'create invalid temperature' do
+      data = create_data
+      data[:temperature] = 'invalid'
+      expected = {
+        error: 103,
+        message: '"temperature" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `humidity` parameter.
+    ##
+    test 'create missing humidity' do
+      data = create_data
+      data.delete(:humidity)
+      expected = {
+        error: 103,
+        message: '"humidity" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `humidity` parameter.
+    ##
+    test 'create invalid humidity' do
+      data = create_data
+      data[:humidity] = 'invalid'
+      expected = {
+        error: 103,
+        message: '"humidity" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too low `humidity` parameter.
+    ##
+    test 'create too low humidity' do
+      data = create_data
+      data[:humidity] = -1
+      expected = {
+        error: 103,
+        message: '"humidity" must be greater than or equal to 0.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with a too high `humidity` parameter.
+    ##
+    test 'create too high humidity' do
+      data = create_data
+      data[:humidity] = 101
+      expected = {
+        error: 103,
+        message: '"humidity" must be less than or equal to 100.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test success of `create` method with a `humidity` parameter at the lower limit.
+    ##
+    test 'create lower limit humidity' do
+      data = create_data
+      data[:humidity] = 0
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test success of `create` method with a `humidity` parameter at the upper limit.
+    ##
+    test 'create upper limit humidity' do
+      data = create_data
+      data[:humidity] = 100
+      expected = { result: 'success' }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test error handling for the `create` with a missing `pressure` parameter.
+    ##
+    test 'create missing pressure' do
+      data = create_data
+      data.delete(:pressure)
+      expected = {
+        error: 103,
+        message: '"pressure" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `create` with an invalid `pressure` parameter.
+    ##
+    test 'create invalid pressure' do
+      data = create_data
+      data[:pressure] = 'invalid'
+      expected = {
+        error: 103,
+        message: '"pressure" is not a number.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test success of the `show` method returning 0 results of data.
+    ##
+    test 'show success empty result' do
+      login
+      create_data
+      data = {
+        identity: Device.first!.identity
+      }
+      expected = {
+        device: {
+          identity: '77834ac5938cbd0c119b22d8bf171824',
+          type: 'b28b7af69320201d1cf206ebf28373980add1451',
+          name: 'main'
+        },
         data: []
       }
 
-      # create a new device first
-      device_id = 6789
-      Device.create!(device_id: device_id, device_type: Device::TYPE_TEST)
+      get :show, params: data
 
-      data = BASE_DATA.deep_dup
-      data[:device_id] = device_id
-      child_data = data[:data][0]
-
-      data[:data].append(child_data.clone)
-      data[:data][1][:sensor_data] = 'invalid'
-
-      Rails.logger.debug(data)
-
-      post(:create, body: data.to_json)
-
-      # make sure the first request failed
-      assert_equal(expected1.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:bad_request)
-
-      # double check nothing was inserted
-      get(:show, params: { device_id: device_id })
-
-      assert_equal(expected2.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
     end
 
     ##
-    # Test multiple successful create
+    # Test success of the `show` method returning multiple results of data.
     ##
-    test 'create multiple success' do
-      data = BASE_DATA.deep_dup
-      child_data = data[:data][0]
-      data[:data].append(child_data.clone)
-      expected = {
-        result: I18n.t('controller.v1.message.success')
+    test 'show success with results' do
+      login
+      group = Group.first!
+      device = Device.find 2
+      device.register! group
+      data = {
+        identity: device.identity
       }
-
-      Rails.logger.debug(data)
-
-      post(:create, body: data.to_json)
-
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
-    end
-
-    ##
-    # Test show method success
-    ##
-    test 'show success' do
       expected = {
+        device: {
+          identity: '6b58d18a8df4600ec5c08a71da081b93',
+          type: 'b28b7af69320201d1cf206ebf28373980add1451',
+          name: 'main'
+        },
         data: [
           {
-            device_id: 1,
-            sensor_name: Datum::SENSOR_MQ2_RAW,
-            sensor_type: Datum::SENSOR_MQ2,
-            sensor_data: 1.5,
-            sensor_error: '9.99',
-            temperature: 293.15,
-            pressure: 101_325.0,
-            humidity: 60.0,
-            log_time: '2016-07-13 16:31:36 UTC'
+            sensor_type: '4080cf866795cdaf370a641cbd8044453d79ae30',
+            sensor_error: 0.0,
+            sensor_data: 0,
+            log_time: '2016-09-23T11:57:47.000Z',
+            temperature: 20.0,
+            humidity: 0.0,
+            pressure: 1000.0
+          }, {
+            sensor_type: '4080cf866795cdaf370a641cbd8044453d79ae30',
+            sensor_error: 0.0,
+            sensor_data: 0,
+            log_time: '2016-09-23T11:57:47.000Z',
+            temperature: 20.0,
+            humidity: 0.0,
+            pressure: 1000.0
           }
         ]
       }
 
-      get(:show, params: { device_id: 1234 })
+      get :show, params: data
 
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:ok)
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
     end
 
     ##
-    # Test show error handling for invalid device id
+    # Test error handling for the `show` method when a user is not logged in.
     ##
-    test 'show not found' do
-      args = { model: 'device', key: 'device_id', value: 'invalid' }
+    test 'show not logged in' do
+      data = {
+        identity: Device.first!.identity
+      }
       expected = {
-        error: I18n.t('controller.v1.error.not_found', args)
+        error: 101,
+        message: 'Not authorised.',
+        status: 400
       }
 
-      get(:show, params: { device_id: 'invalid' })
+      get :show, params: data
 
-      assert_equal(expected.to_json, response.body)
-      assert_equal('application/json', response.content_type)
-      assert_response(:not_found)
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `show` method when a user is not authorised to view the data.
+    ##
+    test 'show not authorised' do
+      login
+      data = {
+        identity: Device.first!.identity
+      }
+      expected = {
+        error: 101,
+        message: 'Not authorised.',
+        status: 400
+      }
+
+      get :show, params: data
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `show` method when a device is not found.
+    ##
+    test 'show device not found' do
+      login
+      data = {
+        identity: 'invalid'
+      }
+      expected = {
+        error: 101,
+        message: 'Not authorised.',
+        status: 400
+      }
+
+      get :show, params: data
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    private
+
+    ##
+    # Helper method to register a device and return data ready to send for said device.
+    ##
+    def create_data
+      data = CREATE_DATA.deep_dup
+      device = Device.first!
+      group = Group.first!
+
+      token = device.register! group
+
+      data[:identity] = device.identity
+      data[:token] = token.token
+
+      return data
+    end
+
+    ##
+    # Set a session cookie to fake being logged in.
+    ##
+    def login
+      user = User.first!
+      token = user.authenticate! 'password'
+
+      cookies.signed[:session] = token.token
     end
   end
 end

@@ -1,23 +1,23 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
+##
+# Sample data points for tests
+##
 one:
-  id: 1
-  sensor_type: 4080cf866795cdaf370a641cbd8044453d79ae30
-  sensor_error: 9.99
-  sensor_data: 1.5
-  log_time: 2016-07-13 16:31:36
-  device_id: 1
-  temperature: 293.15
-  pressure: 101325.0
-  humidity: 60.00
+  device_id: 2
+  sensor_type: 1
+  sensor_error: 0
+  sensor_data: 0
+  log_time: 2016-09-23 11:57:47
+  temperature: 20.0
+  pressure: 1000
+  humidity: 0
 
 two:
-  id: 2
-  sensor_type: 4080cf866795cdaf370a641cbd8044453d79ae30
-  sensor_error: 9.99
-  sensor_data: 1.5
-  log_time: 2016-07-13 16:31:36
   device_id: 2
-  temperature: 293.15
-  pressure: 101325.0
-  humidity: 60.00
+  sensor_type: 1
+  sensor_error: 0
+  sensor_data: 0
+  log_time: 2016-09-23 11:57:47
+  temperature: 20.0
+  pressure: 1000
+  humidity: 0
+

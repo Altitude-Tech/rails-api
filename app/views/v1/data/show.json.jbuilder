@@ -1,11 +1,10 @@
-json.data @data.each do |d|
-  # device
-  json.device_id(d.device_id)
+json.device do
+  json.identity @device.identity
+  json.type @device.device_type
+  json.name @device.name
+end
 
-  # sensor values
-  json.sensor_name(d.sensor_name)
-  json.call(d, :sensor_type, :sensor_data, :sensor_error)
-
-  # other data
-  json.call(d, :temperature, :pressure, :humidity, :log_time)
+json.data @data do |datum|
+  json.extract! datum, :sensor_type, :sensor_error, :sensor_data
+  json.extract! datum, :log_time, :temperature, :humidity, :pressure
 end

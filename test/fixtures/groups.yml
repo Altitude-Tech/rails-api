@@ -1,0 +1,12 @@
+##
+# Sample group data for tests
+##
+one:
+  id: 1
+  name: Group 1
+  admin: 1
+
+two:
+  id: 2
+  name: Group 2
+  admin: 2

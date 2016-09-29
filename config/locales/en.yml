@@ -20,44 +20,4 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  # models
-  models:
-    data: []
-    devices: []
-    users: []
-
-  # validators
-  validator:
-    unrecognised: is an unrecognised value.
-    hex: must be a hexadecimal number.
-    log_time_invalid: 'must be in unix time in seconds.'
-    log_time_out_of_range: 'outside permitted limits.'
-
-  # controllers
-  controller:
-    v1:
-      message:
-        success: Success.
-      error:
-        unhandled_error: An unexpected error occurred.
-        int_outside_limits: Number outside limits.
-        missing_body: Missing request body.
-        json_parse_error: 'There was a problem in the JSON you submitted: %{msg}'
-        invalid_value: '"%{key}" is missing or an unrecognised value.'
-        missing_key: '"%{key}" was not found.'
-        unknown_key: '"%{key}" is an unrecognised key.'
-        not_found: 'Could not find %{model} with %{key}: "%{value}".'
-
-    v1_data:
-      foo: bar
-
-    v1_devices:
-      error:
-        limit: '"limit" must be an integer between 1 and %{max}.'
-        start: '"start" must be an integer greater than 1.'
-        no_more: No more devices were found.
-
-    v1_users:
-      foo: bar
-
-
+  hello: "Hello world"

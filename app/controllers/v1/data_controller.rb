@@ -1,92 +1,60 @@
-##
-#
-##
-
-require 'exceptions'
-
-##
-#
-##
 module V1
-  ##
-  #
-  ##
-  class DataController < V1ApiController
-    before_action :set_json
-
-    rescue_from(Exceptions::V1ApiNotFoundError, with: :not_found_error)
+  class DataController < ApiController
+    before_action :authenticate_device, only: [:create]
+    before_action :authenticate_user, only: [:show]
 
     ##
-    # Get a single device's data
+    # Create a new set of data associated with a particular device.
     ##
-    def show
-      device = Device.find_by!(device_id: params[:device_id])
-      @data = device.datum
-      # @todo order?
-      # <http://stackoverflow.com/questions/9197649/rails-sort-by-join-table-data>
-    rescue ActiveRecord::RecordNotFound => e
-      raise Exceptions::V1ApiNotFoundError.new(e, 'device_id', params[:device_id])
+    def create
+      # remove token from request body
+      @body.delete(:token)
+      # replace identity hash with actual device_id
+      @body.delete(:identity)
+      @body[:device_id] = @device.id
+
+      Datum.create! @body
+
+      @result = 'success'
+      render 'v1/result'
+    rescue ActiveRecord::RecordInvalid => exc
+      raise Api::InvalidCreateError, exc
     end
 
     ##
-    # Creates a new data entry.
+    # Get data associated with a specific device.
     ##
-    def create
-      data = get_data(@json)
-
-      Datum.transaction do
-        data.each do |d|
-          Datum.create!(d)
-        end
+    def show
+      # mask device not found with not authorised
+      begin
+        @device = Device.find_by_identity! params[:identity]
+      rescue ActiveRecord::RecordNotFound
+        msg = 'Not authorised.'
+        raise Api::AuthError, msg
       end
-    rescue NoMethodError
-      msg = t('controller.v1.error.invalid_value', key: 'data')
-      raise Exceptions::V1ApiError, msg
-    else
-      @result = t('controller.v1.message.success')
-      render('v1/result')
+
+      unless !@user.group.nil? && @user.group == @device.group
+        msg = 'Not authorised.'
+        raise Api::AuthError, msg
+      end
+
+      @data = @device.datum
+    rescue ActiveRecord::RecordNotFound
+      raise Api::NotFoundError, 'identity'
     end
 
     private
 
     ##
-    # Flatten/split the raw data hashes into 3 hashes representing each sensor's data
+    # Helper method for authenticating a device with it's token.
     ##
-    def get_data(raw_data)
-      base_data_keys = %i(log_time pressure humidity temperature)
-      sensor_data_keys = %i(sensor_error sensor_data sensor_type)
-      ret = []
-
-      # device_id as a hash is exposed to end users
-      # not the internal id in the database
-      device = get_device(raw_data[:device_id])
-
-      base_data = raw_data.select do |k, _|
-        base_data_keys.include?(k)
-      end
-
-      base_data[:device_id] = device.id
-
-      raw_data[:data].each do |d|
-        data = d.select do |k, _|
-          sensor_data_keys.include?(k)
-        end
-
-        ret.append(data.merge(base_data))
-      end
-
-      return ret
-    end
-
-    ##
-    # Get the device by it's device_id
-    ##
-    def get_device(device_id)
-      device_data = { device_id: device_id }
-      return Device.find_by!(device_data)
+    def authenticate_device
+      @device = Device.find_by_identity! @body[:identity]
+      @device.authenticate! @body[:token]
     rescue ActiveRecord::RecordNotFound
-      msg = t('controller.v1.error.invalid_value', key: 'device_id')
-      raise Exceptions::V1ApiError, msg
+      raise Api::NotFoundError, 'identity'
+    rescue Record::DeviceAuthError => exc
+      raise Api::DeviceAuthError, exc.message
     end
   end
 end
