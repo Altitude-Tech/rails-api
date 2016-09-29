@@ -2,7 +2,7 @@ module V1
   ##
   #
   ##
-  class AdminController < V1ApiController
+  class AdminController < V1::ApiController
     before_action :authenticate_admin
 
     protected
