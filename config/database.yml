@@ -33,5 +33,5 @@ test:
 production:
   <<: *default
   database: api_production
-  username: <%= if ENV['DB_ADMIN'] then 'api_admin' else 'api_user' end %>
-  password: <%= if ENV['DB_ADMIN'] then ENV['API_ADMIN_PASSWORD'] else ENV['API_USER_PASSWORD'] end %>
+  username: <%= if ENV['DB_CREATE'] then 'root' elsif ENV['DB_ADMIN'] then 'api_admin' else 'api_user' end %>
+  password: <%= if ENV['DB_CREATE'] then ENV['MYSQL_ROOT_PASSWORD'] elsif ENV['DB_ADMIN'] then ENV['API_ADMIN_PASSWORD'] else ENV['API_USER_PASSWORD'] end %>
