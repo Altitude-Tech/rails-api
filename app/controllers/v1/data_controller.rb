@@ -1,4 +1,7 @@
 module V1
+  ##
+  #
+  ##
   class DataController < ApiController
     before_action :authenticate_device, only: [:create]
     before_action :authenticate_user, only: [:show]

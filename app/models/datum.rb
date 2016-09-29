@@ -46,7 +46,9 @@ class Datum < ApplicationRecord
   validates :device_id, presence: true
   validates :sensor_type, presence: true # TODO: improve this for better error messages
   validates :sensor_error, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
-  validates :sensor_data, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 4096 }
+  validates :sensor_data, numericality: {
+    only_integer: true, greater_than_or_equal_to: 0, less_than: 4096
+  }
   validates :log_time, datetime: { min: (Time.now.utc - 30.days), max: :now }
   validates :temperature, numericality: true
   validates :pressure, numericality: true

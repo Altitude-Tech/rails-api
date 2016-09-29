@@ -1,4 +1,7 @@
 module V1
+  ##
+  #
+  ##
   class DevicesController < V1::ApiController
     before_action :authenticate_user
 

@@ -146,5 +146,4 @@ class TokenTest < ActiveSupport::TestCase
     assert_not token.enabled
     assert token.expires.nil?
   end
-
 end

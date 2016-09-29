@@ -1,4 +1,7 @@
 module V1
+  ##
+  #
+  ##
   class GroupsController < V1::ApiController
     ##
     # Filters
@@ -9,7 +12,7 @@ module V1
     # Add a new user to a group
     ##
     def add_user
-      is_admin?
+      admin?
 
       user = User.find_by_email! @body[:email]
       user.group = @user.group
@@ -41,7 +44,7 @@ module V1
     # Get a group's details
     ##
     def show
-      is_member?
+      member?
 
       @group = @user.group
     end
@@ -51,7 +54,7 @@ module V1
     ##
     # Check the user is a member of a group.
     ##
-    def is_member?
+    def member?
       if @user.group.nil?
         msg = 'Not authorised.'
         raise Api::AuthError, msg
@@ -61,8 +64,8 @@ module V1
     ##
     # Check the user is an admin of a group.
     ##
-    def is_admin?
-      is_member?
+    def admin?
+      member?
 
       unless @user.group.admin.id == @user.id
         msg = 'Not authorised.'

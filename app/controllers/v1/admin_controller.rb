@@ -1,4 +1,7 @@
 module V1
+  ##
+  #
+  ##
   class AdminController < V1ApiController
     before_action :authenticate_admin
 

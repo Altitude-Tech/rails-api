@@ -14,7 +14,7 @@ class DeviceTest < ActiveSupport::TestCase
   test 'create! success' do
     data = CREATE_DATA.deep_dup
 
-    device = Device.create! data
+    Device.create! data
   end
 
   ##
@@ -120,7 +120,7 @@ class DeviceTest < ActiveSupport::TestCase
   test 'authenticate! missing token' do
     group = Group.first!
     device = Device.first!
-    token = device.register! group
+    device.register! group
 
     assert_raises Record::DeviceAuthError do
       device.authenticate!
@@ -133,7 +133,7 @@ class DeviceTest < ActiveSupport::TestCase
   test 'authenticate! invalid token' do
     group = Group.first!
     device = Device.first!
-    token = device.register! group
+    device.register! group
 
     assert_raises Record::DeviceAuthError do
       device.authenticate! 'invalid'

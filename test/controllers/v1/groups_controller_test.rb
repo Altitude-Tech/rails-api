@@ -134,7 +134,6 @@ module V1
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
       assert_response :bad_request
-
     end
 
     ##

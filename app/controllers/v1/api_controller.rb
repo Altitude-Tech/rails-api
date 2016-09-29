@@ -1,10 +1,10 @@
 require 'api_exceptions'
 require 'record_exceptions'
 
-##
-#
-##
 module V1
+  ##
+  #
+  ##
   class ApiController < BaseApiController
     ##
     # Filters
@@ -119,9 +119,9 @@ module V1
         end
 
         if v.is_a? Array
-          v.map! { |item|
+          v.map! do |item|
             normalise_keys item
-          }
+          end
         end
 
         ret[k] = v

@@ -57,7 +57,7 @@ module V1
     ##
     test 'register device not found' do
       login
-      device = create_device
+      create_device
       data = { identity: 'invalid' }
       expected = {
         error: 104,

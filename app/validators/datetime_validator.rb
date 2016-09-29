@@ -9,18 +9,9 @@ class DatetimeValidator < BaseValidator
     # either nothing or an invalid timestamp was given
     if value.nil?
       raw_value = before_type_cast record, attribute
+      value = valid_raw? raw_value
 
-      if raw_value.nil? && options[:allow_null] == true
-        return
-      end
-
-      begin
-        value = Time.parse(raw_value)
-      rescue ArgumentError, TypeError
-        msg = 'is an invalid value'
-        record.errors.add attribute, msg
-        return
-      end
+      return unless value
     end
 
     if options.key?(:min)
@@ -42,5 +33,26 @@ class DatetimeValidator < BaseValidator
         return
       end
     end
+  end
+
+  private
+
+  ##
+  #
+  ##
+  def valid_raw?(value)
+    if value.nil? && options[:allow_null] == true
+      return false
+    end
+
+    begin
+      value = Time.parse(value).utc
+    rescue ArgumentError, TypeError
+      msg = 'is an invalid value'
+      record.errors.add attribute, msg
+      return false
+    end
+
+    return value
   end
 end

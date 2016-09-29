@@ -1,8 +1,8 @@
-##
-#
-##
 module V1
   module Admin
+    ##
+    #
+    ##
     class DevicesController < V1::ApiController
       ##
       # Create a new device.

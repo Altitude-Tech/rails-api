@@ -1,4 +1,7 @@
 module V1
+  ##
+  #
+  ##
   class UsersController < V1::ApiController
     ##
     # Filters
@@ -29,7 +32,7 @@ module V1
 
       @result = 'success'
       render 'v1/result'
-    rescue ActiveRecord::RecordNotFound => exc
+    rescue ActiveRecord::RecordNotFound
       raise Api::NotFoundError, 'email'
     rescue Record::UserAuthError => exc
       raise Api::LoginAuthError, exc

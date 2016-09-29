@@ -5,7 +5,7 @@ class DeviceTypeValidator < BaseValidator
   ##
   #
   ##
-  def validate_each(record, attribute, value)
+  def validate_each(record, attribute, _value)
     # work with the raw value
     # otherwise you end up working with the hash representations of the types
     # and invalid/missing values are more confusing
