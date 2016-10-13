@@ -9,6 +9,7 @@ module V1
     ##
     # Filters
     ##
+    before_action :set_cors_headers
     before_action :set_json
     before_action do
       methods = %w(POST PUT PATCH)
@@ -79,6 +80,15 @@ module V1
     end
 
     private
+
+    ##
+    # Set CORS headers so the API is accessible from browsers
+    ##
+    def set_cors_headers
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Allow-Headers'] = %w(Origin X-Requested-With Content-Type Accept Authorization)
+      headers['Access-Control-Allow-Methods'] = %w(GET OPTIONS PATCH POST PUT)
+    end
 
     ##
     # Set the request format to JSON.
