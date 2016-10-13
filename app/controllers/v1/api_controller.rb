@@ -82,12 +82,18 @@ module V1
     private
 
     ##
+    # Constants for CORS headers
+    ##
+    HEADERS = %w(Origin X-Requested-With Content-Type Accept Authorization).freeze
+    METHODS = %w(GET OPTIONS PATCH POST PUT).freeze
+
+    ##
     # Set CORS headers so the API is accessible from browsers
     ##
     def set_cors_headers
       headers['Access-Control-Allow-Origin'] = '*'
-      headers['Access-Control-Allow-Headers'] = %w(Origin X-Requested-With Content-Type Accept Authorization)
-      headers['Access-Control-Allow-Methods'] = %w(GET OPTIONS PATCH POST PUT)
+      headers['Access-Control-Allow-Headers'] = HEADERS.join(', ')
+      headers['Access-Control-Allow-Methods'] = METHODS.join(', ')
     end
 
     ##
