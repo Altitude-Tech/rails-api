@@ -9,7 +9,7 @@ class DatetimeValidator < BaseValidator
     # either nothing or an invalid timestamp was given
     if value.nil?
       raw_value = before_type_cast record, attribute
-      value = valid_raw? raw_value
+      value = valid_raw? record, attribute, raw_value
 
       return unless value
     end
@@ -40,7 +40,7 @@ class DatetimeValidator < BaseValidator
   ##
   #
   ##
-  def valid_raw?(value)
+  def valid_raw?(record, attribute, value)
     if value.nil? && options[:allow_null] == true
       return false
     end
