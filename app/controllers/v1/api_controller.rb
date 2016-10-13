@@ -17,6 +17,16 @@ module V1
     end
 
     ##
+    # Handle OPTIONS requests
+    #
+    # TODO: move to `BaseApiController`?
+    ##
+    def options
+      # TODO: check if this is the correct way to repond to this
+      render text: '', content_type: 'text/plain'
+    end
+
+    ##
     # Error handlers
     ##
     rescue_from Api::Error, with: :handle_api_error

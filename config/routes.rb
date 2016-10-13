@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # handle OPTIONs requests for CORS support
+  match '*anything', to: 'v1/api#options', via: :options
+
   namespace :v1 do
     # basic user routes
     resources :users, only: [:create, :show], param: :email
