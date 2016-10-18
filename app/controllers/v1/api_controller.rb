@@ -101,9 +101,12 @@ module V1
     # Set CORS headers so the API is accessible from browsers
     ##
     def set_cors_headers
-      headers['Access-Control-Allow-Origin'] = '*'
+      # set the allow-origin header to the exact origin
+      # otherwise the credentials (cookies) won't be recieved correctly
+      headers['Access-Control-Allow-Origin'] = request.headers['origin']
       headers['Access-Control-Allow-Headers'] = HEADERS.join(', ')
       headers['Access-Control-Allow-Methods'] = METHODS.join(', ')
+      headers['Access-Control-Allow-Credentials'] = true
     end
 
     ##

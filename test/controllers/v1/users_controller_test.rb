@@ -430,6 +430,24 @@ module V1
       assert_response :bad_request
     end
 
+    ##
+    # Test error handling of `show` method when logged in but using incorrect email as a parameter.
+    ##
+    test 'show logged in not found email' do
+      expected = {
+        error: 104,
+        message: '"email" not found.',
+        status: 400
+      }
+
+      post :login, body: login_data.to_json
+      post :show, params: { email: 'not_found@example.com' }
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
     private
 
     ##

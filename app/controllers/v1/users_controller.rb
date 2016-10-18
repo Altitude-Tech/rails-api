@@ -61,6 +61,8 @@ module V1
         msg = 'Not authorised.'
         raise Api::AuthError, msg
       end
+    rescue ActiveRecord::RecordNotFound
+      raise Api::NotFoundError, 'email'
     end
 
     private
