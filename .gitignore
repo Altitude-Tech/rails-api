@@ -22,3 +22,5 @@
 # ignore generated gemfile
 Gemfile.lock
 
+# ignore generated documentation/wiki
+/wiki/*
