@@ -115,4 +115,15 @@ module Api
       super message
     end
   end
+
+  ##
+  # Exception corresponsing to `JSON::ParserError`.
+  ##
+  class JsonParserError < Error
+    def initialize(message)
+      @code ||= 109
+
+      super message
+    end
+  end
 end

@@ -55,14 +55,6 @@ module V1
     # Get a user's details.
     ##
     def show
-      user_from_email = User.find_by_email! params[:email]
-
-      unless @user == user_from_email
-        msg = 'Not authorised.'
-        raise Api::AuthError, msg
-      end
-    rescue ActiveRecord::RecordNotFound
-      raise Api::NotFoundError, 'email'
     end
 
     private
@@ -78,7 +70,8 @@ module V1
         expires: token.expires,
         httponly: true,
         # TODO: set this to true in production
-        secure: ENV['RAILS_ENV'] == 'production' ? false : false
+        # secure: ENV['RAILS_ENV'] == 'production' ? true : false
+        secure: false
       }
 
       cookies.signed[:session] = data

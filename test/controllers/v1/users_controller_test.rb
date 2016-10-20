@@ -387,7 +387,7 @@ module V1
       }
 
       post :login, body: login_data.to_json
-      post :show, params: { email: CREATE_DATA[:email] }
+      post :show
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -404,44 +404,7 @@ module V1
         status: 400
       }
 
-      post :show, params: { email: CREATE_DATA[:email] }
-
-      assert_equal expected.to_json, response.body
-      assert_equal JSON_TYPE, response.content_type
-      assert_response :bad_request
-    end
-
-    ##
-    # Test error handling of the `show` method when logged in as another user.
-    ##
-    test 'show logged in as other user' do
-      user = User.first!
-      expected = {
-        error: 101,
-        message: 'Not authorised.',
-        status: 400
-      }
-
-      post :login, body: login_data.to_json
-      post :show, params: { email: user.email }
-
-      assert_equal expected.to_json, response.body
-      assert_equal JSON_TYPE, response.content_type
-      assert_response :bad_request
-    end
-
-    ##
-    # Test error handling of `show` method when logged in but using incorrect email as a parameter.
-    ##
-    test 'show logged in not found email' do
-      expected = {
-        error: 104,
-        message: '"email" not found.',
-        status: 400
-      }
-
-      post :login, body: login_data.to_json
-      post :show, params: { email: 'not_found@example.com' }
+      post :show
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type

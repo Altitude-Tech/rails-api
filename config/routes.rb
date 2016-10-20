@@ -2,15 +2,15 @@ Rails.application.routes.draw do
   # handle OPTIONs requests for CORS support
   match '*anything', to: 'v1/api#options', via: :options
 
-  namespace :v1 do
+  namespace :v1, format: false do
     # basic user routes
-    resources :users, only: [:create, :show], param: :email
+    resources :users, only: [:create]
 
     # non-standard user routes
     controller :users do
+      match 'users', to: 'users#show', via: :get
       match 'users/login', to: 'users#login', via: :post
       match 'users/logout', to: 'users#logout', via: :post
-      match 'users/:email/group', to: 'users#group', via: :post
     end
 
     # basic group routes

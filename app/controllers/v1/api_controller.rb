@@ -17,6 +17,15 @@ module V1
     end
 
     ##
+    # Error handlers
+    #
+    # List in order of least specific to most specific
+    # As it's matched from bottom to top
+    ##
+    rescue_from StandardError, with: :handle_standard_error
+    rescue_from Api::Error, with: :handle_api_error
+
+    ##
     # Handle OPTIONS requests
     #
     # TODO: move to `BaseApiController`?
@@ -25,11 +34,6 @@ module V1
       # TODO: check if this is the correct way to repond to this
       render text: '', content_type: 'text/plain'
     end
-
-    ##
-    # Error handlers
-    ##
-    rescue_from Api::Error, with: :handle_api_error
 
     protected
 
@@ -70,10 +74,20 @@ module V1
     end
 
     ##
-    # For handling expected exceptions thrown by the Api
+    # For handling expected exceptions thrown by the Api.
     ##
     def handle_api_error(exc)
       render_error exc.code, exc.message, :bad_request
+    end
+
+    ##
+    # For handling exceptions not thrown by the Api
+    # (essentially unhandled exceptions).
+    ##
+    def handle_standard_error(_exc)
+      # TODO: Log/Email about the exception
+      msg = 'An unhandled exception occurred.'
+      render_error 500, msg, :internal_server_error
     end
 
     ##
@@ -128,6 +142,8 @@ module V1
       end
 
       @body = normalise_keys JSON.parse(body)
+    rescue JSON::ParserError => e
+      raise Api::JsonParserError, e.message
     end
 
     ##
