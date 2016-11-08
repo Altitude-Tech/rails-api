@@ -34,6 +34,7 @@ module V1
         expected = {
           error: 103,
           message: '"device_type" is an invalid value.',
+          user_message: 'Device type is an invalid value.',
           status: 400
         }
 
@@ -53,6 +54,7 @@ module V1
         expected = {
           error: 103,
           message: '"device_type" is an invalid value.',
+          user_message: 'Device type is an invalid value.',
           status: 400
         }
 

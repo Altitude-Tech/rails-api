@@ -113,7 +113,8 @@ module V1
       data.delete(:sensor_type)
       expected = {
         error: 103,
-        message: '"sensor_type" can\'t be blank.',
+        message: '"sensor_type" is invalid or missing.',
+        user_message: 'Sensor type is invalid or missing.',
         status: 400
       }
 
@@ -132,7 +133,8 @@ module V1
       data[:sensor_type] = 'invalid'
       expected = {
         error: 103,
-        message: '"sensor_type" can\'t be blank.',
+        message: '"sensor_type" is invalid or missing.',
+        user_message: 'Sensor type is invalid or missing.',
         status: 400
       }
 
@@ -151,7 +153,10 @@ module V1
       data.delete(:sensor_error)
       expected = {
         error: 103,
-        message: '"sensor_error" is not a number.',
+        message: '"sensor_error" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
+        user_message: 'Sensor error must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
         status: 400
       }
 
@@ -170,7 +175,10 @@ module V1
       data[:sensor_error] = 'invalid'
       expected = {
         error: 103,
-        message: '"sensor_error" is not a number.',
+        message: '"sensor_error" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
+        user_message: 'Sensor error must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
         status: 400
       }
 
@@ -189,7 +197,10 @@ module V1
       data[:sensor_error] = -1
       expected = {
         error: 103,
-        message: '"sensor_error" must be greater than or equal to 0.',
+        message: '"sensor_error" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
+        user_message: 'Sensor error must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
         status: 400
       }
 
@@ -208,7 +219,10 @@ module V1
       data[:sensor_error] = 2
       expected = {
         error: 103,
-        message: '"sensor_error" must be less than or equal to 1.',
+        message: '"sensor_error" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
+        user_message: 'Sensor error must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 1.',
         status: 400
       }
 
@@ -257,7 +271,10 @@ module V1
       data.delete(:sensor_data)
       expected = {
         error: 103,
-        message: '"sensor_data" is not a number.',
+        message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
+                 'less than 4096.',
+        user_message: 'Sensor data must be an integer greater than or equal to 0 and ' \
+                      'less than 4096.',
         status: 400
       }
 
@@ -276,7 +293,10 @@ module V1
       data[:sensor_data] = 'invalid'
       expected = {
         error: 103,
-        message: '"sensor_data" is not a number.',
+        message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
+                 'less than 4096.',
+        user_message: 'Sensor data must be an integer greater than or equal to 0 and ' \
+                      'less than 4096.',
         status: 400
       }
 
@@ -295,7 +315,10 @@ module V1
       data[:sensor_data] = -1
       expected = {
         error: 103,
-        message: '"sensor_data" must be greater than or equal to 0.',
+        message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
+                 'less than 4096.',
+        user_message: 'Sensor data must be an integer greater than or equal to 0 and ' \
+                      'less than 4096.',
         status: 400
       }
 
@@ -314,7 +337,10 @@ module V1
       data[:sensor_data] = 4096
       expected = {
         error: 103,
-        message: '"sensor_data" must be less than 4096.',
+        message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
+                 'less than 4096.',
+        user_message: 'Sensor data must be an integer greater than or equal to 0 and ' \
+                      'less than 4096.',
         status: 400
       }
 
@@ -363,7 +389,10 @@ module V1
       data[:sensor_data] = 0.1
       expected = {
         error: 103,
-        message: '"sensor_data" must be an integer.',
+        message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
+                 'less than 4096.',
+        user_message: 'Sensor data must be an integer greater than or equal to 0 and ' \
+                      'less than 4096.',
         status: 400
       }
 
@@ -383,6 +412,7 @@ module V1
       expected = {
         error: 103,
         message: '"log_time" is an invalid value.',
+        user_message: 'Log time is an invalid value.',
         status: 400
       }
 
@@ -402,6 +432,7 @@ module V1
       expected = {
         error: 103,
         message: '"log_time" is an invalid value.',
+        user_message: 'Log time is an invalid value.',
         status: 400
       }
 
@@ -421,6 +452,7 @@ module V1
       expected = {
         error: 103,
         message: '"log_time" is below the minimum allowed value.',
+        user_message: 'Log time is below the minimum allowed value.',
         status: 400
       }
 
@@ -440,6 +472,7 @@ module V1
       expected = {
         error: 103,
         message: '"log_time" is above the maximum allowed value.',
+        user_message: 'Log time is above the maximum allowed value.',
         status: 400
       }
 
@@ -488,7 +521,8 @@ module V1
       data.delete(:temperature)
       expected = {
         error: 103,
-        message: '"temperature" is not a number.',
+        message: '"temperature" must be a number.',
+        user_message: 'Temperature must be a number.',
         status: 400
       }
 
@@ -507,7 +541,8 @@ module V1
       data[:temperature] = 'invalid'
       expected = {
         error: 103,
-        message: '"temperature" is not a number.',
+        message: '"temperature" must be a number.',
+        user_message: 'Temperature must be a number.',
         status: 400
       }
 
@@ -526,7 +561,10 @@ module V1
       data.delete(:humidity)
       expected = {
         error: 103,
-        message: '"humidity" is not a number.',
+        message: '"humidity" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 100.',
+        user_message: 'Humidity must be a number greater than or equal to 0 and ' \
+                      'less than or equal to 100.',
         status: 400
       }
 
@@ -545,7 +583,10 @@ module V1
       data[:humidity] = 'invalid'
       expected = {
         error: 103,
-        message: '"humidity" is not a number.',
+        message: '"humidity" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 100.',
+        user_message: 'Humidity must be a number greater than or equal to 0 and ' \
+                      'less than or equal to 100.',
         status: 400
       }
 
@@ -564,7 +605,10 @@ module V1
       data[:humidity] = -1
       expected = {
         error: 103,
-        message: '"humidity" must be greater than or equal to 0.',
+        message: '"humidity" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 100.',
+        user_message: 'Humidity must be a number greater than or equal to 0 and ' \
+                      'less than or equal to 100.',
         status: 400
       }
 
@@ -583,7 +627,10 @@ module V1
       data[:humidity] = 101
       expected = {
         error: 103,
-        message: '"humidity" must be less than or equal to 100.',
+        message: '"humidity" must be a number greater than or equal to 0 and ' \
+                 'less than or equal to 100.',
+        user_message: 'Humidity must be a number greater than or equal to 0 and ' \
+                      'less than or equal to 100.',
         status: 400
       }
 
@@ -632,7 +679,8 @@ module V1
       data.delete(:pressure)
       expected = {
         error: 103,
-        message: '"pressure" is not a number.',
+        message: '"pressure" must be a number.',
+        user_message: 'Pressure must be a number.',
         status: 400
       }
 
@@ -651,7 +699,8 @@ module V1
       data[:pressure] = 'invalid'
       expected = {
         error: 103,
-        message: '"pressure" is not a number.',
+        message: '"pressure" must be a number.',
+        user_message: 'Pressure must be a number.',
         status: 400
       }
 

@@ -21,3 +21,33 @@
 
 en:
   hello: "Hello world"
+
+  # user friendly names for attributes
+  models:
+    user:
+      email: 'Email address'
+
+  errors:
+    in_use: 'is already in use'
+    invalid_or_missing: 'is invalid or missing'
+
+    must_be_num: 'must be a number'
+    must_be_num_ge: 'must be a number greater than or equal to %{min}'
+    must_be_num_gt: 'must be a number greater than %{min}'
+    must_be_num_le: 'must be a number less than or equal to %{max}'
+    must_be_num_lt: 'must be a number less than %{max}'
+    must_be_num_ge_le: 'must be a number greater than or equal to %{min} and less than or equal to %{max}'
+    must_be_num_ge_lt: 'must be a number greater than or equal to %{min} and less than %{max}'
+    must_be_num_gt_le: 'must be a number greater than %{min} and less than or equal to %{max}'
+    must_be_num_gt_lt: 'must be a number greater than %{min} and less than %{max}'
+
+    must_be_int: 'must be an integer'
+    must_be_int_ge: 'must be an integer greater than or equal to %{min}'
+    must_be_int_gt: 'must be an integer greater than %{min}'
+    must_be_int_le: 'must be an integer less than or equal to %{max}'
+    must_be_int_lt: 'must be an integer less than %{max}'
+    must_be_int_ge_le: 'must be an integer greater than or equal to %{min} and less than or equal to %{max}'
+    must_be_int_ge_lt: 'must be an integer greater than or equal to %{min} and less than %{max}'
+    must_be_int_gt_le: 'must be an integer greater than %{min} and less than or equal to %{max}'
+    must_be_int_gt_lt: 'must be an integer greater than %{min} and less than %{max}'
+

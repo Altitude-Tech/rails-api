@@ -38,6 +38,7 @@ module V1
       expected = {
         error: 103,
         message: '"name" can\'t be blank.',
+        user_message: 'Name can\'t be blank.',
         status: 400
       }
 
@@ -58,6 +59,7 @@ module V1
       expected = {
         error: 103,
         message: '"name" is too long (maximum is 255 characters).',
+        user_message: 'Name is too long (maximum is 255 characters).',
         status: 400
       }
 
@@ -78,6 +80,7 @@ module V1
       expected = {
         error: 103,
         message: '"email" is too short (minimum is 3 characters).',
+        user_message: 'Email address is too short (minimum is 3 characters).',
         status: 400
       }
 
@@ -98,6 +101,7 @@ module V1
       expected = {
         error: 103,
         message: '"email" is invalid.',
+        user_message: 'Email address is invalid.',
         status: 400
       }
 
@@ -118,6 +122,7 @@ module V1
       expected = {
         error: 103,
         message: '"email" is too long (maximum is 255 characters).',
+        user_message: 'Email address is too long (maximum is 255 characters).',
         status: 400
       }
 
@@ -138,6 +143,7 @@ module V1
       expected = {
         error: 103,
         message: '"email" is too short (minimum is 3 characters).',
+        user_message: 'Email address is too short (minimum is 3 characters).',
         status: 400
       }
 
@@ -158,7 +164,8 @@ module V1
 
       expected = {
         error: 103,
-        message: '"email" has already been taken.',
+        message: '"email" is already in use.',
+        user_message: 'Email address is already in use.',
         status: 400
       }
 
@@ -179,6 +186,7 @@ module V1
       expected = {
         error: 103,
         message: '"password" can\'t be blank.',
+        user_message: 'Password can\'t be blank.',
         status: 400
       }
 
@@ -199,6 +207,7 @@ module V1
       expected = {
         error: 103,
         message: '"password" is too short (minimum is 8 characters).',
+        user_message: 'Password is too short (minimum is 8 characters).',
         status: 400
       }
 
@@ -219,6 +228,7 @@ module V1
       expected = {
         error: 103,
         message: '"password" is too long (maximum is 72 characters).',
+        user_message: 'Password is too long (maximum is 72 characters).',
         status: 400
       }
 
@@ -314,6 +324,7 @@ module V1
       expected = {
         error: 102,
         message: 'Invalid or missing value for "password".',
+        user_message: 'Incorrect or missing password.',
         status: 400
       }
 
@@ -334,6 +345,7 @@ module V1
       expected = {
         error: 102,
         message: 'Invalid or missing value for "password".',
+        user_message: 'Incorrect or missing password.',
         status: 400
       }
 

@@ -43,16 +43,35 @@ class Datum < ApplicationRecord
   ##
   # Validations
   ##
-  validates :device_id, presence: true
-  validates :sensor_type, presence: true # TODO: improve this for better error messages
-  validates :sensor_error, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
-  validates :sensor_data, numericality: {
-    only_integer: true, greater_than_or_equal_to: 0, less_than: 4096
-  }
-  validates :log_time, datetime: { min: (Time.now.utc - 30.days), max: :now }
-  validates :temperature, numericality: true
-  validates :pressure, numericality: true
-  validates :humidity, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+  validates :device_id,
+            presence: true
+  validates :sensor_type,
+            presence: { message: I18n.t('errors.invalid_or_missing') }
+  validates :sensor_error,
+            numericality: {
+              greater_than_or_equal_to: 0,
+              less_than_or_equal_to: 1,
+              message: I18n.t('errors.must_be_num_ge_le', min: 0, max: 1)
+            }
+  validates :sensor_data,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0,
+              less_than: 4096,
+              message: I18n.t('errors.must_be_int_ge_lt', min: 0, max: 4096)
+            }
+  validates :log_time,
+            datetime: { min: (Time.now.utc - 30.days), max: :now }
+  validates :temperature,
+            numericality: { message: I18n.t('errors.must_be_num') }
+  validates :pressure,
+            numericality: { message: I18n.t('errors.must_be_num') }
+  validates :humidity,
+            numericality: {
+              greater_than_or_equal_to: 0,
+              less_than_or_equal_to: 100,
+              message: I18n.t('errors.must_be_num_ge_le', min: 0, max: 100)
+            }
 
   ##
   # Setter for `log_time`.

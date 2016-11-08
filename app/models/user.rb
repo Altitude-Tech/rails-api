@@ -20,9 +20,16 @@ class User < ApplicationRecord
   ##
   # Validations
   ##
-  validates :name, presence: true, length: { maximum: 255 }
-  validates :email, uniqueness: true, length: { minimum: 3, maximum: 255 }, format: { with: /@/ }
-  validates :password, length: { minimum: 8, maximum: 72 }, allow_nil: true
+  validates :name,
+            presence: true,
+            length: { maximum: 255 }
+  validates :email,
+            uniqueness: { message: I18n.t('errors.in_use') },
+            length: { minimum: 3, maximum: 255 },
+            format: { with: /@/ }
+  validates :password,
+            length: { minimum: 8, maximum: 72 },
+            allow_nil: true
 
   ##
   # Setter for `email` addresses.

@@ -200,6 +200,7 @@ module V1
       expected = {
         error: 103,
         message: '"name" is too long (maximum is 255 characters).',
+        user_message: 'Name is too long (maximum is 255 characters).',
         status: 400
       }
 

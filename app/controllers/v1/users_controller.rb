@@ -59,6 +59,18 @@ module V1
     def show
     end
 
+    ##
+    # Update a user's details
+    ##
+    def update
+    end
+
+    ##
+    #
+    ##
+    def reset_password
+    end
+
     private
 
     ##

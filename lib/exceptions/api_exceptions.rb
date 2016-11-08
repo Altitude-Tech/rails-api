@@ -9,12 +9,22 @@ module Api
   # Base API error.
   ##
   class Error < Sensly::Error
-    attr_reader :code
+    attr_reader :code, :user_message
 
     def initialize(message)
       @code ||= 100
 
       super message
+    end
+
+    def format_attr(attribute, cap = true)
+      attribute = attribute.to_s.tr '_', ' '
+
+      if cap
+        attribute = attribute.capitalize
+      end
+
+      return attribute
     end
   end
 
@@ -36,6 +46,9 @@ module Api
     def initialize(exc)
       @code ||= 102
 
+      attr_name = format_attr(exc.attribute, false)
+      @user_message ||= "Incorrect or missing #{attr_name}."
+
       message = "Invalid or missing value for \"#{exc.attribute}\"."
       super message
     end
@@ -51,6 +64,9 @@ module Api
       record = exc.record
       key = record.errors.keys.first
       msg = record.errors[key].first
+
+      user_key = I18n.t("models.#{record.class.name.downcase}.#{key}", default: format_attr(key))
+      @user_message = "#{user_key} #{msg}."
 
       message = "\"#{key}\" #{msg}."
       super message

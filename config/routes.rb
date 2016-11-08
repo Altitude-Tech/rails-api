@@ -9,8 +9,10 @@ Rails.application.routes.draw do
     # non-standard user routes
     controller :users do
       match 'users', to: 'users#show', via: :get
+      match 'users', to: 'users#update', via: :put
       match 'users/login', to: 'users#login', via: :post
       match 'users/logout', to: 'users#logout', via: :post
+      match 'users/reset_password', to: 'users#reset_password', via: :post
     end
 
     # basic group routes

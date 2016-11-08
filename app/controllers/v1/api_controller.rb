@@ -77,15 +77,17 @@ module V1
     # For handling expected exceptions thrown by the Api.
     ##
     def handle_api_error(exc)
-      render_error exc.code, exc.message, :bad_request
+      render_error exc.code, exc.message, :bad_request, exc.user_message
     end
 
     ##
     # For handling exceptions not thrown by the Api
     # (essentially unhandled exceptions).
     ##
-    def handle_standard_error(_exc)
+    def handle_standard_error(exc)
       # TODO: Log/Email about the exception
+      Rails.logger.fatal(exc.message)
+
       msg = 'An unhandled exception occurred.'
       render_error 500, msg, :internal_server_error
     end
@@ -93,12 +95,16 @@ module V1
     ##
     # Render an error.
     ##
-    def render_error(code, message, status)
+    def render_error(code, message, status, user_message = nil)
       @error = {
         error: code,
         message: message,
         status: Rack::Utils::SYMBOL_TO_STATUS_CODE[status]
       }
+
+      unless user_message.nil?
+        @error[:user_message] = user_message
+      end
 
       render 'v1/error', status: status
     end
