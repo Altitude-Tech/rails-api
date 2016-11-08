@@ -1,4 +1,4 @@
-require 'record_exceptions'
+require 'exceptions/record_exceptions'
 
 ##
 # Model representing a group in the database.

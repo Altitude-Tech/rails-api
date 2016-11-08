@@ -1,4 +1,4 @@
-require 'record_exceptions'
+require 'exceptions/record_exceptions'
 
 ##
 # Represents a user in the database.

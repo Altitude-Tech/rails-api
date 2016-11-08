@@ -1,5 +1,5 @@
-require 'api_exceptions'
-require 'record_exceptions'
+require 'exceptions/api_exceptions'
+require 'exceptions/record_exceptions'
 
 module V1
   ##
