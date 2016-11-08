@@ -345,6 +345,23 @@ module V1
     end
 
     ##
+    # Test success of the `login` with an existing valid session.
+    ##
+    test 'login existing session' do
+      data = login_data
+      expected = {
+        result: 'success'
+      }
+
+      post :login, body: data.to_json
+      post :login, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
     # Test success of the `logout` method.
     ##
     test 'logout success' do
