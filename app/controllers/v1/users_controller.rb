@@ -24,6 +24,8 @@ module V1
     # Log a user in using their email and password.
     #
     # Creates and sets a session token as a cookie if successful.
+    #
+    # If a session already exists, it will be invalidated and replaced.
     ##
     def login
       user = User.find_by_email! @body[:email]
