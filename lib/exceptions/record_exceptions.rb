@@ -2,7 +2,7 @@
 #
 ##
 
-require 'exceptions'
+require 'exceptions/exceptions'
 
 module Record
   ##
