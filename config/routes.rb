@@ -32,6 +32,9 @@ Rails.application.routes.draw do
     # basic data routes
     resources :data, only: [:create, :show], param: :identity
 
+    # basic token routes
+    resources :tokens, only: [:create]
+
     # admin-only routes
     namespace :admin do
       resources :devices, only: [:create]
