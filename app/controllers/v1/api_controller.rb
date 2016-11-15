@@ -59,6 +59,9 @@ module V1
       t = Token.find(@body[:json])
 
       raise Api::AuthError, error_msg unless t.active?
+
+      # expire the token now it's been used
+      t.disable!
     rescue ActiveRecord::RecordNotFound
       raise ApiAuthError, error_msg
     end
