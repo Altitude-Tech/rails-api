@@ -52,6 +52,10 @@ class Token < ApplicationRecord
     save! validate: false
   end
 
+  def self.csrf!
+    return Token.create! expires: 10.minutes.from_now
+  end
+
   private
 
   ##

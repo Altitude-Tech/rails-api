@@ -46,11 +46,21 @@ module V1
 
       session = cookies.signed[:session]
 
-      begin
-        @user = User.find_by_session_token! session
-      rescue ActiveRecord::RecordNotFound
-        raise ApiAuthError, error_msg
-      end
+      @user = User.find_by_session_token! session
+    rescue ActiveRecord::RecordNotFound
+      raise ApiAuthError, error_msg
+    end
+
+    ##
+    # Attempt to verify that a CSRF token is present and valid
+    ##
+    def require_token
+      error_msg = 'Not authorised.'
+      t = Token.find(@body[:json])
+
+      raise Api::AuthError, error_msg unless t.active?
+    rescue ActiveRecord::RecordNotFound
+      raise ApiAuthError, error_msg
     end
 
     ##

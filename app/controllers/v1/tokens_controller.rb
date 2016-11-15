@@ -7,7 +7,7 @@ module V1
     # Generate a new token
     ##
     def create
-      @token = Token.create! expires: 10.minutes.from_now
+      @token = Token.csrf!
     end
   end
 end
