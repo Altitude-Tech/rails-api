@@ -36,7 +36,7 @@ Rails.application.routes.draw do
     resources :tokens, only: [:create]
 
     # admin-only routes
-    namespace :admin do
+    namespace :staff do
       resources :devices, only: [:create]
     end
   end

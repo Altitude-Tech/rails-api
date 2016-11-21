@@ -1,9 +1,9 @@
 module V1
-  module Admin
+  module Staff
     ##
     #
     ##
-    class DevicesController < V1::ApiController
+    class DevicesController < V1::StaffController
       ##
       # Create a new device.
       ##

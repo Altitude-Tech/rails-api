@@ -48,7 +48,7 @@ module V1
 
       @user = User.find_by_session_token! session
     rescue ActiveRecord::RecordNotFound
-      raise ApiAuthError, error_msg
+      raise Api::AuthError, error_msg
     end
 
     ##
@@ -63,7 +63,7 @@ module V1
       # expire the token now it's been used
       t.disable!
     rescue ActiveRecord::RecordNotFound
-      raise ApiAuthError, error_msg
+      raise Api::AuthError, error_msg
     end
 
     ##
@@ -98,7 +98,7 @@ module V1
     # (essentially unhandled exceptions).
     ##
     def handle_standard_error(exc)
-      # TODO: Log/Email about the exception
+      # TODO: Email about the exception
       Rails.logger.fatal(exc.message)
 
       msg = 'An unhandled exception occurred.'

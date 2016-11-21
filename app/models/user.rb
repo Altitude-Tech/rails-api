@@ -30,6 +30,8 @@ class User < ApplicationRecord
   validates :password,
             length: { minimum: 8, maximum: 72 },
             allow_nil: true
+  validates :staff,
+            inclusion: { in: [true, false] }
 
   ##
   # Setter for `email` addresses.
