@@ -164,4 +164,15 @@ module Api
       super message
     end
   end
+
+  ##
+  # Invalid or missing CSRF token
+  ##
+  class TokenError < Error
+    def initialize(message)
+      @code ||= 112
+
+      super(message)
+    end
+  end
 end

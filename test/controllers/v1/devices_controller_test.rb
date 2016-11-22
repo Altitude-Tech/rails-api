@@ -13,10 +13,10 @@ module V1
     # Test success of the `register` method.
     ##
     test 'register success' do
-      login
       device = create_device
       data = { identity: device.identity }
 
+      login User.first!
       post :register, body: data.to_json
       res = JSON.parse response.body
 
@@ -56,7 +56,6 @@ module V1
     # Test error handling for `register` when no device could be found for the given `identity`.
     ##
     test 'register device not found' do
-      login
       create_device
       data = { identity: 'invalid' }
       expected = {
@@ -65,6 +64,7 @@ module V1
         status: 400
       }
 
+      login User.first!
       post :register, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -76,7 +76,6 @@ module V1
     # Test error handling for `register` for a device that is already registered.
     ##
     test 'register device already registered' do
-      login
       device = create_device
       device.register! User.first!.group
       data = { identity: device.identity }
@@ -86,6 +85,7 @@ module V1
         status: 400
       }
 
+      login User.first!
       post :register, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -103,16 +103,6 @@ module V1
       device = Device.create! data
 
       return device
-    end
-
-    ##
-    # Set a session cookie to fake being logged in.
-    ##
-    def login
-      user = User.first!
-      token = user.authenticate! 'password'
-
-      cookies.signed[:session] = token.token
     end
   end
 end

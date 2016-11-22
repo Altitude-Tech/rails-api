@@ -55,15 +55,15 @@ module V1
     # Attempt to verify that a CSRF token is present and valid
     ##
     def require_token
-      error_msg = 'Not authorised.'
+      error_msg = 'Invalid or missing token.'
       t = Token.find(@body[:json])
 
-      raise Api::AuthError, error_msg unless t.active?
+      raise Api::TokenError, error_msg unless t.active?
 
       # expire the token now it's been used
       t.disable!
     rescue ActiveRecord::RecordNotFound
-      raise Api::AuthError, error_msg
+      raise Api::TokenError, error_msg
     end
 
     ##

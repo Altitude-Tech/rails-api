@@ -26,4 +26,24 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  USER_DATA = {
+    name: 'Bob',
+    email: 'bob@example.com',
+    password: 'password'
+  }.freeze
+
+  ##
+  # Login helper for controllers
+  ##
+  def login(user = nil, password = 'password')
+    unless cookies.nil?
+      if user.nil?
+        user = User.create! USER_DATA.deep_dup
+      end
+
+      token = user.authenticate! password
+      cookies.signed[:session] = token.token
+    end
+  end
 end

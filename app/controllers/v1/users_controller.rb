@@ -6,6 +6,7 @@ module V1
     ##
     # Filters
     ##
+    # before_action :require_token, only: [:create]
     before_action :authenticate_user, only: [:show, :update, :reset_password]
 
     ##

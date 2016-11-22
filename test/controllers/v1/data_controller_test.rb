@@ -715,7 +715,6 @@ module V1
     # Test success of the `show` method returning 0 results of data.
     ##
     test 'show success empty result' do
-      login
       create_data
       data = {
         identity: Device.first!.identity
@@ -729,6 +728,7 @@ module V1
         data: []
       }
 
+      login User.first!
       get :show, params: data
 
       assert_equal expected.to_json, response.body
@@ -740,7 +740,6 @@ module V1
     # Test success of the `show` method returning multiple results of data.
     ##
     test 'show success with results' do
-      login
       group = Group.first!
       device = Device.find 2
       device.register! group
@@ -774,6 +773,7 @@ module V1
         ]
       }
 
+      login User.first!
       get :show, params: data
 
       assert_equal expected.to_json, response.body
@@ -805,7 +805,6 @@ module V1
     # Test error handling for the `show` method when a user is not authorised to view the data.
     ##
     test 'show not authorised' do
-      login
       data = {
         identity: Device.first!.identity
       }
@@ -815,6 +814,7 @@ module V1
         status: 400
       }
 
+      login User.first!
       get :show, params: data
 
       assert_equal expected.to_json, response.body
@@ -826,7 +826,6 @@ module V1
     # Test error handling for the `show` method when a device is not found.
     ##
     test 'show device not found' do
-      login
       data = {
         identity: 'invalid'
       }
@@ -836,6 +835,7 @@ module V1
         status: 400
       }
 
+      login User.first!
       get :show, params: data
 
       assert_equal expected.to_json, response.body
@@ -859,16 +859,6 @@ module V1
       data[:token] = token.token
 
       return data
-    end
-
-    ##
-    # Set a session cookie to fake being logged in.
-    ##
-    def login
-      user = User.first!
-      token = user.authenticate! 'password'
-
-      cookies.signed[:session] = token.token
     end
   end
 end

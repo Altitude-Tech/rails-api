@@ -12,12 +12,6 @@ module V1
     ##
     # Data for creating new users.
     ##
-    USER_DATA = {
-      name: 'Bob',
-      email: 'bob@example.com',
-      password: 'password'
-    }.freeze
-
     USER2_DATA = {
       name: 'Bert',
       email: 'bert@example.com',
@@ -28,8 +22,6 @@ module V1
     # Test success of the `add_users` method.
     ##
     test 'add_user success' do
-      login
-
       data = USER_DATA.deep_dup
       User.create! data
 
@@ -40,6 +32,7 @@ module V1
         result: 'success'
       }
 
+      login User.first!
       post :add_user, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -71,8 +64,6 @@ module V1
     # Test error handling for the `add_users` method when the logged in user is not a group admin.
     ##
     test 'add_user not admin' do
-      login true
-
       data = USER2_DATA.deep_dup
       User.create! data
 
@@ -85,6 +76,7 @@ module V1
         status: 400
       }
 
+      login
       post :add_user, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -96,7 +88,6 @@ module V1
     # Test error handling for the `add_users` method when the `email` parameter is missing.
     ##
     test 'add_user email missing' do
-      login
       User.create! USER_DATA.deep_dup
 
       expected = {
@@ -105,6 +96,7 @@ module V1
         status: 400
       }
 
+      login User.first!
       post :add_user, body: {}.to_json
 
       assert_equal expected.to_json, response.body
@@ -116,7 +108,6 @@ module V1
     # Test error handling for the `add_users` method when the `email` parameter value is not found.
     ##
     test 'add_user email not found' do
-      login
       User.create! USER_DATA.deep_dup
 
       data = {
@@ -129,6 +120,7 @@ module V1
         status: 400
       }
 
+      login User.first!
       post :add_user, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -140,12 +132,12 @@ module V1
     # Test success of the create method.
     ##
     test 'create success' do
-      login true
       data = CREATE_DATA.deep_dup
       expected = {
         result: 'success'
       }
 
+      login
       post(:create, body: data.to_json)
 
       assert_equal expected.to_json, response.body
@@ -175,7 +167,6 @@ module V1
     # Test error handling of the `create` method when the logged in user is already in a group.
     ##
     test 'create already in group' do
-      login
       data = CREATE_DATA.deep_dup
       expected = {
         error: 106,
@@ -183,6 +174,7 @@ module V1
         status: 400
       }
 
+      login User.first!
       post(:create, body: data.to_json)
 
       assert_equal expected.to_json, response.body
@@ -194,7 +186,6 @@ module V1
     # Test error handling of the `create` method when the `name` parameter is too long.
     ##
     test 'create too long group name' do
-      login true
       data = CREATE_DATA.deep_dup
       data[:name] = 'x' * 256
       expected = {
@@ -204,6 +195,7 @@ module V1
         status: 400
       }
 
+      login
       post(:create, body: data.to_json)
 
       assert_equal expected.to_json, response.body
@@ -215,13 +207,13 @@ module V1
     # Test success of the `create` method when the `name` parameter is at the upper limit.
     ##
     test 'create upper limit group name' do
-      login true
       data = CREATE_DATA.deep_dup
       data.delete(:name)
       expected = {
         result: 'success'
       }
 
+      login
       post(:create, body: data.to_json)
 
       assert_equal expected.to_json, response.body
@@ -233,13 +225,13 @@ module V1
     # Test success of the the `create` method when the `name` parameter is missing.
     ##
     test 'create missing group name' do
-      login true
       data = CREATE_DATA.deep_dup
       data.delete(:name)
       expected = {
         result: 'success'
       }
 
+      login
       post(:create, body: data.to_json)
 
       assert_equal expected.to_json, response.body
@@ -251,7 +243,6 @@ module V1
     # Test success of the `show` method.
     ##
     test 'show success' do
-      login true
       data = CREATE_DATA.deep_dup
       expected = {
         name: 'Group 3',
@@ -264,8 +255,8 @@ module V1
         ]
       }
 
+      login
       post(:create, body: data.to_json)
-
       get(:show)
 
       assert_equal expected.to_json, response.body
@@ -285,25 +276,11 @@ module V1
       }
 
       post(:create, body: data.to_json)
-
       get(:show)
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
       assert_response :bad_request
-    end
-
-    private
-
-    ##
-    # Set a session cookie to fake being logged in.
-    ##
-    def login(create = false)
-      data = USER_DATA.deep_dup
-      user = create ? User.create!(data) : User.first!
-      token = user.authenticate! 'password'
-
-      cookies.signed[:session] = token.token
     end
   end
 end
