@@ -55,7 +55,7 @@ module Api
   end
 
   ##
-  # Exception corresponding to `ActiveRecord::RecordInvalid`
+  # Exception corresponding to `ActiveRecord::RecordInvalid` for `create` Api methods
   ##
   class InvalidCreateError < Error
     def initialize(exc)
@@ -138,6 +138,28 @@ module Api
   class JsonParserError < Error
     def initialize(message)
       @code ||= 109
+
+      super message
+    end
+  end
+
+  ##
+  # Exception corresponding to `ActiveRecord::RecordInvalid` for `update` Api methods
+  ##
+  class InvalidUpdateError < InvalidCreateError
+    def initialize(exc)
+      @code ||= 110
+
+      super exc
+    end
+  end
+
+  ##
+  # Exception corresponding to `Record::UpdateError`
+  ##
+  class UpdateError < Error
+    def initialize(message)
+      @code ||= 111
 
       super message
     end

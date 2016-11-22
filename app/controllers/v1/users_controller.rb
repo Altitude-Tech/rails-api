@@ -6,7 +6,7 @@ module V1
     ##
     # Filters
     ##
-    before_action :authenticate_user, only: [:show]
+    before_action :authenticate_user, only: [:show, :update, :reset_password]
 
     ##
     # Create a new user.
@@ -63,6 +63,11 @@ module V1
     # Update a user's details
     ##
     def update
+      @user.update_details! @body
+    rescue Record::UpdateError => exc
+      raise Api::UpdateError, exc.message
+    rescue ActiveRecord::RecordInvalid => exc
+      raise Api::InvalidUpdateError, exc
     end
 
     ##

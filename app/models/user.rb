@@ -5,6 +5,13 @@ require 'exceptions/record_exceptions'
 ##
 class User < ApplicationRecord
   ##
+  # Constants
+  ##
+  UPDATE_ATTRS = [
+    :name
+  ].freeze
+
+  ##
   # See <http://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html>
   # Note that the `password_confirmation` attribute is not used.
   ##
@@ -101,5 +108,17 @@ class User < ApplicationRecord
 
       update! session_token: nil
     end
+  end
+
+  ##
+  #
+  ##
+  def update_details!(attrs)
+    attrs.each do |k, _|
+      msg = "Unable to update attribute \"#{k}\"."
+      raise Record::UpdateError, msg unless UPDATE_ATTRS.include? k
+    end
+
+    update! attrs
   end
 end

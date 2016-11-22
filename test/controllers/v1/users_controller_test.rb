@@ -440,6 +440,80 @@ module V1
       assert_response :bad_request
     end
 
+    ##
+    # Test success of the `update` method.
+    ##
+    test 'update success' do
+      new_name = 'Example'
+      data = { name: new_name }
+      expected = {
+        name: new_name,
+      }
+
+      post :login, body: login_data.to_json
+      post :update, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test error handling of the `update` method with a non-whitelisted attribute.
+    ##
+    test 'update non-whitelisted attribute' do
+      data = { invalid: 'invalid' }
+      expected = {
+        error: 111,
+        message: 'Unable to update attribute "invalid".',
+        status: 400
+      }
+
+      post :login, body: login_data.to_json
+      post :update, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling of the `update` method with an invalid `name` attribute.
+    ##
+    test 'update invalid name' do
+      data = { name: 'x' * 256 }
+      expected = {
+        error: 110,
+        message: '"name" is too long (maximum is 255 characters).',
+        user_message: 'Name is too long (maximum is 255 characters).',
+        status: 400
+      }
+
+      post :login, body: login_data.to_json
+      post :update, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling of the `update` method when not logged in.
+    ##
+    test 'update not logged in' do
+      expected = {
+        error: 101,
+        message: 'Not authorised.',
+        status: 400
+      }
+
+      post :update
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
     private
 
     ##

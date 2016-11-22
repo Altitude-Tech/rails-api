@@ -285,4 +285,28 @@ class UserTest < ActiveSupport::TestCase
       user.group = group
     end
   end
+
+  ##
+  # Test success for updating a user's details.
+  ##
+  test 'update_details success' do
+    user = User.first!
+    data = { name: 'Example' }
+
+    user.update_details! data
+
+    assert user.name == 'Example'
+  end
+
+  ##
+  # Test success for updating a user's details.
+  ##
+  test 'update_details attribute not whitelisted' do
+    user = User.first!
+    data = { error: 'Error' }
+
+    assert_raises Record::UpdateError do
+      user.update_details! data
+    end
+  end
 end
