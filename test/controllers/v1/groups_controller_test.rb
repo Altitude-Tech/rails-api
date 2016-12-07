@@ -27,6 +27,7 @@ module V1
 
       data.delete(:name)
       data.delete(:password)
+      data = set_token data
 
       expected = {
         result: 'success'
@@ -41,12 +42,34 @@ module V1
     end
 
     ##
+    # Test error handling for the `add_users` method with a missing `token` attribute.
+    ##
+    test 'add_user missing token' do
+      data = USER_DATA.deep_dup
+      User.create! data
+
+      data.delete(:name)
+      data.delete(:password)
+
+      expected = {
+        error: 112,
+        message: 'Invalid or missing token.',
+        status: 400
+      }
+
+      login User.first!
+      post :add_user, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
     # Test error handling for the `add_users` method when not logged in.
     ##
     test 'add_user not logged in' do
-      data = {
-        email: USER_DATA[:email]
-      }
+      data = set_token email: USER_DATA[:email]
       expected = {
         error: 101,
         message: 'Not authorised.',
@@ -69,6 +92,7 @@ module V1
 
       data.delete(:name)
       data.delete(:password)
+      data = set_token data
 
       expected = {
         error: 101,
@@ -89,7 +113,7 @@ module V1
     ##
     test 'add_user email missing' do
       User.create! USER_DATA.deep_dup
-
+      data = set_token
       expected = {
         error: 104,
         message: '"email" not found.',
@@ -97,7 +121,7 @@ module V1
       }
 
       login User.first!
-      post :add_user, body: {}.to_json
+      post :add_user, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -109,11 +133,7 @@ module V1
     ##
     test 'add_user email not found' do
       User.create! USER_DATA.deep_dup
-
-      data = {
-        email: 'notfound@example.com'
-      }
-
+      data = set_token email: 'notfound@example.com'
       expected = {
         error: 104,
         message: '"email" not found.',
@@ -132,7 +152,7 @@ module V1
     # Test success of the create method.
     ##
     test 'create success' do
-      data = CREATE_DATA.deep_dup
+      data = set_token CREATE_DATA.deep_dup
       expected = {
         result: 'success'
       }
@@ -146,10 +166,29 @@ module V1
     end
 
     ##
+    # Test error handling of the `create` method wioth a missing token.
+    ##
+    test 'create missing token' do
+      data = CREATE_DATA.deep_dup
+      expected = {
+        error: 112,
+        message: 'Invalid or missing token.',
+        status: 400
+      }
+
+      login
+      post(:create, body: data.to_json)
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
     # Test error handling of the `create` method when not logged in.
     ##
     test 'create not logged in' do
-      data = CREATE_DATA.deep_dup
+      data = set_token CREATE_DATA.deep_dup
       expected = {
         error: 101,
         message: 'Not authorised.',
@@ -167,7 +206,7 @@ module V1
     # Test error handling of the `create` method when the logged in user is already in a group.
     ##
     test 'create already in group' do
-      data = CREATE_DATA.deep_dup
+      data = set_token CREATE_DATA.deep_dup
       expected = {
         error: 106,
         message: 'User is already a member of a group.',
@@ -186,7 +225,7 @@ module V1
     # Test error handling of the `create` method when the `name` parameter is too long.
     ##
     test 'create too long group name' do
-      data = CREATE_DATA.deep_dup
+      data = set_token CREATE_DATA.deep_dup
       data[:name] = 'x' * 256
       expected = {
         error: 103,
@@ -207,7 +246,7 @@ module V1
     # Test success of the `create` method when the `name` parameter is at the upper limit.
     ##
     test 'create upper limit group name' do
-      data = CREATE_DATA.deep_dup
+      data = set_token CREATE_DATA.deep_dup
       data.delete(:name)
       expected = {
         result: 'success'
@@ -225,7 +264,7 @@ module V1
     # Test success of the the `create` method when the `name` parameter is missing.
     ##
     test 'create missing group name' do
-      data = CREATE_DATA.deep_dup
+      data = set_token CREATE_DATA.deep_dup
       data.delete(:name)
       expected = {
         result: 'success'
@@ -243,7 +282,7 @@ module V1
     # Test success of the `show` method.
     ##
     test 'show success' do
-      data = CREATE_DATA.deep_dup
+      data = set_token CREATE_DATA.deep_dup
       expected = {
         name: 'Group 3',
         admin: 'bob@example.com',
