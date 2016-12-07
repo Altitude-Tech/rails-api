@@ -15,8 +15,7 @@ module V1
     # Test success of the `create` method.
     ##
     test 'create success' do
-      data = CREATE_DATA.deep_dup
-
+      data = create_data
       expected = {
         result: 'success'
       }
@@ -29,10 +28,30 @@ module V1
     end
 
     ##
+    # Test error handling of the `create` method for missing `token` parameter.
+    ##
+    test 'create missing token' do
+      data = create_data
+      data.delete(:token)
+
+      expected = {
+        error: 112,
+        message: 'Invalid or missing token.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
     # Test error handling of the `create` method for missing `name` parameter.
     ##
     test 'create name missing' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data.delete(:name)
 
       expected = {
@@ -53,7 +72,7 @@ module V1
     # Test error handling of the `create` method for too long `name` parameter.
     ##
     test 'create name too long' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:name] = 'x' * 256
 
       expected = {
@@ -74,7 +93,7 @@ module V1
     # Test error handling of the `create` method for missing `email` parameter.
     ##
     test 'create email missing' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data.delete(:email)
 
       expected = {
@@ -95,7 +114,7 @@ module V1
     # Test error handling of the `create` method for invalid `email` parameter.
     ##
     test 'create email invalid' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:email] = 'invalid'
 
       expected = {
@@ -116,7 +135,7 @@ module V1
     # Test error handling of the `create` method for too long `email` parameter.
     ##
     test 'create email too long' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:email] = 'x@' + ('y' * 254)
 
       expected = {
@@ -137,7 +156,7 @@ module V1
     # Test error handling of the `create` method for too short `email` parameter.
     ##
     test 'create email too short' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:email] = '@'
 
       expected = {
@@ -159,7 +178,7 @@ module V1
     ##
     test 'create email in use' do
       user = User.first!
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:email] = user.email
 
       expected = {
@@ -180,7 +199,7 @@ module V1
     # Test error handling of the `create` method for missing `password` parameter.
     ##
     test 'create password missing' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data.delete(:password)
 
       expected = {
@@ -201,7 +220,7 @@ module V1
     # Test error handling of the `create` method for too short `password` parameter.
     ##
     test 'create password too short' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:password] = 'x'
 
       expected = {
@@ -222,7 +241,7 @@ module V1
     # Test error handling of the `create` method for too long `password` parameter.
     ##
     test 'create password too long' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:password] = 'x' * 73
 
       expected = {
@@ -243,7 +262,7 @@ module V1
     # Test success of the `create` method with the `password` parameter at the upper limit.
     ##
     test 'create success password upper limit' do
-      data = CREATE_DATA.deep_dup
+      data = create_data
       data[:password] = 'x' * 72
 
       expected = {
@@ -272,6 +291,26 @@ module V1
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
       assert_response :ok
+    end
+
+    ##
+    # Test error handling for the `login` method with a missing `token` parameter.
+    ##
+    test 'login missing token' do
+      data = login_data
+      data.delete(:token)
+
+      expected = {
+        error: 112,
+        message: 'Invalid or missing token.',
+        status: 400
+      }
+
+      post :login, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
     end
 
     ##
@@ -366,6 +405,7 @@ module V1
       }
 
       post :login, body: data.to_json
+      data = set_token data
       post :login, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -445,7 +485,7 @@ module V1
     ##
     test 'update success' do
       new_name = 'Example'
-      data = { name: new_name }
+      data = set_token name: new_name
       expected = {
         name: new_name,
       }
@@ -462,7 +502,7 @@ module V1
     # Test error handling of the `update` method with a non-whitelisted attribute.
     ##
     test 'update non-whitelisted attribute' do
-      data = { invalid: 'invalid' }
+      data = set_token invalid: 'invalid'
       expected = {
         error: 111,
         message: 'Unable to update attribute "invalid".',
@@ -481,7 +521,7 @@ module V1
     # Test error handling of the `update` method with an invalid `name` attribute.
     ##
     test 'update invalid name' do
-      data = { name: 'x' * 256 }
+      data = set_token name: 'x' * 256
       expected = {
         error: 110,
         message: '"name" is too long (maximum is 255 characters).',
@@ -501,13 +541,34 @@ module V1
     # Test error handling of the `update` method when not logged in.
     ##
     test 'update not logged in' do
+      data = set_token
       expected = {
         error: 101,
         message: 'Not authorised.',
         status: 400
       }
 
-      post :update
+      post :update, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling of the `update` method with a missing `token` attribute.
+    ##
+    test 'update missing token' do
+      new_name = 'Example'
+      data = { name: new_name }
+      expected = {
+        error: 112,
+        message: 'Invalid or missing token.',
+        status: 400
+      }
+
+      post :login, body: login_data.to_json
+      post :update, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -515,6 +576,16 @@ module V1
     end
 
     private
+
+    ##
+    #
+    ##
+    def create_data
+      data = CREATE_DATA.deep_dup
+      data = set_token data
+
+      return data
+    end
 
     ##
     # Helper method for creating a new user.
@@ -531,6 +602,7 @@ module V1
       create_user!
 
       data = CREATE_DATA.deep_dup
+      data = set_token data
       data.delete(:name)
 
       return data

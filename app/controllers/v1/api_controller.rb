@@ -56,12 +56,14 @@ module V1
     ##
     def require_token
       error_msg = 'Invalid or missing token.'
-      t = Token.find(@body[:json])
+      t = Token.find(@body[:token])
 
       raise Api::TokenError, error_msg unless t.active?
 
       # expire the token now it's been used
       t.disable!
+      # and delete it from the request body
+      @body.delete(:token)
     rescue ActiveRecord::RecordNotFound
       raise Api::TokenError, error_msg
     end
@@ -99,7 +101,11 @@ module V1
     ##
     def handle_standard_error(exc)
       # TODO: Email about the exception
-      Rails.logger.fatal(exc.message)
+      Rails.logger.fatal(exc)
+
+      #puts exc.class.name
+      #puts exc.message
+      #puts exc.backtrace
 
       msg = 'An unhandled exception occurred.'
       render_error 500, msg, :internal_server_error
