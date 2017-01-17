@@ -18,7 +18,7 @@ If an error occurs as a result of a request or generating a response, an error r
 - `status` contains the HTTP error code. This will be 400 for bad client request or 500 for an internal server error. Please report any internal errors to the [issue tracker](https://github.com/Altitude-Tech/rails-api/issues).
 
 ## Tokens
-Many of the actions made available by the API require a CSRF token. If a token is required, the request body for a particular action will include a `token` key. This token can be obtained by sending a POST request to `/api/tokens`. POST and PUT requests require tokens, while GET requests do not.
+Many of the actions made available by the API require a CSRF token. If a token is required, the request body for a particular action will include a `token` key. This token can be obtained by sending a POST request to `/api/tokens`. POST and PUT requests require tokens, while GET requests do not. Tokens obtained through this method will expire 10 minutes after creation or when they are used, irrespective of whether the request resulted in an error or not.
 
 The response to this request if no errors occur will be:
 ```json
@@ -129,12 +129,12 @@ This action requires a user to be logged in and be a member of a group.
 The response to this request if no errors occur will be:
 ```json
 {
-	"identity": "$identity"
+	"identity": "$identity",
 	"token": "$token"
 }
 ```
 
-Note that the `token` in this case is different to a [CSRF token](#token) and essentially acts as the device's password. It should be used when creating a new data [entry](#creating-a-new-data-entry)
+Note that the `token` in this case is different to a [CSRF token](#tokens) and essentially acts as the device's password. It should be used when creating a new [data entry](#creating-a-new-data-entry) and does not expire after use.
 
 ## Data
 ### Creating a new data entry
