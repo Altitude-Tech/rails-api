@@ -4,6 +4,9 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+# ignore fuse files
+.fuse_hidden*
+
 # ignore bundler config.
 /.bundle
 
@@ -21,6 +24,3 @@
 
 # ignore generated gemfile
 Gemfile.lock
-
-# ignore generated documentation/wiki
-/wiki/*
