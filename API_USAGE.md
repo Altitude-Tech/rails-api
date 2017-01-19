@@ -83,8 +83,7 @@ To update a user's details, send the following to `/api/users` as a PUT request.
 }
 ```
 
-The attributes of a user that can currently be updated are:
-- name
+The attributes of a user that can currently be updated are: `name`.
 
 The response to this request if no errors occur will be:
 ```json
@@ -108,10 +107,57 @@ The response to this request if no errors occur will be:
 
 ## Groups
 ### Creating a group
+To create a group, a user must be logged in and not already member of an existing group. The user that creates the group will be the group admin.
+
+To create a group via the API, send the following to `/api/groups` as a POST request:
+```json
+{
+	"name": "$group_name"
+}
+```
+
+The response to this request if no errors occur will be:
+```json
+{
+	"result": "success"
+}
+```
 
 ### Adding users to a group
+To add a user to the group, send the following to `/api/groups/add_user` as a POST request. Only a logged in group admin may add users to a group. The user being added to the group cannot be a member of an existing group.
+```json
+{
+	"email": "$user_to_add"
+}
+```
+
+The response to this request if no errors occur will be:
+```json
+{
+	"result": "success"
+}
+```
 
 ### Getting data about a group
+To get data about a group, send a GET request to `/api/groups`. Only members of the group may access the group's data.
+
+The response to this request if no errors occur will be:
+```json
+{
+	"name": "$group_name",
+	"admin": "$group_admin_email",
+	"users": [
+		{
+			"name": "$group_admin_name",
+			"email": "$group_admin_email"
+		},
+		{
+			"name": "$group_member_name",
+			"email": "$group_member_email"
+		}
+	]
+}
+```
 
 ## Devices
 ### Registering a device
