@@ -103,9 +103,9 @@ module V1
       # TODO: Email about the exception
       Rails.logger.fatal(exc)
 
-      #puts exc.class.name
-      #puts exc.message
-      #puts exc.backtrace
+      # puts exc.class.name
+      # puts exc.message
+      # puts exc.backtrace
 
       msg = 'An unhandled exception occurred.'
       render_error 500, msg, :internal_server_error

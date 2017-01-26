@@ -405,7 +405,7 @@ module V1
       }
 
       post :login, body: data.to_json
-      data = set_token data
+      data = add_token data
       post :login, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -485,9 +485,9 @@ module V1
     ##
     test 'update success' do
       new_name = 'Example'
-      data = set_token name: new_name
+      data = add_token name: new_name
       expected = {
-        name: new_name,
+        name: new_name
       }
 
       post :login, body: login_data.to_json
@@ -502,7 +502,7 @@ module V1
     # Test error handling of the `update` method with a non-whitelisted attribute.
     ##
     test 'update non-whitelisted attribute' do
-      data = set_token invalid: 'invalid'
+      data = add_token invalid: 'invalid'
       expected = {
         error: 111,
         message: 'Unable to update attribute "invalid".',
@@ -521,7 +521,7 @@ module V1
     # Test error handling of the `update` method with an invalid `name` attribute.
     ##
     test 'update invalid name' do
-      data = set_token name: 'x' * 256
+      data = add_token name: 'x' * 256
       expected = {
         error: 110,
         message: '"name" is too long (maximum is 255 characters).',
@@ -541,7 +541,7 @@ module V1
     # Test error handling of the `update` method when not logged in.
     ##
     test 'update not logged in' do
-      data = set_token
+      data = add_token
       expected = {
         error: 101,
         message: 'Not authorised.',
@@ -582,7 +582,7 @@ module V1
     ##
     def create_data
       data = CREATE_DATA.deep_dup
-      data = set_token data
+      data = add_token data
 
       return data
     end
@@ -602,7 +602,7 @@ module V1
       create_user!
 
       data = CREATE_DATA.deep_dup
-      data = set_token data
+      data = add_token data
       data.delete(:name)
 
       return data

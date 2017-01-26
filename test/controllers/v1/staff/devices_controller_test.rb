@@ -103,7 +103,6 @@ module V1
         }
 
         post :create, body: data.to_json
-        res = JSON.parse response.body
 
         assert_equal expected.to_json, response.body
         assert_equal JSON_TYPE, response.content_type

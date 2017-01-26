@@ -27,7 +27,7 @@ module V1
 
       data.delete(:name)
       data.delete(:password)
-      data = set_token data
+      data = add_token data
 
       expected = {
         result: 'success'
@@ -69,7 +69,7 @@ module V1
     # Test error handling for the `add_users` method when not logged in.
     ##
     test 'add_user not logged in' do
-      data = set_token email: USER_DATA[:email]
+      data = add_token email: USER_DATA[:email]
       expected = {
         error: 101,
         message: 'Not authorised.',
@@ -92,7 +92,7 @@ module V1
 
       data.delete(:name)
       data.delete(:password)
-      data = set_token data
+      data = add_token data
 
       expected = {
         error: 101,
@@ -113,7 +113,7 @@ module V1
     ##
     test 'add_user email missing' do
       User.create! USER_DATA.deep_dup
-      data = set_token
+      data = add_token
       expected = {
         error: 104,
         message: '"email" not found.',
@@ -133,7 +133,7 @@ module V1
     ##
     test 'add_user email not found' do
       User.create! USER_DATA.deep_dup
-      data = set_token email: 'notfound@example.com'
+      data = add_token email: 'notfound@example.com'
       expected = {
         error: 104,
         message: '"email" not found.',
@@ -152,7 +152,7 @@ module V1
     # Test success of the create method.
     ##
     test 'create success' do
-      data = set_token CREATE_DATA.deep_dup
+      data = add_token CREATE_DATA.deep_dup
       expected = {
         result: 'success'
       }
@@ -188,7 +188,7 @@ module V1
     # Test error handling of the `create` method when not logged in.
     ##
     test 'create not logged in' do
-      data = set_token CREATE_DATA.deep_dup
+      data = add_token CREATE_DATA.deep_dup
       expected = {
         error: 101,
         message: 'Not authorised.',
@@ -206,7 +206,7 @@ module V1
     # Test error handling of the `create` method when the logged in user is already in a group.
     ##
     test 'create already in group' do
-      data = set_token CREATE_DATA.deep_dup
+      data = add_token CREATE_DATA.deep_dup
       expected = {
         error: 106,
         message: 'User is already a member of a group.',
@@ -225,7 +225,7 @@ module V1
     # Test error handling of the `create` method when the `name` parameter is too long.
     ##
     test 'create too long group name' do
-      data = set_token CREATE_DATA.deep_dup
+      data = add_token CREATE_DATA.deep_dup
       data[:name] = 'x' * 256
       expected = {
         error: 103,
@@ -246,7 +246,7 @@ module V1
     # Test success of the `create` method when the `name` parameter is at the upper limit.
     ##
     test 'create upper limit group name' do
-      data = set_token CREATE_DATA.deep_dup
+      data = add_token CREATE_DATA.deep_dup
       data.delete(:name)
       expected = {
         result: 'success'
@@ -264,7 +264,7 @@ module V1
     # Test success of the the `create` method when the `name` parameter is missing.
     ##
     test 'create missing group name' do
-      data = set_token CREATE_DATA.deep_dup
+      data = add_token CREATE_DATA.deep_dup
       data.delete(:name)
       expected = {
         result: 'success'
@@ -282,7 +282,7 @@ module V1
     # Test success of the `show` method.
     ##
     test 'show success' do
-      data = set_token CREATE_DATA.deep_dup
+      data = add_token CREATE_DATA.deep_dup
       expected = {
         name: 'Group 3',
         admin: 'bob@example.com',

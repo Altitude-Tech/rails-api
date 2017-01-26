@@ -50,7 +50,7 @@ class ActiveSupport::TestCase
   ##
   # Token helper for all controllers
   ##
-  def set_token(data = {})
+  def add_token(data = {})
     token = Token.csrf!
     data[:token] = token.token
 
