@@ -2,12 +2,14 @@
 #
 ##
 
+require 'sensly/sensors/base_sensor'
+
 module Sensly
   class SensorMQ135 < BaseSensor
     ##
     # R0 Resistance
     ##
-    R0 = 10804.861
+    R0 = 10_804.861
 
     ##
     # Sensor specific gas configuraton
@@ -31,14 +33,14 @@ module Sensly
       rs_r0_max: 2.35,
       rs_ro_min: 0.8,
       gradient: -2.7979,
-      intercept: 2.0425,
+      intercept: 2.0425
     }.freeze
     CONFIG_ETHANOL = {
       name: NAME_ETHANOL,
       rs_r0_max: 1.91,
       rs_ro_min: 0.585,
-      gradient:
-      intercept:
+      gradient: -3.1616,
+      intercept: 1.8939
     }.freeze
     CONFIG_METHYL = {
       name: NAME_METHYL,

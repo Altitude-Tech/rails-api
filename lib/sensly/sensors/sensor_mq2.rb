@@ -2,6 +2,8 @@
 #
 ##
 
+require 'sensly/sensors/base_sensor'
+
 module Sensly
   class SensorMQ2 < BaseSensor
     ##
@@ -35,8 +37,8 @@ module Sensly
     }.freeze
     CONFIG_H2 = {
       name: NAME_H2,
-      rs_ro_max: 2.1
-      rs_ro_min: 0.335
+      rs_ro_max: 2.1,
+      rs_ro_min: 0.335,
       gradient: -2.0588,
       intercept: 3.017
     }.freeze

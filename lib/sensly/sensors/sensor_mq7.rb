@@ -2,6 +2,8 @@
 #
 ##
 
+require 'sensly/sensors/base_sensor'
+
 module Sensly
   class SensorMQ7 < BaseSensor
     ##
@@ -20,7 +22,7 @@ module Sensly
       intercept: 20.415
     }.freeze
     CONFIG_CH4 = {
-      name: NAME_CH4
+      name: NAME_CH4,
       rs_r0_max: 15.0,
       rs_ro_min: 9.0,
       gradient: -8.6709,
@@ -29,7 +31,7 @@ module Sensly
     CONFIG_CO = {
       name: NAME_CO,
       rs_r0_max: 1.75,
-      rs_ro_min: 0.092.
+      rs_ro_min: 0.092,
       gradient: -1.5096,
       intercept: 2.0051
     }.freeze
@@ -58,6 +60,5 @@ module Sensly
       GAS_H2: CONFIG_H2,
       GAS_LPG: CONFIG_LPG
     }.freeze
-
   end
 end

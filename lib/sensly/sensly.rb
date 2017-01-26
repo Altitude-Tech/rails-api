@@ -1,7 +1,11 @@
+require 'sensly/exceptions'
+require 'sensly/sensors/sensor_mq2'
+require 'sensly/sensors/sensor_mq7'
+require 'sensly/sensors/sensor_mq135'
+
 ##
 #
 ##
-
 module Sensly
   ##
   #
@@ -20,10 +24,18 @@ module Sensly
   }.freeze
 
   def sensor(type, adc_value)
-    unless TYPES.include? type
-      # throw error
-    end
+    case type
+    when TYPE_MQ2
+      return SensorMQ2(adc_value)
 
-    return TYPES[types](adc_value)
+    when TYPE_MQ7
+      return SensorMQ7(adc_value)
+
+    when TYPE_MQ135
+      return SensorMQ135(adc_value)
+
+    else
+      raise UnrecognisedSensorTypeError, 'Unrecognised sensor type'
+    end
   end
 end
