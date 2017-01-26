@@ -5,6 +5,7 @@
 require 'sensly/sensors/base_sensor'
 
 module Sensly
+  module Sensors
   class SensorMQ135 < BaseSensor
     ##
     # R0 Resistance
@@ -69,4 +70,5 @@ module Sensly
       GAS_NH3: CONFIG_NH3
     }.freeze
   end
+end
 end

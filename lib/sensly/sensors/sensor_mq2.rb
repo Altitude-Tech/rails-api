@@ -69,4 +69,5 @@ module Sensly
       GAS_PROPANE: CONFIG_PROPANE
     }.freeze
   end
+
 end
