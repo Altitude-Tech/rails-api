@@ -16,7 +16,7 @@ module V1
       @body.delete(:identity)
       @body[:device_id] = @device.id
 
-      Datum.create! @body
+      RawDatum.create! @body
 
       @result = 'success'
       render 'v1/result'
@@ -41,7 +41,7 @@ module V1
         raise Api::AuthError, msg
       end
 
-      @data = @device.datum
+      @data = @device.raw_datum
     rescue ActiveRecord::RecordNotFound
       raise Api::NotFoundError, 'identity'
     end

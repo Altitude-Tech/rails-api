@@ -1,5 +1,5 @@
 ##
-# Sample data points for tests
+# Sample raw data points for tests
 ##
 one:
   device_id: 2
@@ -16,7 +16,7 @@ two:
   sensor_type: 1
   sensor_error: 0
   sensor_data: 0
-  log_time: 2016-09-23 11:57:47
+  log_time: 2016-09-23 11:57:48
   temperature: 20.0
   pressure: 1000
   humidity: 0

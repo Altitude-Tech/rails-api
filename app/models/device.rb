@@ -46,7 +46,7 @@ class Device < ApplicationRecord
   ##
   # Associations
   ##
-  has_many :datum
+  has_many :raw_datum
   belongs_to :group, optional: true
   belongs_to :token, foreign_key: :token, optional: true
 

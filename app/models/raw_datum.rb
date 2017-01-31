@@ -1,7 +1,7 @@
 ##
-# Representation of a data point in the database.
+# Representation of a raw, unporcessed data point in the database.
 ##
-class Datum < ApplicationRecord
+class RawDatum < ApplicationRecord
   ##
   # Constants
   ##

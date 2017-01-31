@@ -1,11 +1,11 @@
 require 'test_helper'
 
-class DatumTest < ActiveSupport::TestCase
+class RawDatumTest < ActiveSupport::TestCase
   ##
   # Data to create a new data point with.
   ##
   CREATE_DATA = {
-    sensor_type: Datum::SENSOR_MQ2_HASH,
+    sensor_type: RawDatum::SENSOR_MQ2_HASH,
     sensor_error: 0,
     sensor_data: 0,
     log_time: Time.now.utc.to_i,
@@ -20,7 +20,7 @@ class DatumTest < ActiveSupport::TestCase
   test 'create! success' do
     data = create_data
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -31,7 +31,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :device_id
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -43,7 +43,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:device_id] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -55,7 +55,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :sensor_type
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -67,7 +67,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_type] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -79,7 +79,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :sensor_error
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -91,7 +91,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_error] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -103,7 +103,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_error] = -0.1
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -115,7 +115,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_error] = 1.1
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -126,7 +126,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:sensor_error] = 0.0
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -136,7 +136,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:sensor_error] = 1.0
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -147,7 +147,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :sensor_data
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -159,7 +159,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_data] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -171,7 +171,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_data] = -1
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -183,7 +183,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_data] = 4096
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -194,7 +194,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:sensor_data] = 0
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -204,7 +204,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:sensor_data] = 4095
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -215,7 +215,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:sensor_data] = 1.1
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -227,7 +227,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :log_time
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -239,7 +239,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:log_time] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -251,7 +251,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:log_time] = (Time.now.utc - 31.days).to_i
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -263,7 +263,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:log_time] = (Time.now.utc + 1.day).to_i
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -274,7 +274,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:log_time] = (Time.now.utc - 29.days).to_i
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -284,7 +284,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:log_time] = (Time.now.utc - 5.minutes).to_i
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -295,7 +295,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :temperature
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -307,7 +307,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:temperature] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -319,7 +319,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :pressure
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -331,7 +331,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:pressure] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -343,7 +343,7 @@ class DatumTest < ActiveSupport::TestCase
     data.delete :humidity
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -355,7 +355,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:humidity] = 'invalid'
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -367,7 +367,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:humidity] = -0.1
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -379,7 +379,7 @@ class DatumTest < ActiveSupport::TestCase
     data[:humidity] = 100.1
 
     assert_raises ActiveRecord::RecordInvalid do
-      Datum.create! data
+      RawDatum.create! data
     end
   end
 
@@ -390,7 +390,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:humidity] = 0
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   ##
@@ -400,7 +400,7 @@ class DatumTest < ActiveSupport::TestCase
     data = create_data
     data[:humidity] = 100
 
-    Datum.create! data
+    RawDatum.create! data
   end
 
   private

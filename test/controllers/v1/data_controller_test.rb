@@ -6,7 +6,7 @@ module V1
     #
     ##
     CREATE_DATA = {
-      sensor_type: Datum::SENSOR_MQ2_HASH,
+      sensor_type: RawDatum::SENSOR_MQ2_HASH,
       sensor_error: 0.0,
       sensor_data: 1000,
       humidity: 0,
@@ -765,7 +765,7 @@ module V1
             sensor_type: '4080cf866795cdaf370a641cbd8044453d79ae30',
             sensor_error: 0.0,
             sensor_data: 0,
-            log_time: '2016-09-23T11:57:47.000Z',
+            log_time: '2016-09-23T11:57:48.000Z',
             temperature: 20.0,
             humidity: 0.0,
             pressure: 1000.0
