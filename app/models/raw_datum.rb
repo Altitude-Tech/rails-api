@@ -91,7 +91,7 @@ class RawDatum < ApplicationRecord
   # Setter for sensor_type.
   ##
   def sensor_type=(value)
-    self[:sensor_type] = SENSOR_MAP_HASH_TO_DB[value]
+    self[:sensor_type] = SENSOR_MAP_HASH_TO_DB.fetch(value)
   rescue KeyError
     self[:sensor_type] = nil
   end
