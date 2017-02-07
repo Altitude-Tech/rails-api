@@ -3,6 +3,15 @@ Rails.application.routes.draw do
   match '*anything', to: 'v1/api#options', via: :options
 
   namespace :v1, format: false do
+    # routes for testing the base api controller
+    if ENV['RAILS_ENV'] == 'test'
+      resources :tests, only: [:create]
+
+      controller :tests do
+        match 'groups/unhandled_error', to: 'tests#unhandled_error', via: :post
+      end
+    end
+
     # basic user routes
     resources :users, only: [:create]
 
