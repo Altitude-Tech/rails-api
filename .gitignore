@@ -24,3 +24,6 @@
 
 # ignore generated gemfile
 Gemfile.lock
+
+# simplecov result
+coverage
