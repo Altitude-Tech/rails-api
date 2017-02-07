@@ -87,6 +87,8 @@ module V1
     # Test error handling for the `add_users` method when the logged in user is not a group admin.
     ##
     test 'add_user not admin' do
+      user = User.create! USER_DATA.deep_dup
+      user.group = Group.first!.id
       data = USER2_DATA.deep_dup
       User.create! data
 
@@ -100,7 +102,7 @@ module V1
         status: 400
       }
 
-      login
+      login user
       post :add_user, body: data.to_json
 
       assert_equal expected.to_json, response.body
@@ -149,6 +151,26 @@ module V1
     end
 
     ##
+    # Test error handling for the `add_users` method when the user is already in a group.
+    ##
+    test 'add_user already in group' do
+      user = User.first!
+      data = add_token email: user.email
+      expected = {
+        error: 106,
+        message: 'User is already a member of a group.',
+        status: 400
+      }
+
+      login User.find 2
+      post :add_user, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
     # Test success of the create method.
     ##
     test 'create success' do
@@ -158,7 +180,7 @@ module V1
       }
 
       login
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -177,7 +199,7 @@ module V1
       }
 
       login
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -195,7 +217,7 @@ module V1
         status: 400
       }
 
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -214,7 +236,7 @@ module V1
       }
 
       login User.first!
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -235,7 +257,7 @@ module V1
       }
 
       login
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -253,7 +275,7 @@ module V1
       }
 
       login
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -271,7 +293,7 @@ module V1
       }
 
       login
-      post(:create, body: data.to_json)
+      post :create, body: data.to_json
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -295,8 +317,8 @@ module V1
       }
 
       login
-      post(:create, body: data.to_json)
-      get(:show)
+      post :create, body: data.to_json
+      get :show
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
@@ -314,8 +336,26 @@ module V1
         status: 400
       }
 
-      post(:create, body: data.to_json)
-      get(:show)
+      post :create, body: data.to_json
+      get :show
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for the `show` method for a non-member.
+    ##
+    test 'show non-member' do
+      expected = {
+        error: 101,
+        message: 'Not authorised.',
+        status: 400
+      }
+
+      login
+      get :show
 
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
