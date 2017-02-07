@@ -68,6 +68,18 @@ class UserTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test error handling of create! method for invalid `email` attribute.
+  ##
+  test 'create! error email invalid (non-string)' do
+    data = CREATE_DATA.deep_dup
+    data[:email] = 1
+
+    assert_raises ActiveRecord::RecordInvalid do
+      User.create! data
+    end
+  end
+
+  ##
   # Test error handling of `create!` method for too long `email` attribute.
   ##
   test 'create! error email too long' do
