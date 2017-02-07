@@ -31,6 +31,18 @@ class DeviceTest < ActiveSupport::TestCase
   end
 
   ##
+  # Test error handling for the `create!` method with an invalid `identity` attribute.
+  ##
+  test 'create! invalid identity' do
+    data = CREATE_DATA.deep_dup
+    data[:identity] = 'invalid'
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Device.create! data
+    end
+  end
+
+  ##
   # Test error handling for the `create!` method with a missing `device_type` attribute.
   ##
   test 'create! missing device_type' do
