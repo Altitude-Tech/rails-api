@@ -5,6 +5,6 @@ json.device do
 end
 
 json.data @data do |datum|
-  json.extract! datum, :sensor_type, :sensor_error, :sensor_data
+  json.extract! datum, :sensor_type, :sensor_name, :sensor_error, :sensor_data
   json.extract! datum, :log_time, :temperature, :humidity, :pressure
 end
