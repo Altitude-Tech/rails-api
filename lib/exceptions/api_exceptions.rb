@@ -86,20 +86,6 @@ module Api
   end
 
   ##
-  # Invalid or missing value for an API parameter.
-  #
-  # Only thrown if the value is checked before being passed to a model.
-  ##
-  class ArgumentError < Error
-    def initialize(key)
-      @code ||= 105
-
-      message = "Invalid argument recieved for #{key}"
-      super message
-    end
-  end
-
-  ##
   # Exception corresponding to `Record::GroupMemberError`.
   ##
   class GroupMemberError < Error
