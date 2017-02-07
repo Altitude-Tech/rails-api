@@ -32,6 +32,7 @@ module V1
     ##
     def options
       # TODO: check if this is the correct way to repond to this
+      # TODO: Check which headers are needed (may be handled by cors handling)
       render text: '', content_type: 'text/plain'
     end
 
