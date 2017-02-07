@@ -755,6 +755,7 @@ module V1
         data: [
           {
             sensor_type: '4080cf866795cdaf370a641cbd8044453d79ae30',
+            sensor_name: RawDatum::SENSOR_MQ2_NAME,
             sensor_error: 0.0,
             sensor_data: 0,
             log_time: '2016-09-23T11:57:47.000Z',
@@ -763,6 +764,7 @@ module V1
             pressure: 1000.0
           }, {
             sensor_type: '4080cf866795cdaf370a641cbd8044453d79ae30',
+            sensor_name: RawDatum::SENSOR_MQ2_NAME,
             sensor_error: 0.0,
             sensor_data: 0,
             log_time: '2016-09-23T11:57:48.000Z',
