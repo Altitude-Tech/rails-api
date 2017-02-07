@@ -42,8 +42,6 @@ module V1
       end
 
       @data = @device.raw_datum
-    rescue ActiveRecord::RecordNotFound
-      raise Api::NotFoundError, 'identity'
     end
 
     private
