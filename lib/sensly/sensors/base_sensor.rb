@@ -59,9 +59,9 @@ module Sensly
         raise ADCValueOutOfRangeError, msg
       end
 
-      #puts "adc_value: #{adc_value}"
+      # puts "adc_value: #{adc_value}"
       calc_rs_ro_ratio adc_value, self.class::R0
-      #puts "rs_ro_ratio: #{@rs_ro_ratio}"
+      # puts "rs_ro_ratio: #{@rs_ro_ratio}"
     end
 
     ##
@@ -75,6 +75,13 @@ module Sensly
       end
     end
 
+    ##
+    #
+    ##
+    def rs_ro
+      return @rs_ro_ratio
+    end
+
     protected
 
     ##
@@ -82,7 +89,7 @@ module Sensly
     ##
     def calc_rs_ro_ratio(adc_value, ro)
       rs = ((MAX_ADC_VALUE / Float(adc_value)) - 1.0) * RLOAD
-      #puts "rs: #{rs}, ro: #{ro}"
+      # puts "rs: #{rs}, ro: #{ro}"
       @rs_ro_ratio = rs / ro
     end
 
