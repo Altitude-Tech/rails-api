@@ -13,9 +13,9 @@ module Sensly
     def initialize(adc_value, r0, temperature, humidity)
       super adc_value
 
-      @r0 = float r0
-      @temperature = float temperature
-      @humidity = float humidity
+      @r0 = Float(r0)
+      @temperature = Float(temperature)
+      @humidity = Float(humidity)
     end
 
     ##
@@ -33,6 +33,13 @@ module Sensly
     end
 
     ##
+    #
+    ##
+    def corr_rs_r0_ratio
+      return @rs_r0_ratio
+    end
+
+    ##
     # Calculate the ambient temperature for a relative humidity
     ##
     def amb_temp_at_rel_humidity(coeff)
@@ -43,11 +50,11 @@ module Sensly
     #
     ##
     def gases
-      GAS_CONFIG.each do |k, v|
+      self.class::GAS_CONFIG.each do |k, v|
         data = {}
 
-        data[:ppm] = 10**((v['gradient'] * Math.log10(@rs_r0)) + v['intercept']
-        data[:gas] = gas_name(k)
+        data[:ppm] = 10**((v[:gradient] * Math.log10(@rs_r0_ratio)) + v[:intercept])
+        data[:name] = Sensly.gas_name(k)
 
         yield data
       end

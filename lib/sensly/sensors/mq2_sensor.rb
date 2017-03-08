@@ -5,8 +5,8 @@ module Sensly
     ##
     #
     ##
-    def initilize(r0, adc_value, temperature, humidity)
-      super r0, adc_value, temperature, humidity
+    def initialize(adc_value, r0, temperature, humidity)
+      super adc_value, r0, temperature, humidity
 
       @rs_r0_ratio = correct_rs_r0_ratio
     end
@@ -63,12 +63,12 @@ module Sensly
     #
     ##
     GAS_CONFIG = {
-      GAS_ALCOHOL: CONFIG_ALCOHOL,
-      GAS_CH4: CONFIG_CH4,
-      GAS_CO: CONFIG_CO,
-      GAS_H2: CONFIG_h2,
-      GAS_LPG: CONFIG_LPG,
-      GAS_PROPANE: CONFIG_PROPANE
+      GAS_ALCOHOL => CONFIG_ALCOHOL,
+      GAS_CH4 => CONFIG_CH4,
+      GAS_CO => CONFIG_CO,
+      GAS_H2 => CONFIG_H2,
+      GAS_LPG => CONFIG_LPG,
+      GAS_PROPANE => CONFIG_PROPANE
     }.freeze
 
     ##
@@ -79,7 +79,7 @@ module Sensly
       at_60rh = amb_temp_at_rel_humidity COEFF_60RH
       at_85rh = amb_temp_at_rel_humidity COEFF_85RH
 
-      if @humidity > 60.0
+      if @humidity < 60.0
         rs_r0_at_amb_rh = (((@humidity - 30.0) / (60.0 - 30.0)) * (at_60rh - at_30rh)) + at_30rh
       else
         rs_r0_at_amb_rh = (((@humidity - 60.0) / 85.0 - 60.0) * (at_85rh - at_60rh) + at_60rh)
@@ -88,7 +88,7 @@ module Sensly
       ref_rs_r0_20C_60RH = 1.0
 
       rs_ro_corr_pct = 1.0 + (ref_rs_r0_20C_60RH - rs_r0_at_amb_rh)/ ref_rs_r0_20C_60RH
-      return rsroCorrPct * rs_r0_ratio
+      return rs_ro_corr_pct * rs_r0_ratio
     end
   end
 end

@@ -18,23 +18,23 @@ module Sensly
   # Map of gas integers to their names as a string.
   ##
   GAS_NAMES = {
-    GAS_ACETONE: 'Acetone',
-    GAS_ALCOHOL: 'Alcohol',
-    GAS_CH4: 'Methane',
-    GAS_CO: 'Carbon Monoxide',
-    GAS_CO2: 'Carbon Dioxide',
-    GAS_ETHANOL: 'Ethanol',
-    GAS_H2: 'Hydrogen',
-    GAS_LPG: 'Liquid Petroleum Gas',
-    GAS_METHYL: 'Methyl',
-    GAS_NH3: 'Ammonia',
-    GAS_PROPANE: 'Propane'
+    GAS_ACETONE => 'Acetone',
+    GAS_ALCOHOL => 'Alcohol',
+    GAS_CH4 => 'Methane',
+    GAS_CO => 'Carbon Monoxide',
+    GAS_CO2 => 'Carbon Dioxide',
+    GAS_ETHANOL => 'Ethanol',
+    GAS_H2 => 'Hydrogen',
+    GAS_LPG => 'Liquid Petroleum Gas',
+    GAS_METHYL => 'Methyl',
+    GAS_NH3 => 'Ammonia',
+    GAS_PROPANE => 'Propane'
   }.freeze
 
   ##
-  # Convert an integer representation of a gas into a string representing it's name.
+  # Convert an integer representation of a gas into a string representing its name.
   ##
-  def gas_name(gas)
+  def self.gas_name(gas)
     return GAS_NAMES[gas]
   end
 end

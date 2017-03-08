@@ -17,7 +17,7 @@ module Sensly
         raise ADCValueOutOfRangeError, msg
       end
 
-      @adc_value = float adc_value
+      @adc_value = Float adc_value
     end
   end
 end

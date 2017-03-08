@@ -3,9 +3,16 @@
 ##
 
 require 'test_helper'
-require 'sensly/sensors/sensor_mq2'
+require 'sensly/sensors/mq2_sensor'
 
-class SensorMQ2Test < MiniTest::Test
+class MQ2SensorTest < MiniTest::Test
+  ##
+  #
+  ##
+  R0 = 3120.5010
+  TEMP = 21.0
+  HUMIDITY = 22.0
+
   ##
   # ADC values that correspond to RSR0 values for the gases detected by the MQ2 sensor.
   # The RSR0 values used to generate these ADC values are noted next to each ADC value.
@@ -46,9 +53,9 @@ class SensorMQ2Test < MiniTest::Test
     adc_value = 1119
     expected = 3.56
 
-    sensor = Sensly::SensorMQ2.new(adc_value)
+    sensor = Sensly::MQ2Sensor.new(adc_value, R0, TEMP, HUMIDITY)
 
-    assert_equal expected, sensor.rs_ro.round(2)
+    assert_equal expected, sensor.corr_rs_r0_ratio.round(2)
   end
 
   ##
@@ -58,15 +65,14 @@ class SensorMQ2Test < MiniTest::Test
   def test_band1_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_CO
+      Sensly.gas_name(Sensly::GAS_CO)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND1_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND1_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 1 upper: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 1
     assert_equal expected, gases
   end
 
@@ -77,15 +83,14 @@ class SensorMQ2Test < MiniTest::Test
   def test_band1_lower
     gases = [].to_set
     expected = [
-      Sensly::NAME_CO
+      Sensly.gas_name(Sensly::GAS_CO)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND1_LOWER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND1_LOWER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 1 lower: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 1
     assert_equal expected, gases
   end
 
@@ -96,16 +101,15 @@ class SensorMQ2Test < MiniTest::Test
   def test_band2_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_CO,
-      Sensly::NAME_CH4
+      Sensly.gas_name(Sensly::GAS_CO),
+      Sensly.gas_name(Sensly::GAS_CH4)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND2_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND2_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 2 upper: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 2
     assert_equal expected, gases
   end
 
@@ -115,16 +119,15 @@ class SensorMQ2Test < MiniTest::Test
   def test_band2_lower
     gases = [].to_set
     expected = [
-      Sensly::NAME_CO,
-      Sensly::NAME_CH4
+      Sensly.gas_name(Sensly::GAS_CO),
+      Sensly.gas_name(Sensly::GAS_CH4)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND2_LOWER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND2_LOWER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 2 lower: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 1
     assert_equal expected, gases
   end
 
@@ -134,17 +137,16 @@ class SensorMQ2Test < MiniTest::Test
   def test_band3_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_CO,
-      Sensly::NAME_CH4,
-      Sensly::NAME_ALCOHOL
+      Sensly.gas_name(Sensly::GAS_CO),
+      Sensly.gas_name(Sensly::GAS_CH4),
+      Sensly.gas_name(Sensly::GAS_ALCOHOL)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND3_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND3_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 3: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 3
     assert_equal expected, gases
   end
 
@@ -154,18 +156,17 @@ class SensorMQ2Test < MiniTest::Test
   def test_band4_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_CO,
-      Sensly::NAME_CH4,
-      Sensly::NAME_ALCOHOL,
-      Sensly::NAME_H2
+      Sensly.gas_name(Sensly::GAS_CO),
+      Sensly.gas_name(Sensly::GAS_CH4),
+      Sensly.gas_name(Sensly::GAS_ALCOHOL),
+      Sensly.gas_name(Sensly::GAS_H2)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND4_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND4_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 4: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 4
     assert_equal expected, gases
   end
 
@@ -175,20 +176,19 @@ class SensorMQ2Test < MiniTest::Test
   def test_band5_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_CO,
-      Sensly::NAME_CH4,
-      Sensly::NAME_ALCOHOL,
-      Sensly::NAME_H2,
-      Sensly::NAME_PROPANE,
-      Sensly::NAME_LPG
+      Sensly.gas_name(Sensly::GAS_CO),
+      Sensly.gas_name(Sensly::GAS_CH4),
+      Sensly.gas_name(Sensly::GAS_ALCOHOL),
+      Sensly.gas_name(Sensly::GAS_H2),
+      Sensly.gas_name(Sensly::GAS_PROPANE),
+      Sensly.gas_name(Sensly::GAS_LPG)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND5_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND5_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 5: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 6
     assert_equal expected, gases
   end
 
@@ -198,19 +198,18 @@ class SensorMQ2Test < MiniTest::Test
   def test_band6_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_CH4,
-      Sensly::NAME_ALCOHOL,
-      Sensly::NAME_H2,
-      Sensly::NAME_PROPANE,
-      Sensly::NAME_LPG
+      Sensly::gas_name(Sensly::GAS_CH4),
+      Sensly::gas_name(Sensly::GAS_ALCOHOL),
+      Sensly::gas_name(Sensly::GAS_H2),
+      Sensly::gas_name(Sensly::GAS_PROPANE),
+      Sensly::gas_name(Sensly::GAS_LPG)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND6_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND6_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 6: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 5
     assert_equal expected, gases
   end
 
@@ -220,17 +219,16 @@ class SensorMQ2Test < MiniTest::Test
   def test_band7_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_H2,
-      Sensly::NAME_PROPANE,
-      Sensly::NAME_LPG
+      Sensly::gas_name(Sensly::GAS_H2),
+      Sensly::gas_name(Sensly::GAS_PROPANE),
+      Sensly::gas_name(Sensly::GAS_LPG)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND7_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND7_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 7: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 3
     assert_equal expected, gases
   end
 
@@ -240,16 +238,15 @@ class SensorMQ2Test < MiniTest::Test
   def test_band8_upper
     gases = [].to_set
     expected = [
-      Sensly::NAME_PROPANE,
-      Sensly::NAME_LPG
+      Sensly::gas_name(Sensly::GAS_PROPANE),
+      Sensly::gas_name(Sensly::GAS_LPG)
     ].to_set
 
-    Sensly::SensorMQ2.new(BAND8_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(BAND8_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
       puts "Band 8: #{gas[:name]} :: #{gas[:ppm]} :: #{gas[:rs_ro]}"
     end
 
-    assert_equal gases.length, 2
     assert_equal expected, gases
   end
 
@@ -260,11 +257,10 @@ class SensorMQ2Test < MiniTest::Test
     gases = [].to_set
     expected = [].to_set
 
-    Sensly::SensorMQ2.new(ABOVE_UPPER).gases do |gas|
+    Sensly::MQ2Sensor.new(ABOVE_UPPER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
     end
 
-    assert_equal gases.length, 0
     assert_equal expected, gases
   end
 
@@ -275,11 +271,10 @@ class SensorMQ2Test < MiniTest::Test
     gases = [].to_set
     expected = [].to_set
 
-    Sensly::SensorMQ2.new(BELOW_LOWER).gases do |gas|
+    Sensly::MQ2Sensor.new(BELOW_LOWER, R0, TEMP, HUMIDITY).gases do |gas|
       gases.add gas[:name]
     end
 
-    assert_equal gases.length, 0
     assert_equal expected, gases
   end
 end
