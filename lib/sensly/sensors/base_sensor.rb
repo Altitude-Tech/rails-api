@@ -2,6 +2,9 @@ require 'sensly/exceptions'
 require 'sensly/sensly'
 
 module Sensly
+  ##
+  #
+  ##
   class BaseSensor
     ##
     # Max value the ADC can produce.

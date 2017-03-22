@@ -1,6 +1,9 @@
 require 'sensly/sensors/base_sensor'
 
 module Sensly
+  ##
+  #
+  ##
   class PMSensor < BaseSensor
     ##
     #

@@ -1,6 +1,9 @@
 require 'sensly/sensors/mq_sensor'
 
 module Sensly
+  ##
+  #
+  ##
   class MQ2Sensor < MQSensor
     ##
     #
@@ -8,7 +11,7 @@ module Sensly
     def initialize(adc_value, r0, temperature, humidity)
       super adc_value, r0, temperature, humidity
 
-      @rs_r0_ratio = correct_rs_r0_ratio
+      @rs_ro_ratio = correct_rs_ro_ratio
     end
 
     ##
@@ -23,38 +26,38 @@ module Sensly
     #
     ##
     CONFIG_ALCOHOL = {
-      min: -0.1804,
-      max: 0.4624,
+      min: 0.69,
+      max: 2.85,
       gradient: -2.7171,
-      intercept: 3.5912,
+      intercept: 3.5912
     }.freeze
     CONFIG_CH4 = {
-      min: -0.1612,
-      max: 0.4771,
+      min: 0.69,
+      max: 3,
       gradient: -2.6817,
       intercept: 3.623
     }.freeze
     CONFIG_CO = {
-      min: 0.204,
-      max: 0.7160,
+      min: 1.6,
+      max: 5.2,
       gradient: -3.2141,
       intercept: 4.624
     }.freeze
     CONFIG_H2 = {
-      min: -0.4750,
-      max: 0.3222,
+      min: 0.335,
+      max: 2.1,
       gradient: -2.0588,
       intercept: 3.017
     }.freeze
     CONFIG_LPG = {
-      min: -0.5850,
-      max: 0.2304,
+      min: 0.26,
+      max: 1.8,
       gradient: -2.0626,
       intercept: 2.808
     }.freeze
     CONFIG_PROPANE = {
-      min: -0.5528,
-      max: 0.2553,
+      min: 0.26,
+      max: 1.8,
       gradient: -2.0813,
       intercept: 2.8436
     }.freeze
@@ -74,21 +77,30 @@ module Sensly
     ##
     #
     ##
-    def correct_rs_r0_ratio
-      at_30rh = amb_temp_at_rel_humidity COEFF_30RH
-      at_60rh = amb_temp_at_rel_humidity COEFF_60RH
-      at_85rh = amb_temp_at_rel_humidity COEFF_85RH
+    def correct_rs_ro_ratio
+      at_thirty_rh = amb_temp_at_rel_humidity COEFF_30RH
+      at_sixty_rh = amb_temp_at_rel_humidity COEFF_60RH
+      at_eighty_five_rh = amb_temp_at_rel_humidity COEFF_85RH
 
       if @humidity < 60.0
-        rs_r0_at_amb_rh = (((@humidity - 30.0) / (60.0 - 30.0)) * (at_60rh - at_30rh)) + at_30rh
+        rs_ro_at_amb_rh = (
+          (
+            (@humidity - 30.0) / (60.0 - 30.0) *
+            (at_sixty_rh - at_thirty_rh)
+          ) + at_thirty_rh)
       else
-        rs_r0_at_amb_rh = (((@humidity - 60.0) / 85.0 - 60.0) * (at_85rh - at_60rh) + at_60rh)
+        rs_ro_at_amb_rh = (
+          (
+            (@humidity - 60.0) / (85.0 - 60.0) *
+            (at_eighty_five_rh - at_sixty_rh)
+          ) + at_sixty_rh)
       end
 
-      ref_rs_r0_20C_60RH = 1.0
+      # at 20C and 60rh
+      ref_rs_ro = 1.0
 
-      rs_ro_corr_pct = 1.0 + (ref_rs_r0_20C_60RH - rs_r0_at_amb_rh)/ ref_rs_r0_20C_60RH
-      return rs_ro_corr_pct * rs_r0_ratio
+      rs_ro_corr_pct = 1.0 + (ref_rs_ro - rs_ro_at_amb_rh) / ref_rs_ro
+      return rs_ro_corr_pct * rs_ro_ratio
     end
   end
 end
