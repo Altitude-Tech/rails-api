@@ -98,7 +98,7 @@ class MQ7SensorTest < MiniTest::Test
   def test_band1_upper
     gases = [].to_set
     expected = [
-      [Sensly::NAME_ALCOHOL, 1.6452447493569063e+39].to_set
+      [Sensly::NAME_ALCOHOL, 41.0932].to_set
     ].to_set
     rs_ro_ratio = 17.6697
     corr_rs_ro_ratio = 16.9905
@@ -121,7 +121,7 @@ class MQ7SensorTest < MiniTest::Test
   def test_band1_lower
     gases = [].to_set
     expected = [
-      [Sensly::NAME_ALCOHOL, 2.477576210704151e+38].to_set
+      [Sensly::NAME_ALCOHOL, 272.8808].to_set
     ].to_set
     rs_ro_ratio = 15.6110
     corr_rs_ro_ratio = 15.0109
@@ -144,7 +144,7 @@ class MQ7SensorTest < MiniTest::Test
   def test_band2_upper
     gases = [].to_set
     expected = [
-      [Sensly::NAME_ALCOHOL, 2.436556872489434e+38].to_set,
+      [Sensly::NAME_ALCOHOL, 277.4747].to_set,
       [Sensly::NAME_CH4, 67.2368].to_set
     ].to_set
     rs_ro_ratio = 15.5940
@@ -168,7 +168,7 @@ class MQ7SensorTest < MiniTest::Test
   def test_band2_lower
     gases = [].to_set
     expected = [
-      [Sensly::NAME_ALCOHOL, 2.7751436924755896e+37].to_set,
+      [Sensly::NAME_ALCOHOL, 2436.2089].to_set,
       [Sensly::NAME_CH4, 230.6227].to_set
     ].to_set
     rs_ro_ratio = 13.5276

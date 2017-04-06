@@ -27,7 +27,7 @@ module Sensly
     CONFIG_ALCOHOL = {
       min: 13.0,
       max: 17.0,
-      gradient: 15.283,
+      gradient: -15.283,
       intercept: 20.415
     }.freeze
     CONFIG_CH4 = {
