@@ -416,7 +416,7 @@ class MQ7SensorTest < MiniTest::Test
     gases = [].to_set
     expected = [
       [Sensly::NAME_CO, 64.3309].to_set,
-      [Sensly::NAME_H2, 49.5005].to_set,
+      [Sensly::NAME_H2, 49.5005].to_set
     ].to_set
     rs_ro_ratio = 1.4038
     corr_rs_ro_ratio = 1.3499
@@ -440,7 +440,7 @@ class MQ7SensorTest < MiniTest::Test
     gases = [].to_set
     expected = [
       [Sensly::NAME_CO, 3679.4543].to_set,
-      [Sensly::NAME_H2, 1884.2706].to_set,
+      [Sensly::NAME_H2, 1884.2706].to_set
     ].to_set
     rs_ro_ratio = 0.0962
     corr_rs_ro_ratio = 0.0925
@@ -463,7 +463,7 @@ class MQ7SensorTest < MiniTest::Test
   def test_band9_upper
     gases = [].to_set
     expected = [
-      [Sensly::NAME_H2, 1938.4159].to_set,
+      [Sensly::NAME_H2, 1938.4159].to_set
     ].to_set
     rs_ro_ratio = 0.0942
     corr_rs_ro_ratio = 0.0906
@@ -486,7 +486,7 @@ class MQ7SensorTest < MiniTest::Test
   def test_band9_lower
     gases = [].to_set
     expected = [
-      [Sensly::NAME_H2, 3866.6265].to_set,
+      [Sensly::NAME_H2, 3866.6265].to_set
     ].to_set
     rs_ro_ratio = 0.0567
     corr_rs_ro_ratio = 0.0545
