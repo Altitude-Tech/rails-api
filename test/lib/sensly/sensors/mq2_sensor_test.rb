@@ -49,7 +49,7 @@ class MQ2SensorTest < MiniTest::Test
   ##
   def test_rs_ro_ratio
     # values based on sample data set (thus effectively random)
-    adc_value = 2787.0
+    adc_value = 2787
     rs_ro_ratio = 1.5040
     corr_rs_ro_ratio = 1.0792
 
