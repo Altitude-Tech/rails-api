@@ -10,14 +10,12 @@ class PMSensorTest < MiniTest::Test
   #
   ##
   def test_pm_density
-    # values based on sample data set (thus effectively random)
-    # TODO: Get sample data for this
-    adc_value = 2000
-    expected = 0
+    adc_value = 92
+    expected = 63.1062
 
     sensor = Sensly::PMSensor.new(adc_value)
 
-    assert_equal expected, sensor.pm_density
+    assert_equal expected, sensor.pm_density.round(4)
   end
 
   ##
