@@ -74,6 +74,29 @@ class MQ7SensorTest < MiniTest::Test
   ##
   #
   ##
+  def test_above_65_rh
+    adc_value = 927
+    rs_ro_ratio = 27.1469
+    corr_rs_ro_ratio = 31.0955
+
+    sensor = Sensly::MQ7Sensor.new(adc_value, R0, TEMP, 70.0)
+
+    assert_equal rs_ro_ratio, sensor.rs_ro_ratio.round(4)
+    assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
+
+    expected_gases = [].to_set
+    gases = [].to_set
+
+    sensor.gases do |gas|
+      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+    end
+
+    assert_equal expected_gases, gases
+  end
+
+  ##
+  #
+  ##
   def test_above_upper
     gases = [].to_set
     expected = [].to_set

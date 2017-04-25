@@ -75,6 +75,35 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
+  #
+  ##
+  def test_above_60_rh
+    adc_value = 2787
+    rs_ro_ratio = 1.5040
+    corr_rs_ro_ratio = 1.4433
+
+    sensor = Sensly::MQ2Sensor.new(adc_value, R0, TEMP, 65.0)
+
+    assert_equal rs_ro_ratio, sensor.rs_ro_ratio.round(4)
+    assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
+
+    expected_gases = [
+      [Sensly::NAME_CH4, 1569.1369].to_set,
+      [Sensly::NAME_LPG, 301.5205].to_set,
+      [Sensly::NAME_H2, 488.565].to_set,
+      [Sensly::NAME_PROPANE, 325.0401].to_set,
+      [Sensly::NAME_ALCOHOL, 1439.5267].to_set
+    ].to_set
+    gases = [].to_set
+
+    sensor.gases do |gas|
+      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+    end
+
+    assert_equal expected_gases, gases
+  end
+
+  ##
   # Test for no gases detected for an RSR0 ratio above 5.2.
   ##
   def test_above_upper_limit

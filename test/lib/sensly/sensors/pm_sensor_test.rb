@@ -35,7 +35,7 @@ class PMSensorTest < MiniTest::Test
   ##
   #
   ##
-  def test_below_no_dust_voltage
+  def test_above_no_dust_voltage
     adc_value = 57
     expected = 1.0549
 
