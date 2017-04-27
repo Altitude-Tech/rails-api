@@ -134,8 +134,13 @@ module V1
         when RawDatum::SENSOR_MQ135_HASH
           Sensly::MQ135Sensor.new(*values)
 
-        when RawDatum::PM_SENSOR_HASH
-          Sensly::PMSensor.new(*values)
+        when RawDatum::SENSOR_PM_HASH
+          Sensly::PMSensor.new(data[:sensor_data])
+
+        else
+          # shouldn't be possible as it should have been caught during
+          # validation by RawDatum
+          raise Sensly::UnknownError, 'Unknown sensor type'
         end
 
       sensor.gases do |gas|

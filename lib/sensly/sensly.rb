@@ -16,6 +16,7 @@ module Sensly
   GAS_METHYL = 9
   GAS_NH3 = 10
   GAS_PROPANE = 11
+  GAS_PM = 12
 
   ##
   # Name of the gases.
@@ -31,6 +32,7 @@ module Sensly
   NAME_METHYL = 'Methyl'.freeze
   NAME_NH3 = 'Ammonia'.freeze
   NAME_PROPANE = 'Propane'.freeze
+  NAME_PM = 'Particulate Matter'.freeze
 
   ##
   # Map of gas integers to their names as a string.
@@ -46,7 +48,8 @@ module Sensly
     GAS_LPG => NAME_LPG,
     GAS_METHYL => NAME_METHYL,
     GAS_NH3 => NAME_NH3,
-    GAS_PROPANE => NAME_PROPANE
+    GAS_PROPANE => NAME_PROPANE,
+    GAS_PM => NAME_PM
   }.freeze
 
   ##

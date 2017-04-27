@@ -2,7 +2,7 @@ require 'sensly/sensors/base_sensor'
 
 module Sensly
   ##
-  #
+  # Base MQ sensor class.
   ##
   class MQSensor < BaseSensor
     ##
@@ -10,9 +10,6 @@ module Sensly
     ##
     R_LOAD = 10_000.0
 
-    ##
-    #
-    ##
     def initialize(adc_value, r0, temperature, humidity)
       super adc_value
 
@@ -36,7 +33,7 @@ module Sensly
     end
 
     ##
-    #
+    # Get the corrected RsR0 value.
     ##
     def corr_rs_ro_ratio
       return @rs_ro_ratio

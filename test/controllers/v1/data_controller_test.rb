@@ -850,6 +850,30 @@ module V1
     end
 
     ##
+    # Test `create` method for the pm sensor.
+    ##
+    test 'create pm sensor' do
+      data = create_data
+      data[:data] = [{
+        sensor_type: RawDatum::SENSOR_PM_HASH,
+        sensor_error: 0.0,
+        sensor_data: 1000
+      }]
+
+      expected = {
+        gases: {
+          'Particulate Matter': 1672.8938
+        }
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
     # Test success of the `show` method returning 0 results of data.
     ##
     test 'show success empty result' do
