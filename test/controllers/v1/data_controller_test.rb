@@ -25,13 +25,11 @@ module V1
       data = create_data
       expected = {
         gases: {
-          mq2: {
-            Alcohol: 5478.509,
-            Methane: 5868.6898,
-            Hydrogen: 1345.0398,
-            'Liquid Petroleum Gas': 831.6515,
-            Propane: 904.8076
-          }
+          Alcohol: 5478.509,
+          Methane: 5868.6898,
+          Hydrogen: 1345.0398,
+          'Liquid Petroleum Gas': 831.6515,
+          Propane: 904.8076
         }
       }
 
@@ -254,13 +252,11 @@ module V1
       data[:data][0][:sensor_error] = 0
       expected = {
         gases: {
-          mq2: {
-            Alcohol: 5478.509,
-            Methane: 5868.6898,
-            Hydrogen: 1345.0398,
-            'Liquid Petroleum Gas': 831.6515,
-            Propane: 904.8076
-          }
+          Alcohol: 5478.509,
+          Methane: 5868.6898,
+          Hydrogen: 1345.0398,
+          'Liquid Petroleum Gas': 831.6515,
+          Propane: 904.8076
         }
       }
 
@@ -279,13 +275,11 @@ module V1
       data[:data][0][:sensor_error] = 1
       expected = {
         gases: {
-          mq2: {
-            Alcohol: 5478.509,
-            Methane: 5868.6898,
-            Hydrogen: 1345.0398,
-            'Liquid Petroleum Gas': 831.6515,
-            Propane: 904.8076
-          }
+          Alcohol: 5478.509,
+          Methane: 5868.6898,
+          Hydrogen: 1345.0398,
+          'Liquid Petroleum Gas': 831.6515,
+          Propane: 904.8076
         }
       }
 
@@ -524,13 +518,11 @@ module V1
       data[:log_time] = (Time.now.utc - 30.days).to_i
       expected = {
         gases: {
-          mq2: {
-            Alcohol: 5478.509,
-            Methane: 5868.6898,
-            Hydrogen: 1345.0398,
-            'Liquid Petroleum Gas': 831.6515,
-            Propane: 904.8076
-          }
+          Alcohol: 5478.509,
+          Methane: 5868.6898,
+          Hydrogen: 1345.0398,
+          'Liquid Petroleum Gas': 831.6515,
+          Propane: 904.8076
         }
       }
 
@@ -549,13 +541,11 @@ module V1
       data[:log_time] = Time.now.utc.to_i
       expected = {
         gases: {
-          mq2: {
-            Alcohol: 5478.509,
-            Methane: 5868.6898,
-            Hydrogen: 1345.0398,
-            'Liquid Petroleum Gas': 831.6515,
-            Propane: 904.8076
-          }
+          Alcohol: 5478.509,
+          Methane: 5868.6898,
+          Hydrogen: 1345.0398,
+          'Liquid Petroleum Gas': 831.6515,
+          Propane: 904.8076
         }
       }
 
@@ -702,11 +692,9 @@ module V1
       data[:humidity] = 0
       expected = {
         gases: {
-          mq2: {
-            Hydrogen: 2573.2701,
-            'Liquid Petroleum Gas': 1592.9848,
-            Propane: 1743.3543
-          }
+          Hydrogen: 2573.2701,
+          'Liquid Petroleum Gas': 1592.9848,
+          Propane: 1743.3543
         }
       }
 
@@ -725,13 +713,11 @@ module V1
       data[:humidity] = 100
       expected = {
         gases: {
-          mq2: {
-            Alcohol: 1546.8867,
-            Methane: 1684.5838,
-            Hydrogen: 515.9321,
-            'Liquid Petroleum Gas': 318.4423,
-            Propane: 343.4518
-          }
+          Alcohol: 1546.8867,
+          Methane: 1684.5838,
+          Hydrogen: 515.9321,
+          'Liquid Petroleum Gas': 318.4423,
+          Propane: 343.4518
         }
       }
 
@@ -780,6 +766,87 @@ module V1
       assert_equal expected.to_json, response.body
       assert_equal JSON_TYPE, response.content_type
       assert_response :bad_request
+    end
+
+    ##
+    # Test error handling for `create` with a duplicate entry.
+    ##
+    test 'create duplicate sensor' do
+      data = create_data
+      data[:data].push(data[:data][0])
+      expected = {
+        error: 113,
+        message: 'Duplicate data submitted.',
+        status: 400
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :bad_request
+    end
+
+    ##
+    # Test `create` method with multiple sensor data entries for different gases.
+    ##
+    test 'create multiple different gases' do
+      data = create_data
+      data[:data].push({
+        sensor_type: RawDatum::SENSOR_MQ135_HASH,
+        sensor_error: 0.0,
+        sensor_r0: 2786.3375,
+        sensor_data: 2900
+      })
+      expected = {
+        gases: {
+          Alcohol: 5478.509,
+          Methane: 5868.6898,
+          Hydrogen: 1345.0398,
+          'Liquid Petroleum Gas': 831.6515,
+          Propane: 904.8076,
+          'Carbon Monoxide': 165.833,
+          Ammonia: 39.9385,
+          'Carbon Dioxide': 37.5145,
+          Ethanol: 23.1593,
+          Methyl: 13.5074,
+          Acetone: 11.052
+        }
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
+    end
+
+    ##
+    # Test `create` method with multiple sensor data entries for intersecting gases.
+    ##
+    test 'create multiple intersecting gases' do
+      data = create_data
+      data[:data].push({
+        sensor_type: RawDatum::SENSOR_MQ7_HASH,
+        sensor_error: 0.0,
+        sensor_r0: 1258.8822,
+        sensor_data: 1450
+      })
+      expected = {
+        gases: {
+          Alcohol: 3081.0906,
+          Methane: 2990.4197,
+          Hydrogen: 1345.0398,
+          'Liquid Petroleum Gas': 831.6515,
+          Propane: 904.8076
+        }
+      }
+
+      post :create, body: data.to_json
+
+      assert_equal expected.to_json, response.body
+      assert_equal JSON_TYPE, response.content_type
+      assert_response :ok
     end
 
     ##

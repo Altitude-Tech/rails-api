@@ -161,4 +161,15 @@ module Api
       super(message)
     end
   end
+
+  ##
+  # Duplicate sensor data
+  ##
+  class DuplicateDataError < Error
+    def initialize(message)
+      @code ||= 113
+
+      super(message)
+    end
+  end
 end

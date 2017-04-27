@@ -15,17 +15,18 @@ module V1
     # Create a new set of data associated with a particular device.
     ##
     def create
-      # remove token from request body
-      @body.delete(:token)
       # replace identity hash with actual device_id
       @body.delete(:identity)
       @body[:device_id] = @device.id
 
       RawDatum.transaction do
-        @gas_data = create_raw_data
+        @gas_data = convert_raw_data
       end
     rescue ActiveRecord::RecordInvalid => exc
       raise Api::InvalidCreateError, exc
+    rescue ActiveRecord::RecordNotUnique => exc
+      msg = 'Duplicate data submitted.'
+      raise Api::DuplicateDataError, msg
     end
 
     ##
@@ -54,25 +55,23 @@ module V1
     # Helper method for authenticating a device with it's token.
     ##
     def authenticate_device
-      Rails.logger.info('authenticating')
-      Rails.logger.info(@body)
       @device = Device.find_by_identity! @body[:identity]
-      Rails.logger.info(@device)
       @device.authenticate! @body[:token]
-      # delete the token now we're done with it
+
+      # remove token now that we're done with it
+      @body.delete(:token)
     rescue ActiveRecord::RecordNotFound
       raise Api::NotFoundError, 'identity'
     rescue Record::DeviceAuthError => exc
-      Rails.logger.info("not authorised")
       raise Api::DeviceAuthError, exc.message
     end
 
     ##
     # Helper method to insert raw data into the database.
     ##
-    def create_raw_data
+    def convert_raw_data
       base_data = @body.except(:data)
-      converted_data = {}
+      data = {}
 
       @body[:data].each do |d|
         d = d.merge(base_data)
@@ -82,11 +81,34 @@ module V1
         gases = convert_data d
 
         unless gases.empty?
-          converted_data[datum.sensor_name] = gases
+          data[datum.sensor_name] = gases
         end
       end
 
-      return converted_data
+      return merge_gas_data data
+    end
+
+    ##
+    # Merge ppm values for gases together if they appear the data for multiple sensors.
+    ##
+    def merge_gas_data(data)
+      merged_data = {}
+
+      data.values.each do |v|
+        v.each do |gas, ppm|
+          unless merged_data.key? gas
+            merged_data[gas] = []
+          end
+
+          merged_data[gas].push(ppm)
+        end
+      end
+
+      merged_data.each do |k, v|
+        merged_data[k] = (v.sum / v.size).round(4)
+      end
+
+      return merged_data
     end
 
     ##
