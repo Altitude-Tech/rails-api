@@ -6,13 +6,16 @@ module V1
     #
     ##
     CREATE_DATA = {
-      sensor_type: RawDatum::SENSOR_MQ2_HASH,
-      sensor_error: 0.0,
-      sensor_data: 1000,
-      humidity: 0,
+      humidity: 30,
       pressure: 1000,
-      temperature: 20.0,
-      log_time: Time.now.utc.to_i
+      temperature: 20,
+      log_time: Time.now.utc.to_i,
+      data: [{
+        sensor_type: RawDatum::SENSOR_MQ2_HASH,
+        sensor_error: 0.0,
+        sensor_data: 3000,
+        sensor_r0: 3000
+      }]
     }.freeze
 
     ##
@@ -20,7 +23,17 @@ module V1
     ##
     test 'create success' do
       data = create_data
-      expected = { result: 'success' }
+      expected = {
+        gases: {
+          mq2: {
+            Alcohol: 5478.509,
+            Methane: 5868.6898,
+            Hydrogen: 1345.0398,
+            'Liquid Petroleum Gas': 831.6515,
+            Propane: 904.8076
+          }
+        }
+      }
 
       post :create, body: data.to_json
 
@@ -110,7 +123,7 @@ module V1
     ##
     test 'create missing sensor_type' do
       data = create_data
-      data.delete(:sensor_type)
+      data[:data][0].delete(:sensor_type)
       expected = {
         error: 103,
         message: '"sensor_type" is invalid or missing.',
@@ -130,7 +143,7 @@ module V1
     ##
     test 'create invalid sensor_type' do
       data = create_data
-      data[:sensor_type] = 'invalid'
+      data[:data][0][:sensor_type] = 'invalid'
       expected = {
         error: 103,
         message: '"sensor_type" is invalid or missing.',
@@ -150,7 +163,7 @@ module V1
     ##
     test 'create missing sensor_error' do
       data = create_data
-      data.delete(:sensor_error)
+      data[:data][0].delete(:sensor_error)
       expected = {
         error: 103,
         message: '"sensor_error" must be a number greater than or equal to 0 and ' \
@@ -172,7 +185,7 @@ module V1
     ##
     test 'create invalid sensor_error' do
       data = create_data
-      data[:sensor_error] = 'invalid'
+      data[:data][0][:sensor_error] = 'invalid'
       expected = {
         error: 103,
         message: '"sensor_error" must be a number greater than or equal to 0 and ' \
@@ -194,7 +207,7 @@ module V1
     ##
     test 'create too low sensor_error' do
       data = create_data
-      data[:sensor_error] = -1
+      data[:data][0][:sensor_error] = -1
       expected = {
         error: 103,
         message: '"sensor_error" must be a number greater than or equal to 0 and ' \
@@ -216,7 +229,7 @@ module V1
     ##
     test 'create too high sensor_error' do
       data = create_data
-      data[:sensor_error] = 2
+      data[:data][0][:sensor_error] = 2
       expected = {
         error: 103,
         message: '"sensor_error" must be a number greater than or equal to 0 and ' \
@@ -238,8 +251,18 @@ module V1
     ##
     test 'create lower limit sensor_error' do
       data = create_data
-      data[:sensor_error] = 0
-      expected = { result: 'success' }
+      data[:data][0][:sensor_error] = 0
+      expected = {
+        gases: {
+          mq2: {
+            Alcohol: 5478.509,
+            Methane: 5868.6898,
+            Hydrogen: 1345.0398,
+            'Liquid Petroleum Gas': 831.6515,
+            Propane: 904.8076
+          }
+        }
+      }
 
       post :create, body: data.to_json
 
@@ -253,8 +276,18 @@ module V1
     ##
     test 'create upper limit sensor_error' do
       data = create_data
-      data[:sensor_error] = 1
-      expected = { result: 'success' }
+      data[:data][0][:sensor_error] = 1
+      expected = {
+        gases: {
+          mq2: {
+            Alcohol: 5478.509,
+            Methane: 5868.6898,
+            Hydrogen: 1345.0398,
+            'Liquid Petroleum Gas': 831.6515,
+            Propane: 904.8076
+          }
+        }
+      }
 
       post :create, body: data.to_json
 
@@ -268,7 +301,7 @@ module V1
     ##
     test 'create missing sensor_data' do
       data = create_data
-      data.delete(:sensor_data)
+      data[:data][0].delete(:sensor_data)
       expected = {
         error: 103,
         message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
@@ -290,7 +323,7 @@ module V1
     ##
     test 'create invalid sensor_data' do
       data = create_data
-      data[:sensor_data] = 'invalid'
+      data[:data][0][:sensor_data] = 'invalid'
       expected = {
         error: 103,
         message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
@@ -312,7 +345,7 @@ module V1
     ##
     test 'create too low sensor_data' do
       data = create_data
-      data[:sensor_data] = -1
+      data[:data][0][:sensor_data] = -1
       expected = {
         error: 103,
         message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
@@ -334,7 +367,7 @@ module V1
     ##
     test 'create too high sensor_data' do
       data = create_data
-      data[:sensor_data] = 4096
+      data[:data][0][:sensor_data] = 4096
       expected = {
         error: 103,
         message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
@@ -356,8 +389,8 @@ module V1
     ##
     test 'create lower limit sensor_data' do
       data = create_data
-      data[:sensor_data] = 0
-      expected = { result: 'success' }
+      data[:data][0][:sensor_data] = 0
+      expected = { gases: {} }
 
       post :create, body: data.to_json
 
@@ -371,8 +404,8 @@ module V1
     ##
     test 'create upper limit sensor_data' do
       data = create_data
-      data[:sensor_data] = 4095
-      expected = { result: 'success' }
+      data[:data][0][:sensor_data] = 4095
+      expected = { gases: {} }
 
       post :create, body: data.to_json
 
@@ -386,7 +419,7 @@ module V1
     ##
     test 'create non-integer sensor_data' do
       data = create_data
-      data[:sensor_data] = 0.1
+      data[:data][0][:sensor_data] = 0.1
       expected = {
         error: 103,
         message: '"sensor_data" must be an integer greater than or equal to 0 and ' \
@@ -489,7 +522,17 @@ module V1
     test 'create lower limit log_time' do
       data = create_data
       data[:log_time] = (Time.now.utc - 30.days).to_i
-      expected = { result: 'success' }
+      expected = {
+        gases: {
+          mq2: {
+            Alcohol: 5478.509,
+            Methane: 5868.6898,
+            Hydrogen: 1345.0398,
+            'Liquid Petroleum Gas': 831.6515,
+            Propane: 904.8076
+          }
+        }
+      }
 
       post :create, body: data.to_json
 
@@ -504,7 +547,17 @@ module V1
     test 'create upper limit log_time' do
       data = create_data
       data[:log_time] = Time.now.utc.to_i
-      expected = { result: 'success' }
+      expected = {
+        gases: {
+          mq2: {
+            Alcohol: 5478.509,
+            Methane: 5868.6898,
+            Hydrogen: 1345.0398,
+            'Liquid Petroleum Gas': 831.6515,
+            Propane: 904.8076
+          }
+        }
+      }
 
       post :create, body: data.to_json
 
@@ -647,7 +700,15 @@ module V1
     test 'create lower limit humidity' do
       data = create_data
       data[:humidity] = 0
-      expected = { result: 'success' }
+      expected = {
+        gases: {
+          mq2: {
+            Hydrogen: 2573.2701,
+            'Liquid Petroleum Gas': 1592.9848,
+            Propane: 1743.3543
+          }
+        }
+      }
 
       post :create, body: data.to_json
 
@@ -662,7 +723,17 @@ module V1
     test 'create upper limit humidity' do
       data = create_data
       data[:humidity] = 100
-      expected = { result: 'success' }
+      expected = {
+        gases: {
+          mq2: {
+            Alcohol: 1546.8867,
+            Methane: 1684.5838,
+            Hydrogen: 515.9321,
+            'Liquid Petroleum Gas': 318.4423,
+            Propane: 343.4518
+          }
+        }
+      }
 
       post :create, body: data.to_json
 

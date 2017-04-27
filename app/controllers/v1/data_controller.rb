@@ -1,3 +1,8 @@
+require 'sensly/sensors/pm_sensor'
+require 'sensly/sensors/mq2_sensor'
+require 'sensly/sensors/mq7_sensor'
+require 'sensly/sensors/mq135_sensor'
+
 module V1
   ##
   #
@@ -16,10 +21,9 @@ module V1
       @body.delete(:identity)
       @body[:device_id] = @device.id
 
-      RawDatum.create! @body
-
-      @result = 'success'
-      render 'v1/result'
+      RawDatum.transaction do
+        @gas_data = create_raw_data
+      end
     rescue ActiveRecord::RecordInvalid => exc
       raise Api::InvalidCreateError, exc
     end
@@ -50,12 +54,73 @@ module V1
     # Helper method for authenticating a device with it's token.
     ##
     def authenticate_device
+      Rails.logger.info('authenticating')
+      Rails.logger.info(@body)
       @device = Device.find_by_identity! @body[:identity]
+      Rails.logger.info(@device)
       @device.authenticate! @body[:token]
+      # delete the token now we're done with it
     rescue ActiveRecord::RecordNotFound
       raise Api::NotFoundError, 'identity'
     rescue Record::DeviceAuthError => exc
+      Rails.logger.info("not authorised")
       raise Api::DeviceAuthError, exc.message
+    end
+
+    ##
+    # Helper method to insert raw data into the database.
+    ##
+    def create_raw_data
+      base_data = @body.except(:data)
+      converted_data = {}
+
+      @body[:data].each do |d|
+        d = d.merge(base_data)
+        # TODO: remove the except from this
+        datum = RawDatum.create! d.except(:sensor_r0)
+
+        gases = convert_data d
+
+        unless gases.empty?
+          converted_data[datum.sensor_name] = gases
+        end
+      end
+
+      return converted_data
+    end
+
+    ##
+    #
+    ##
+    def convert_data(data)
+      values = [
+        data[:sensor_data],
+        data[:sensor_r0],
+        data[:temperature],
+        data[:humidity]
+      ]
+      gases = {}
+
+      sensor =
+        case data[:sensor_type]
+        when RawDatum::SENSOR_MQ2_HASH
+          Sensly::MQ2Sensor.new(*values)
+
+        when RawDatum::SENSOR_MQ7_HASH
+          Sensly::MQ7Sensor.new(*values)
+
+        when RawDatum::SENSOR_MQ135_HASH
+          Sensly::MQ135Sensor.new(*values)
+
+        when RawDatum::PM_SENSOR_HASH
+          Sensly::PMSensor.new(*values)
+        end
+
+      sensor.gases do |gas|
+        gases[gas[:name]] = gas[:ppm].round(4)
+      end
+
+      return gases
     end
   end
 end
