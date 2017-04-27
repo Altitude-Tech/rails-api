@@ -58,8 +58,10 @@ end
 begin
   token = Token.create! token: '00000000000000000000000000000000', enabled: true
   device.update! group: group, token: token
+# rubocop:disable Lint/HandleExceptions
 rescue ActiveRecord::RecordInvalid
   # token already created
 rescue Record::DeviceRegistrationError
   # device already registered
 end
+# rubocop:enable Lint/HandleExceptions
