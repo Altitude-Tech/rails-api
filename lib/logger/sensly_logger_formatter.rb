@@ -17,11 +17,14 @@ class SenslyLoggerFormatter < Logger::Formatter
 
   ##
   # Format the message object to handle non-strings being logged
-  #
-  # TODO: fix this, it's a string by the time it gets here
   ##
   def message_to_s(obj)
     return obj if obj.is_a?(String)
+
+    if obj.is_a?(StandardError)
+      return "#{obj.class}: #{obj.message}\n\t#{obj.backtrace.join("\n\t")}"
+    end
+
     return obj.inspect
   end
 end
