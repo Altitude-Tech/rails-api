@@ -24,7 +24,7 @@ module Api
 
     # format logs to show a timestamp and severity for dev/prod
     # and just severity for test
-    logger = Logger.new("log/#{ENV['RAILS_ENV'].downcase}.log")
+    logger = Logger.new("log/#{Rails.env}.log")
     logger.formatter = SenslyLoggerFormatter.new
     config.logger = logger
   end
