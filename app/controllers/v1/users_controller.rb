@@ -13,7 +13,10 @@ module V1
     # Create a new user.
     ##
     def create
-      User.create!(@body)
+      user = User.create!(@body)
+
+      # send a confirmation email
+      UserMailer.confirm_email(user).deliver_later
 
       @result = 'success'
       render 'v1/result'
