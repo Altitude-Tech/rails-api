@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170427135450) do
+ActiveRecord::Schema.define(version: 20170508130643) do
+
+  create_table "data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "device_id",            null: false
+    t.datetime "log_time",             null: false
+    t.integer  "gas",                  null: false
+    t.float    "conc_ppm",  limit: 24
+    t.float    "conc_ugm3", limit: 24
+    t.index ["device_id", "log_time", "gas"], name: "index_data_on_device_id_and_log_time_and_gas", unique: true, using: :btree
+  end
 
   create_table "devices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "identity",    null: false
@@ -41,9 +50,9 @@ ActiveRecord::Schema.define(version: 20170427135450) do
     t.float    "temperature",  limit: 24, null: false
     t.float    "pressure",     limit: 24, null: false
     t.float    "humidity",     limit: 24, null: false
+    t.float    "sensor_r0",    limit: 24
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
-    t.float    "sensor_r0",    limit: 24
     t.index ["device_id", "sensor_type", "log_time"], name: "index_raw_data_on_device_id_and_sensor_type_and_log_time", unique: true, using: :btree
     t.index ["device_id"], name: "index_raw_data_on_device_id", using: :btree
   end
@@ -61,16 +70,17 @@ ActiveRecord::Schema.define(version: 20170427135450) do
     t.string   "email",                           null: false
     t.string   "name",                            null: false
     t.string   "password_digest",                 null: false
+    t.boolean  "staff",           default: false, null: false
     t.string   "session_token"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "group_id"
-    t.boolean  "staff",           default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["group_id"], name: "fk_rails_f40b3f4da6", using: :btree
     t.index ["session_token"], name: "index_users_on_session_token", unique: true, using: :btree
   end
 
+  add_foreign_key "data", "devices"
   add_foreign_key "devices", "groups"
   add_foreign_key "devices", "tokens", column: "token", primary_key: "token"
   add_foreign_key "groups", "users", column: "admin"
