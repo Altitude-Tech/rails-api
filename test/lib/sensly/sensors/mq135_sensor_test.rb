@@ -1,13 +1,15 @@
 ##
-#
+# Tests for the MQ135Sensor class.
+# Tests largely focus on 'bands' which are the ranges across different gases can be detected.
 ##
 
 require 'test_helper'
 require 'sensly/sensors/mq135_sensor'
 
 class MQ135SensorTest < MiniTest::Test
-  ##
   #
+  # Values to be used as constants for the tests.
+  # Based on values from a sample data set.
   ##
   R0 = 2786.3375
   TEMP = 20.785436042

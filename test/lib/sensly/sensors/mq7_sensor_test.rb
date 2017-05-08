@@ -1,13 +1,15 @@
 ##
-#
+# Tests for the MQ7Sensor class.
+# Tests largely focus on 'bands' which are the ranges across different gases can be detected.
 ##
 
 require 'test_helper'
 require 'sensly/sensors/mq7_sensor'
 
 class MQ7SensorTest < MiniTest::Test
-  ##
   #
+  # Values to be used as constants for the tests.
+  # Based on values from a sample data set.
   ##
   R0 = 1258.8822
   TEMP = 20.785436042

@@ -2,30 +2,31 @@ require 'sensly/sensors/base_sensor'
 
 module Sensly
   ##
-  # Sensor for detecting particulate matter.
+  # Sensor for detecting particulate matter larger than 10 microns (um).
   #
-  # TODO: what size particles does this detect?
   # TODO: Give this a better name closer to what the sensor is called.
   ##
   class PMSensor < BaseSensor
     ##
-    # TODO: document this
+    # Minimum value for the voltage.
+    # Values below this will cause the density returned to be 0.
     ##
     NO_DUST_VOLTAGE = 500.0
 
     ##
-    # TODO: Document this
+    # Conversion ratio to convert voltage to density.
     ##
     COV_RATIO = 0.2
 
+    ##
+    # Constructor for the sensor.
+    ##
     def initialize(adc_value)
       super adc_value
     end
 
     ##
-    # Calculate the particulate matter density.
-    #
-    # TODO: Return data in what units?
+    # Calculate the particulate matter density in ug/m3.
     ##
     def pm_density
       pm_volt = pm_voltage
@@ -39,7 +40,10 @@ module Sensly
     end
 
     ##
+    # Yields the name and ppm of the particulate matter.
     #
+    # This exists to allow all sensors to respond to this method.
+    # In reality, unlike the MQ sensors, this will only ever return one set of values.
     ##
     def gases
       data = {}

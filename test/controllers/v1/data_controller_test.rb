@@ -792,12 +792,12 @@ module V1
     ##
     test 'create multiple different gases' do
       data = create_data
-      data[:data].push({
+      data[:data].push(
         sensor_type: RawDatum::SENSOR_MQ135_HASH,
         sensor_error: 0.0,
         sensor_r0: 2786.3375,
         sensor_data: 2900
-      })
+      )
       expected = {
         gases: {
           Alcohol: 5478.509,
@@ -826,12 +826,12 @@ module V1
     ##
     test 'create multiple intersecting gases' do
       data = create_data
-      data[:data].push({
+      data[:data].push(
         sensor_type: RawDatum::SENSOR_MQ7_HASH,
         sensor_error: 0.0,
         sensor_r0: 1258.8822,
         sensor_data: 1450
-      })
+      )
       expected = {
         gases: {
           Alcohol: 3081.0906,

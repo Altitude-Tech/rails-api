@@ -8,6 +8,7 @@ class RawDatumTest < ActiveSupport::TestCase
     sensor_type: RawDatum::SENSOR_MQ2_HASH,
     sensor_error: 0,
     sensor_data: 0,
+    sensor_r0: 0,
     log_time: Time.now.utc.to_i,
     temperature: 20.0,
     pressure: 1000,
@@ -401,6 +402,53 @@ class RawDatumTest < ActiveSupport::TestCase
     data[:humidity] = 100
 
     RawDatum.create! data
+  end
+
+  ##
+  # Tests error handling for `create!` method with a missing `sensor_r0` attribute.
+  ##
+  test 'create! missing sensor_r0' do
+    data = create_data
+    data.delete(:sensor_r0)
+
+    assert_raises ActiveRecord::RecordInvalid do
+      RawDatum.create! data
+    end
+  end
+
+  ##
+  # Tests error handling for `create!` method with an invalid `sensor_r0` attribute.
+  ##
+  test 'create! invalid sensor_r0' do
+    data = create_data
+    data[:sensor_r0] = 'invalid'
+
+    assert_raises ActiveRecord::RecordInvalid do
+      RawDatum.create! data
+    end
+  end
+
+  ##
+  # Test success of `create!` method for a PM sensor.
+  ##
+  test 'create! pm sensor' do
+    data = create_data
+    data[:sensor_type] = RawDatum::SENSOR_PM_HASH
+    data.delete(:sensor_r0)
+
+    RawDatum.create! data
+  end
+
+  ##
+  # Test error handling of `create! method for a PM sensor with a `sensor_r0` attribute set.
+  ##
+  test 'create! pm sensor with sensor_r0' do
+    data = create_data
+    data[:sensor_type] = RawDatum::SENSOR_PM_HASH
+
+    assert_raises ActiveRecord::RecordInvalid do
+      RawDatum.create! data
+    end
   end
 
   private

@@ -66,6 +66,9 @@ class RawDatum < ApplicationRecord
               less_than: 4096,
               message: I18n.t('errors.must_be_int_ge_lt', min: 0, max: 4096)
             }
+  validates :sensor_r0,
+            numericality: { allow_nil: true },
+            sensor_r0: true
   validates :log_time,
             datetime: { min: (Time.now.utc - 30.days), max: :now }
   validates :temperature,

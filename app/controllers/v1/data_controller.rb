@@ -24,7 +24,7 @@ module V1
       end
     rescue ActiveRecord::RecordInvalid => exc
       raise Api::InvalidCreateError, exc
-    rescue ActiveRecord::RecordNotUnique => exc
+    rescue ActiveRecord::RecordNotUnique
       msg = 'Duplicate data submitted.'
       raise Api::DuplicateDataError, msg
     end
@@ -75,8 +75,7 @@ module V1
 
       @body[:data].each do |d|
         d = d.merge(base_data)
-        # TODO: remove the except from this
-        datum = RawDatum.create! d.except(:sensor_r0)
+        datum = RawDatum.create! d
 
         gases = convert_data d
 

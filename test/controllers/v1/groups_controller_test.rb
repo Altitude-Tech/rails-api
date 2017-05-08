@@ -313,7 +313,8 @@ module V1
             name: 'Bob',
             email: 'bob@example.com'
           }
-        ]
+        ],
+        devices: []
       }
 
       login

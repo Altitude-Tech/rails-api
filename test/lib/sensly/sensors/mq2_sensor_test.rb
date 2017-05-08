@@ -1,5 +1,6 @@
 ##
-#
+# Tests for the MQ2Sensor class.
+# Tests largely focus on 'bands' which are the ranges across different gases can be detected.
 ##
 
 require 'test_helper'
@@ -7,7 +8,8 @@ require 'sensly/sensors/mq2_sensor'
 
 class MQ2SensorTest < MiniTest::Test
   ##
-  #
+  # Values to be used as constants for the tests.
+  # Based on values from a sample data set.
   ##
   R0 = 3120.5010
   TEMP = 20.785436042

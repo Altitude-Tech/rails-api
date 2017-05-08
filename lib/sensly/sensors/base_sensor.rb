@@ -3,7 +3,7 @@ require 'sensly/sensly'
 
 module Sensly
   ##
-  #
+  # Base sensor class that should be inherited by all sensors.
   ##
   class BaseSensor
     ##
@@ -12,7 +12,8 @@ module Sensly
     MAX_ADC = 4095.0
 
     ##
-    #
+    # Constructor for the base sensor.
+    # Checks the ADC value is within range.
     ##
     def initialize(adc_value)
       unless adc_value.between? 0, MAX_ADC

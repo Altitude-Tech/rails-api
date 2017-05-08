@@ -2,11 +2,11 @@ require 'sensly/sensors/mq_sensor'
 
 module Sensly
   ##
-  #
+  # MQ135 sensor class.
   ##
   class MQ135Sensor < MQSensor
     ##
-    #
+    # Constructor for the sensor.
     ##
     def initialize(adc_value, r0, temperature, humidity)
       super adc_value, r0, temperature, humidity
@@ -22,7 +22,7 @@ module Sensly
     COEFF_85RH = [-0.0000002, 0.00028254, -0.02388492, 1.27309524].freeze
 
     ##
-    #
+    # Configuration for each gas detected by the sensor.
     ##
     CONFIG_CO = {
       min: 1.44,
@@ -62,7 +62,7 @@ module Sensly
     }.freeze
 
     ##
-    #
+    # Maps gas ids to their configurations.
     ##
     GAS_CONFIG = {
       GAS_CO => CONFIG_CO,
@@ -74,7 +74,7 @@ module Sensly
     }.freeze
 
     ##
-    #
+    # Correct the RsR0 value for temperature and humidity.
     ##
     def correct_rs_ro_ratio
       at_thirty_three_rh = amb_temp_at_rel_humidity COEFF_33RH

@@ -1,5 +1,5 @@
 ##
-#
+# Module for converting ADC values produced by various sensors.
 ##
 module Sensly
   ##

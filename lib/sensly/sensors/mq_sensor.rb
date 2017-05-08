@@ -10,6 +10,11 @@ module Sensly
     ##
     R_LOAD = 10_000.0
 
+    ##
+    # Constructor for the sensor.
+    #
+    # Converts r0, temperature and humidity to floating point numbers for later calculations.
+    ##
     def initialize(adc_value, r0, temperature, humidity)
       super adc_value
 
@@ -50,7 +55,7 @@ module Sensly
     end
 
     ##
-    #
+    # Yields a list of gases and their ppm values based on the data given.
     ##
     def gases
       self.class::GAS_CONFIG.each do |k, v|
