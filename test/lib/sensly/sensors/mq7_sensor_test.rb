@@ -16,7 +16,7 @@ class MQ7SensorTest < MiniTest::Test
   HUMIDITY = 27.1676259197
 
   ##
-  #
+  # ADC values that correspond to RSR0 values for the gases detected by the MQ7 sensor.
   ##
   ABOVE_UPPER = 1269 # RSR0 17.0099
 
@@ -50,7 +50,7 @@ class MQ7SensorTest < MiniTest::Test
   BELOW_LOWER = 4067 # RSR0 0.0526
 
   ##
-  #
+  # Tests the conversion based on data from a sample data set.
   ##
   def test_rs_r0_ratio
     # values based on sample data set (thus effectively random)
@@ -74,7 +74,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion for relative humidity above 65%.
   ##
   def test_above_65_rh
     adc_value = 927
@@ -97,7 +97,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 17.
   ##
   def test_above_upper
     gases = [].to_set
@@ -118,7 +118,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 17.
   ##
   def test_band1_upper
     gases = [].to_set
@@ -141,7 +141,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 15.
   ##
   def test_band1_lower
     gases = [].to_set
@@ -164,7 +164,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 15.
   ##
   def test_band2_upper
     gases = [].to_set
@@ -188,7 +188,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 13.
   ##
   def test_band2_lower
     gases = [].to_set
@@ -212,7 +212,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 13.
   ##
   def test_band3_upper
     gases = [].to_set
@@ -235,7 +235,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 9.
   ##
   def test_band3_lower
     gases = [].to_set
@@ -259,7 +259,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 9.
   ##
   def test_band4_upper
     gases = [].to_set
@@ -280,7 +280,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 8.75.
   ##
   def test_band4_lower
     gases = [].to_set
@@ -301,7 +301,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 8.75.
   ##
   def test_band5_upper
     gases = [].to_set
@@ -324,7 +324,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 4.9.
   ##
   def test_band5_lower
     gases = [].to_set
@@ -347,7 +347,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 4.9.
   ##
   def test_band6_upper
     gases = [].to_set
@@ -368,7 +368,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.75.
   ##
   def test_band6_lower
     gases = [].to_set
@@ -389,7 +389,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.75.
   ##
   def test_band7_upper
     gases = [].to_set
@@ -412,7 +412,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.35.
   ##
   def test_band7_lower
     gases = [].to_set
@@ -435,7 +435,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.35.
   ##
   def test_band8_upper
     gases = [].to_set
@@ -459,7 +459,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 0.092.
   ##
   def test_band8_lower
     gases = [].to_set
@@ -483,7 +483,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 0.092.
   ##
   def test_band9_upper
     gases = [].to_set
@@ -506,7 +506,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 0.053.
   ##
   def test_band9_lower
     gases = [].to_set
@@ -529,7 +529,7 @@ class MQ7SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 0.053.
   ##
   def test_below_lower
     gases = [].to_set

@@ -47,7 +47,7 @@ class MQ135SensorTest < MiniTest::Test
   BELOW_LOWER = 3521 # RSR0 0.5841
 
   ##
-  #
+  # Tests the conversion based on data from a sample data set.
   ##
   def test_rs_r0_ratio
     # values based on sample data set (thus effectively random)
@@ -71,7 +71,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion for relative humidity above 65%.
   ##
   def test_above_65_rh
     adc_value = 2189
@@ -94,7 +94,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 2.85.
   ##
   def test_above_upper
     gases = [].to_set
@@ -115,7 +115,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 2.85.
   ##
   def test_band1_upper
     gases = [].to_set
@@ -138,7 +138,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 2.59.
   ##
   def test_band1_lower
     gases = [].to_set
@@ -161,7 +161,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 2.59.
   ##
   def test_band2_upper
     gases = [].to_set
@@ -185,7 +185,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 2.35.
   ##
   def test_band2_lower
     gases = [].to_set
@@ -209,7 +209,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 2.35.
   ##
   def test_band3_upper
     gases = [].to_set
@@ -234,7 +234,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.91.
   ##
   def test_band3_lower
     gases = [].to_set
@@ -259,7 +259,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.91.
   ##
   def test_band4_upper
     gases = [].to_set
@@ -285,7 +285,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.61.
   ##
   def test_band4_lower
     gases = [].to_set
@@ -311,7 +311,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.61.
   ##
   def test_band5_upper
     gases = [].to_set
@@ -338,7 +338,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.51.
   ##
   def test_band5_lower
     gases = [].to_set
@@ -365,7 +365,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.51.
   ##
   def test_band6_upper
     gases = [].to_set
@@ -393,7 +393,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.44.
   ##
   def test_band6_lower
     gases = [].to_set
@@ -421,7 +421,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.44.
   ##
   def test_band7_upper
     gases = [].to_set
@@ -448,7 +448,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 0.8.
   ##
   def test_band7_lower
     gases = [].to_set
@@ -475,7 +475,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 0.8.
   ##
   def test_band8_upper
     gases = [].to_set
@@ -501,7 +501,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 0.585.
   ##
   def test_band8_lower
     gases = [].to_set
@@ -527,7 +527,7 @@ class MQ135SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 0.585.
   ##
   def test_below_lower
     gases = [].to_set

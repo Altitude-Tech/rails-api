@@ -47,7 +47,7 @@ class MQ2SensorTest < MiniTest::Test
   BELOW_LOWER = 3680 # RSR0 0.2293
 
   ##
-  #
+  # Tests the conversion based on data from a sample data set.
   ##
   def test_rs_ro_ratio
     # values based on sample data set (thus effectively random)
@@ -77,7 +77,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion for relative humidity above 60%.
   ##
   def test_above_60_rh
     adc_value = 2787
@@ -106,7 +106,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  # Test for no gases detected for an RSR0 ratio above 5.2.
+  # Test conversion with an RSR0 ratio above 5.2.
   ##
   def test_above_upper_limit
     gases = [].to_set
@@ -127,8 +127,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  # Test for the correct identification of carbon monoxide only with an RSR0 ratio just below
-  # 5.2.
+  # Test conversion with an RSR0 ratio below 5.2.
   ##
   def test_band1_upper
     gases = [].to_set
@@ -151,8 +150,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  # Test for the correct identification of carbon monoxide only with an RSR0 ratio just above
-  # 3.
+  # Test conversion with an RSR0 ratio above 3.
   ##
   def test_band1_lower
     gases = [].to_set
@@ -175,8 +173,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  # Test for the correct identification of carbon monoxide and methane with an RSR0 ratio just
-  # below 3.
+  # Test conversion with an RSR0 ratio below 3.
   ##
   def test_band2_upper
     gases = [].to_set
@@ -200,7 +197,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 2.85.
   ##
   def test_band2_lower
     gases = [].to_set
@@ -224,7 +221,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 2.85.
   ##
   def test_band3_upper
     gases = [].to_set
@@ -249,7 +246,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 2.1.
   ##
   def test_band3_lower
     gases = [].to_set
@@ -274,7 +271,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 2.1.
   ##
   def test_band4_upper
     gases = [].to_set
@@ -300,7 +297,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.8.
   ##
   def test_band4_lower
     gases = [].to_set
@@ -326,7 +323,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.8.
   ##
   def test_band5_upper
     gases = [].to_set
@@ -354,7 +351,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 1.6.
   ##
   def test_band5_lower
     gases = [].to_set
@@ -382,7 +379,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 1.6.
   ##
   def test_band6_upper
     gases = [].to_set
@@ -409,7 +406,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 0.69.
   ##
   def test_band6_lower
     gases = [].to_set
@@ -436,7 +433,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 0.69.
   ##
   def test_band7_upper
     gases = [].to_set
@@ -461,7 +458,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 0.335.
   ##
   def test_band7_lower
     gases = [].to_set
@@ -486,7 +483,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio below 0.335.
   ##
   def test_band8_upper
     gases = [].to_set
@@ -510,7 +507,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  #
+  # Test conversion with an RSR0 ratio above 0.26.
   ##
   def test_band8_lower
     gases = [].to_set
@@ -534,7 +531,7 @@ class MQ2SensorTest < MiniTest::Test
   end
 
   ##
-  # Test for no gases detected for an RSR0 ratio below 0.26
+  # Test conversion with an RSR0 ratio below 0.26.
   ##
   def test_below_lower_limit
     gases = [].to_set
