@@ -15,7 +15,7 @@
 begin
   user_data = {
     name: 'Default',
-    email: 'matthew@altitude.tech',
+    email: 'example@example.com',
     password: 'password'
   }
 
