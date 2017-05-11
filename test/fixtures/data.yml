@@ -1,0 +1,16 @@
+##
+# Sample datum data for tests.
+##
+one:
+  id: 1
+  device_id: 1
+  log_time: 2016-09-23 11:57:47
+  gas: <%= Sensly::GAS_H2 %>
+  conc_ugm3: 0.0
+
+two:
+  id: 2
+  device_id: 1
+  log_time: 2016-09-23 11:57:47
+  gas:  <%= Sensly::GAS_NH3 %>
+  conc_ppm: 0.0

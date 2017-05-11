@@ -49,7 +49,7 @@ module Sensly
       data = {}
 
       data[:name] = NAME_PM
-      data[:ppm] = pm_density
+      data[:ugm3] = pm_density
 
       yield data
     end

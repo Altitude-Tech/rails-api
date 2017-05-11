@@ -2,6 +2,7 @@ require 'sensly/sensors/pm_sensor'
 require 'sensly/sensors/mq2_sensor'
 require 'sensly/sensors/mq7_sensor'
 require 'sensly/sensors/mq135_sensor'
+require 'sensly/sensly'
 
 module V1
   ##
@@ -21,6 +22,10 @@ module V1
 
       RawDatum.transaction do
         @gas_data = convert_raw_data
+      end
+
+      Datum.transaction do
+        store_data
       end
     rescue ActiveRecord::RecordInvalid => exc
       raise Api::InvalidCreateError, exc
@@ -94,17 +99,37 @@ module V1
       merged_data = {}
 
       data.values.each do |v|
-        v.each do |gas, ppm|
+        v.each do |gas, data|
           unless merged_data.key? gas
-            merged_data[gas] = []
+            merged_data[gas] = {}
           end
 
-          merged_data[gas].push(ppm)
+          unless data[:ppm].nil?
+            if merged_data[gas][:ppm].nil?
+              merged_data[gas][:ppm] = []
+            end
+
+            merged_data[gas][:ppm].push(data[:ppm])
+          end
+
+          unless data[:ugm3].nil?
+            if merged_data[gas][:ugm3].nil?
+              merged_data[gas][:ugm3] = []
+            end
+
+            merged_data[gas][:ugm3].push(data[:ugm3])
+          end
         end
       end
 
-      merged_data.each do |k, v|
-        merged_data[k] = (v.sum / v.size).round(4)
+      merged_data.each do |k, data|
+        unless data[:ppm].nil?
+          merged_data[k][:ppm] = (data[:ppm].sum / data[:ppm].size).round(4)
+        end
+
+        unless data[:ugm3].nil?
+          merged_data[k][:ugm3] = (data[:ugm3].sum / data[:ugm3].size).round(4)
+        end
       end
 
       return merged_data
@@ -143,10 +168,46 @@ module V1
         end
 
       sensor.gases do |gas|
-        gases[gas[:name]] = gas[:ppm].round(4)
+        data = {}
+
+        if gas.include? :ppm
+          data[:ppm] = gas[:ppm].round(4)
+        end
+
+        if gas.include? :ugm3
+          data[:ugm3] = gas[:ugm3].round(4)
+        end
+
+        gases[gas[:name]] = data
       end
 
       return gases
+    end
+
+    ##
+    #
+    ##
+    def store_data
+      base_data = @body.select { |k, _| [:device_id, :log_time].include? k }
+      @data = []
+
+      @gas_data.each do |name, val|
+        data = {}
+
+        data[:gas] = Sensly::gas_from_name(name)
+
+        unless val[:ppm].nil?
+          data[:conc_ppm] = val[:ppm]
+        end
+
+        unless val[:ugm3].nil?
+          data[:conc_ugm3] = val[:ugm3]
+        end
+
+        data = data.merge(base_data)
+        d = Datum.create! data
+        @data.push(d)
+      end
     end
   end
 end

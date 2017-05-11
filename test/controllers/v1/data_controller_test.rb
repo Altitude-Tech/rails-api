@@ -24,13 +24,28 @@ module V1
     test 'create success' do
       data = create_data
       expected = {
-        gases: {
-          Alcohol: 5478.509,
-          Methane: 5868.6898,
-          Hydrogen: 1345.0398,
-          'Liquid Petroleum Gas': 831.6515,
-          Propane: 904.8076
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 5478.509
+          },
+          {
+            gas: 'Methane',
+            ppm: 5868.6898
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 1345.0398
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 831.6515
+          },
+          {
+            gas: 'Propane',
+            ppm: 904.8076
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -251,13 +266,28 @@ module V1
       data = create_data
       data[:data][0][:sensor_error] = 0
       expected = {
-        gases: {
-          Alcohol: 5478.509,
-          Methane: 5868.6898,
-          Hydrogen: 1345.0398,
-          'Liquid Petroleum Gas': 831.6515,
-          Propane: 904.8076
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 5478.509
+          },
+          {
+            gas: 'Methane',
+            ppm: 5868.6898
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 1345.0398
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 831.6515
+          },
+          {
+            gas: 'Propane',
+            ppm: 904.8076
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -274,13 +304,28 @@ module V1
       data = create_data
       data[:data][0][:sensor_error] = 1
       expected = {
-        gases: {
-          Alcohol: 5478.509,
-          Methane: 5868.6898,
-          Hydrogen: 1345.0398,
-          'Liquid Petroleum Gas': 831.6515,
-          Propane: 904.8076
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 5478.509
+          },
+          {
+            gas: 'Methane',
+            ppm: 5868.6898
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 1345.0398
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 831.6515
+          },
+          {
+            gas: 'Propane',
+            ppm: 904.8076
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -384,7 +429,7 @@ module V1
     test 'create lower limit sensor_data' do
       data = create_data
       data[:data][0][:sensor_data] = 0
-      expected = { gases: {} }
+      expected = { gases: [] }
 
       post :create, body: data.to_json
 
@@ -399,7 +444,7 @@ module V1
     test 'create upper limit sensor_data' do
       data = create_data
       data[:data][0][:sensor_data] = 4095
-      expected = { gases: {} }
+      expected = { gases: [] }
 
       post :create, body: data.to_json
 
@@ -517,13 +562,28 @@ module V1
       data = create_data
       data[:log_time] = (Time.now.utc - 30.days).to_i
       expected = {
-        gases: {
-          Alcohol: 5478.509,
-          Methane: 5868.6898,
-          Hydrogen: 1345.0398,
-          'Liquid Petroleum Gas': 831.6515,
-          Propane: 904.8076
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 5478.509
+          },
+          {
+            gas: 'Methane',
+            ppm: 5868.6898
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 1345.0398
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 831.6515
+          },
+          {
+            gas: 'Propane',
+            ppm: 904.8076
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -540,13 +600,28 @@ module V1
       data = create_data
       data[:log_time] = Time.now.utc.to_i
       expected = {
-        gases: {
-          Alcohol: 5478.509,
-          Methane: 5868.6898,
-          Hydrogen: 1345.0398,
-          'Liquid Petroleum Gas': 831.6515,
-          Propane: 904.8076
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 5478.509
+          },
+          {
+            gas: 'Methane',
+            ppm: 5868.6898
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 1345.0398
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 831.6515
+          },
+          {
+            gas: 'Propane',
+            ppm: 904.8076
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -691,11 +766,20 @@ module V1
       data = create_data
       data[:humidity] = 0
       expected = {
-        gases: {
-          Hydrogen: 2573.2701,
-          'Liquid Petroleum Gas': 1592.9848,
-          Propane: 1743.3543
-        }
+        gases: [
+          {
+            gas: 'Hydrogen',
+            ppm: 2573.2701
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 1592.9848
+          },
+          {
+            gas: 'Propane',
+            ppm: 1743.3543
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -712,13 +796,28 @@ module V1
       data = create_data
       data[:humidity] = 100
       expected = {
-        gases: {
-          Alcohol: 1546.8867,
-          Methane: 1684.5838,
-          Hydrogen: 515.9321,
-          'Liquid Petroleum Gas': 318.4423,
-          Propane: 343.4518
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 1546.8867
+          },
+          {
+            gas: 'Methane',
+            ppm: 1684.5838
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 515.9321
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 318.4423
+          },
+          {
+            gas: 'Propane',
+            ppm: 343.4518
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -799,19 +898,52 @@ module V1
         sensor_data: 2900
       )
       expected = {
-        gases: {
-          Alcohol: 5478.509,
-          Methane: 5868.6898,
-          Hydrogen: 1345.0398,
-          'Liquid Petroleum Gas': 831.6515,
-          Propane: 904.8076,
-          'Carbon Monoxide': 165.833,
-          Ammonia: 39.9385,
-          'Carbon Dioxide': 37.5145,
-          Ethanol: 23.1593,
-          Methyl: 13.5074,
-          Acetone: 11.052
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 5478.509
+          },
+          {
+            gas: 'Methane',
+            ppm: 5868.6898
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 1345.0398
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 831.6515
+          },
+          {
+            gas: 'Propane',
+            ppm: 904.8076
+          },
+          {
+            gas: 'Carbon Monoxide',
+            ppm: 165.833
+          },
+          {
+            gas: 'Ammonia',
+            ppm: 39.9385
+          },
+          {
+            gas: 'Carbon Dioxide',
+            ppm: 37.5145
+          },
+          {
+            gas: 'Ethanol',
+            ppm: 23.1593
+          },
+          {
+            gas: 'Methyl',
+            ppm: 13.5074
+          },
+          {
+            gas: 'Acetone',
+            ppm: 11.052
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -833,13 +965,28 @@ module V1
         sensor_data: 1450
       )
       expected = {
-        gases: {
-          Alcohol: 3081.0906,
-          Methane: 2990.4197,
-          Hydrogen: 1345.0398,
-          'Liquid Petroleum Gas': 831.6515,
-          Propane: 904.8076
-        }
+        gases: [
+          {
+            gas: 'Alcohol',
+            ppm: 3081.0906
+          },
+          {
+            gas: 'Methane',
+            ppm: 2990.4197
+          },
+          {
+            gas: 'Hydrogen',
+            ppm: 1345.0398
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            ppm: 831.6515
+          },
+          {
+            gas: 'Propane',
+            ppm: 904.8076
+          }
+        ]
       }
 
       post :create, body: data.to_json
@@ -861,9 +1008,12 @@ module V1
       }]
 
       expected = {
-        gases: {
-          'Particulate Matter': 1672.8938
-        }
+        gases: [
+          {
+            gas: 'Particulate Matter',
+            ugm3: 1672.8938
+          }
+        ]
       }
 
       post :create, body: data.to_json

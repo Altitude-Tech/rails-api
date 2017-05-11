@@ -58,4 +58,11 @@ module Sensly
   def self.gas_name(gas)
     return GAS_NAMES[gas]
   end
+
+  ##
+  #
+  ##
+  def self.gas_from_name(name)
+    return GAS_NAMES.key(name)
+  end
 end

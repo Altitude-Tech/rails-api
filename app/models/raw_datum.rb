@@ -1,5 +1,5 @@
 ##
-# Representation of a raw, unporcessed data point in the database.
+# Representation of a raw, unprocessed data point in the database.
 ##
 class RawDatum < ApplicationRecord
   ##

@@ -46,4 +46,10 @@ module Record
   ##
   class DeviceAuthError < Error
   end
+
+  ##
+  #
+  ##
+  class ConcMissingError < Error
+  end
 end
