@@ -21,7 +21,10 @@ class Datum < ApplicationRecord
   ##
   # Validations
   ##
-  validates :device_id, presence: true
+  validates :device_id,
+            presence: { message: I18n.t('errors.invalid_or_missing') }
+  validates :sensor_type,
+            presence: { message: I18n.t('errors.invalid_or_missing') }
   validates :log_time,
             datetime: { max: :now }
   validates :gas,
@@ -47,6 +50,13 @@ class Datum < ApplicationRecord
     self[:log_time] = value
   rescue TypeError, ArgumentError
     self[:log_time] = value
+  end
+
+  ##
+  # Get the unhashed string representation of a sensor type.
+  ##
+  def sensor_name
+    return RawDatum::SENSOR_MAP_DB_TO_NAME[self[:sensor_type]]
   end
 
   ##

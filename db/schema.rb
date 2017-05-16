@@ -13,12 +13,13 @@
 ActiveRecord::Schema.define(version: 20170508130643) do
 
   create_table "data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "device_id",            null: false
-    t.datetime "log_time",             null: false
-    t.integer  "gas",                  null: false
-    t.float    "conc_ppm",  limit: 24
-    t.float    "conc_ugm3", limit: 24
-    t.index ["device_id", "log_time", "gas"], name: "index_data_on_device_id_and_log_time_and_gas", unique: true, using: :btree
+    t.integer  "device_id",              null: false
+    t.integer  "sensor_type",            null: false
+    t.datetime "log_time",               null: false
+    t.integer  "gas",                    null: false
+    t.float    "conc_ppm",    limit: 24
+    t.float    "conc_ugm3",   limit: 24
+    t.index ["device_id", "sensor_type", "log_time", "gas"], name: "index_data_on_device_id_and_sensor_type_and_log_time_and_gas", unique: true, using: :btree
   end
 
   create_table "devices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

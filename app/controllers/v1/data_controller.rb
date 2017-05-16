@@ -21,11 +21,9 @@ module V1
       @body[:device_id] = @device.id
 
       RawDatum.transaction do
-        @gas_data = convert_raw_data
-      end
-
-      Datum.transaction do
-        store_data
+        Datum.transaction do
+          @data = convert_raw_data
+        end
       end
     rescue ActiveRecord::RecordInvalid => exc
       raise Api::InvalidCreateError, exc
@@ -72,142 +70,22 @@ module V1
     end
 
     ##
-    # Helper method to insert raw data into the database.
+    # Helper method to insert data into the database.
     ##
     def convert_raw_data
       base_data = @body.except(:data)
-      data = {}
+      data = []
 
       @body[:data].each do |d|
         d = d.merge(base_data)
-        datum = RawDatum.create! d
 
-        gases = convert_data d
+        raw_datum = RawDatum.create! d
+        datum = raw_datum.to_datum!
 
-        unless gases.empty?
-          data[datum.sensor_name] = gases
-        end
+        data.concat(datum)
       end
 
-      return merge_gas_data data
-    end
-
-    ##
-    # Merge ppm values for gases together if they appear the data for multiple sensors.
-    ##
-    def merge_gas_data(data)
-      merged_data = {}
-
-      data.values.each do |v|
-        v.each do |gas, data|
-          unless merged_data.key? gas
-            merged_data[gas] = {}
-          end
-
-          unless data[:ppm].nil?
-            if merged_data[gas][:ppm].nil?
-              merged_data[gas][:ppm] = []
-            end
-
-            merged_data[gas][:ppm].push(data[:ppm])
-          end
-
-          unless data[:ugm3].nil?
-            if merged_data[gas][:ugm3].nil?
-              merged_data[gas][:ugm3] = []
-            end
-
-            merged_data[gas][:ugm3].push(data[:ugm3])
-          end
-        end
-      end
-
-      merged_data.each do |k, data|
-        unless data[:ppm].nil?
-          merged_data[k][:ppm] = (data[:ppm].sum / data[:ppm].size).round(4)
-        end
-
-        unless data[:ugm3].nil?
-          merged_data[k][:ugm3] = (data[:ugm3].sum / data[:ugm3].size).round(4)
-        end
-      end
-
-      return merged_data
-    end
-
-    ##
-    #
-    ##
-    def convert_data(data)
-      values = [
-        data[:sensor_data],
-        data[:sensor_r0],
-        data[:temperature],
-        data[:humidity]
-      ]
-      gases = {}
-
-      sensor =
-        case data[:sensor_type]
-        when RawDatum::SENSOR_MQ2_HASH
-          Sensly::MQ2Sensor.new(*values)
-
-        when RawDatum::SENSOR_MQ7_HASH
-          Sensly::MQ7Sensor.new(*values)
-
-        when RawDatum::SENSOR_MQ135_HASH
-          Sensly::MQ135Sensor.new(*values)
-
-        when RawDatum::SENSOR_PM_HASH
-          Sensly::PMSensor.new(data[:sensor_data])
-
-        else
-          # shouldn't be possible as it should have been caught during
-          # validation by RawDatum
-          raise Sensly::UnknownError, 'Unknown sensor type'
-        end
-
-      sensor.gases do |gas|
-        data = {}
-
-        if gas.include? :ppm
-          data[:ppm] = gas[:ppm].round(4)
-        end
-
-        if gas.include? :ugm3
-          data[:ugm3] = gas[:ugm3].round(4)
-        end
-
-        gases[gas[:name]] = data
-      end
-
-      return gases
-    end
-
-    ##
-    #
-    ##
-    def store_data
-      base_data = @body.select { |k, _| [:device_id, :log_time].include? k }
-      @data = []
-
-      @gas_data.each do |name, val|
-        data = {}
-
-        data[:gas] = Sensly::gas_from_name(name)
-
-        unless val[:ppm].nil?
-          data[:conc_ppm] = val[:ppm]
-        end
-
-        unless val[:ugm3].nil?
-          data[:conc_ugm3] = val[:ugm3]
-        end
-
-        data = data.merge(base_data)
-        d = Datum.create! data
-        @data.push(d)
-      end
+      return data
     end
   end
 end

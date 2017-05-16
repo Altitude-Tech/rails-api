@@ -27,23 +27,23 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 5478.509
+            conc_ppm: 5478.509
           },
           {
             gas: 'Methane',
-            ppm: 5868.6898
+            conc_ppm: 5868.6898
           },
           {
             gas: 'Hydrogen',
-            ppm: 1345.0398
+            conc_ppm: 1345.0398
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 831.6515
+            conc_ppm: 831.6515
           },
           {
             gas: 'Propane',
-            ppm: 904.8076
+            conc_ppm: 904.8076
           }
         ]
       }
@@ -269,23 +269,23 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 5478.509
+            conc_ppm: 5478.509
           },
           {
             gas: 'Methane',
-            ppm: 5868.6898
+            conc_ppm: 5868.6898
           },
           {
             gas: 'Hydrogen',
-            ppm: 1345.0398
+            conc_ppm: 1345.0398
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 831.6515
+            conc_ppm: 831.6515
           },
           {
             gas: 'Propane',
-            ppm: 904.8076
+            conc_ppm: 904.8076
           }
         ]
       }
@@ -307,23 +307,23 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 5478.509
+            conc_ppm: 5478.509
           },
           {
             gas: 'Methane',
-            ppm: 5868.6898
+            conc_ppm: 5868.6898
           },
           {
             gas: 'Hydrogen',
-            ppm: 1345.0398
+            conc_ppm: 1345.0398
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 831.6515
+            conc_ppm: 831.6515
           },
           {
             gas: 'Propane',
-            ppm: 904.8076
+            conc_ppm: 904.8076
           }
         ]
       }
@@ -565,23 +565,23 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 5478.509
+            conc_ppm: 5478.509
           },
           {
             gas: 'Methane',
-            ppm: 5868.6898
+            conc_ppm: 5868.6898
           },
           {
             gas: 'Hydrogen',
-            ppm: 1345.0398
+            conc_ppm: 1345.0398
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 831.6515
+            conc_ppm: 831.6515
           },
           {
             gas: 'Propane',
-            ppm: 904.8076
+            conc_ppm: 904.8076
           }
         ]
       }
@@ -603,23 +603,23 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 5478.509
+            conc_ppm: 5478.509
           },
           {
             gas: 'Methane',
-            ppm: 5868.6898
+            conc_ppm: 5868.6898
           },
           {
             gas: 'Hydrogen',
-            ppm: 1345.0398
+            conc_ppm: 1345.0398
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 831.6515
+            conc_ppm: 831.6515
           },
           {
             gas: 'Propane',
-            ppm: 904.8076
+            conc_ppm: 904.8076
           }
         ]
       }
@@ -769,15 +769,15 @@ module V1
         gases: [
           {
             gas: 'Hydrogen',
-            ppm: 2573.2701
+            conc_ppm: 2573.2701
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 1592.9848
+            conc_ppm: 1592.9848
           },
           {
             gas: 'Propane',
-            ppm: 1743.3543
+            conc_ppm: 1743.3543
           }
         ]
       }
@@ -799,23 +799,23 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 1546.8867
+            conc_ppm: 1546.8867
           },
           {
             gas: 'Methane',
-            ppm: 1684.5838
+            conc_ppm: 1684.5838
           },
           {
             gas: 'Hydrogen',
-            ppm: 515.9321
+            conc_ppm: 515.9321
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 318.4423
+            conc_ppm: 318.4423
           },
           {
             gas: 'Propane',
-            ppm: 343.4518
+            conc_ppm: 343.4518
           }
         ]
       }
@@ -901,47 +901,47 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 5478.509
+            conc_ppm: 5478.509
           },
           {
             gas: 'Methane',
-            ppm: 5868.6898
+            conc_ppm: 5868.6898
           },
           {
             gas: 'Hydrogen',
-            ppm: 1345.0398
+            conc_ppm: 1345.0398
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 831.6515
+            conc_ppm: 831.6515
           },
           {
             gas: 'Propane',
-            ppm: 904.8076
+            conc_ppm: 904.8076
           },
           {
             gas: 'Carbon Monoxide',
-            ppm: 165.833
+            conc_ppm: 165.833
           },
           {
             gas: 'Ammonia',
-            ppm: 39.9385
+            conc_ppm: 39.9385
           },
           {
             gas: 'Carbon Dioxide',
-            ppm: 37.5145
+            conc_ppm: 37.5145
           },
           {
             gas: 'Ethanol',
-            ppm: 23.1593
+            conc_ppm: 23.1593
           },
           {
             gas: 'Methyl',
-            ppm: 13.5074
+            conc_ppm: 13.5074
           },
           {
             gas: 'Acetone',
-            ppm: 11.052
+            conc_ppm: 11.052
           }
         ]
       }
@@ -968,23 +968,31 @@ module V1
         gases: [
           {
             gas: 'Alcohol',
-            ppm: 3081.0906
+            conc_ppm: 5478.509
           },
           {
             gas: 'Methane',
-            ppm: 2990.4197
+            conc_ppm: 5868.6898
           },
           {
             gas: 'Hydrogen',
-            ppm: 1345.0398
+            conc_ppm: 1345.0398
           },
           {
             gas: 'Liquid Petroleum Gas',
-            ppm: 831.6515
+            conc_ppm: 831.6515
           },
           {
             gas: 'Propane',
-            ppm: 904.8076
+            conc_ppm: 904.8076
+          },
+          {
+            gas: 'Alcohol',
+            conc_ppm: 683.6722
+          },
+          {
+            gas: 'Methane',
+            conc_ppm: 112.1495
           }
         ]
       }
@@ -1011,7 +1019,7 @@ module V1
         gases: [
           {
             gas: 'Particulate Matter',
-            ugm3: 1672.8938
+            conc_ugm3: 1672.8938
           }
         ]
       }

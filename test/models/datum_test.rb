@@ -5,6 +5,7 @@ class DatumTest < ActiveSupport::TestCase
   # Data to create a new data point with.
   ##
   CREATE_DATA = {
+    sensor_type: RawDatum::SENSOR_MQ2_HASH,
     log_time: Time.now.utc.to_i,
     gas: Sensly::GAS_H2,
     conc_ppm: 0.0,

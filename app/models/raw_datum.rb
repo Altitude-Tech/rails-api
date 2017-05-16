@@ -118,4 +118,41 @@ class RawDatum < ApplicationRecord
   def sensor_name
     return SENSOR_MAP_DB_TO_NAME[self[:sensor_type]]
   end
+
+  ##
+  # Convert a raw data point to a set of gata data.
+  ##
+  def to_datum!
+    s = self.attributes.symbolize_keys
+    base_data = s.slice(:device_id, :log_time, :sensor_type)
+    mq_data = s.slice(:sensor_data, :sensor_r0, :temperature, :humidity).values
+    data = []
+
+    sensor =
+        case self.sensor_type
+        when RawDatum::SENSOR_MQ2_HASH
+          Sensly::MQ2Sensor.new(*mq_data)
+
+        when RawDatum::SENSOR_MQ7_HASH
+          Sensly::MQ7Sensor.new(*mq_data)
+
+        when RawDatum::SENSOR_MQ135_HASH
+          Sensly::MQ135Sensor.new(*mq_data)
+
+        when RawDatum::SENSOR_PM_HASH
+          Sensly::PMSensor.new(self[:sensor_data])
+        end
+
+
+    sensor.gases do |gas|
+      g = gas.merge(base_data)
+      g[:gas] = Sensly::gas_from_name(g[:name])
+      g.delete(:name)
+
+      d = Datum.create! g
+      data.push(d)
+    end
+
+    return data
+  end
 end

@@ -59,13 +59,13 @@ module Sensly
     ##
     def gases
       self.class::GAS_CONFIG.each do |k, v|
-        next if v[:min] > corr_rs_ro_ratio
-        next if v[:max] < corr_rs_ro_ratio
+        data = { name: Sensly.gas_name(k) }
 
-        data = {}
-
-        data[:ppm] = 10**((v[:gradient] * Math.log10(@rs_ro_ratio)) + v[:intercept])
-        data[:name] = Sensly.gas_name(k)
+        if v[:min] > corr_rs_ro_ratio || v[:max] < corr_rs_ro_ratio
+          data[:conc_ppm] = 0
+        else
+          data[:conc_ppm] = 10**((v[:gradient] * Math.log10(@rs_ro_ratio)) + v[:intercept])
+        end
 
         yield data
       end

@@ -70,7 +70,9 @@ class MQ2SensorTest < MiniTest::Test
     gases = [].to_set
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected_gases, gases
@@ -99,7 +101,9 @@ class MQ2SensorTest < MiniTest::Test
     gases = [].to_set
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected_gases, gases
@@ -120,7 +124,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -143,7 +149,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -166,7 +174,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -190,7 +200,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -214,7 +226,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -239,7 +253,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -264,7 +280,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -290,7 +308,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -316,7 +336,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -344,7 +366,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -372,7 +396,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -399,7 +425,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -426,7 +454,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -451,7 +481,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -476,7 +508,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -500,7 +534,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -524,7 +560,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
@@ -545,7 +583,9 @@ class MQ2SensorTest < MiniTest::Test
     assert_equal corr_rs_ro_ratio, sensor.corr_rs_ro_ratio.round(4)
 
     sensor.gases do |gas|
-      gases.add [gas[:name], gas[:ppm].round(4)].to_set
+      if gas[:conc_ppm] > 0
+        gases.add [gas[:name], gas[:conc_ppm].round(4)].to_set
+      end
     end
 
     assert_equal expected, gases
