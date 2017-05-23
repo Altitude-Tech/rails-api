@@ -34,6 +34,10 @@ module V1
             conc_ppm: 5868.6898
           },
           {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
             gas: 'Hydrogen',
             conc_ppm: 1345.0398
           },
@@ -276,6 +280,10 @@ module V1
             conc_ppm: 5868.6898
           },
           {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
             gas: 'Hydrogen',
             conc_ppm: 1345.0398
           },
@@ -312,6 +320,10 @@ module V1
           {
             gas: 'Methane',
             conc_ppm: 5868.6898
+          },
+          {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
           },
           {
             gas: 'Hydrogen',
@@ -429,7 +441,34 @@ module V1
     test 'create lower limit sensor_data' do
       data = create_data
       data[:data][0][:sensor_data] = 0
-      expected = { gases: [] }
+      expected = {
+        gases: [
+          {
+            gas: 'Alcohol',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Methane',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Hydrogen',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Propane',
+            conc_ppm: 0.0
+          }
+        ]
+      }
 
       post :create, body: data.to_json
 
@@ -444,7 +483,34 @@ module V1
     test 'create upper limit sensor_data' do
       data = create_data
       data[:data][0][:sensor_data] = 4095
-      expected = { gases: [] }
+      expected = {
+        gases: [
+          {
+            gas: 'Alcohol',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Methane',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Hydrogen',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Propane',
+            conc_ppm: 0.0
+          }
+        ]
+      }
 
       post :create, body: data.to_json
 
@@ -572,6 +638,10 @@ module V1
             conc_ppm: 5868.6898
           },
           {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
             gas: 'Hydrogen',
             conc_ppm: 1345.0398
           },
@@ -608,6 +678,10 @@ module V1
           {
             gas: 'Methane',
             conc_ppm: 5868.6898
+          },
+          {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
           },
           {
             gas: 'Hydrogen',
@@ -768,6 +842,18 @@ module V1
       expected = {
         gases: [
           {
+            gas: 'Alcohol',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Methane',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
             gas: 'Hydrogen',
             conc_ppm: 2573.2701
           },
@@ -804,6 +890,10 @@ module V1
           {
             gas: 'Methane',
             conc_ppm: 1684.5838
+          },
+          {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
           },
           {
             gas: 'Hydrogen',
@@ -908,6 +998,10 @@ module V1
             conc_ppm: 5868.6898
           },
           {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
             gas: 'Hydrogen',
             conc_ppm: 1345.0398
           },
@@ -975,6 +1069,10 @@ module V1
             conc_ppm: 5868.6898
           },
           {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
             gas: 'Hydrogen',
             conc_ppm: 1345.0398
           },
@@ -993,7 +1091,19 @@ module V1
           {
             gas: 'Methane',
             conc_ppm: 112.1495
-          }
+          },
+          {
+            gas: 'Liquid Petroleum Gas',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Carbon Monoxide',
+            conc_ppm: 0.0
+          },
+          {
+            gas: 'Hydrogen',
+            conc_ppm: 0.0
+          },
         ]
       }
 
