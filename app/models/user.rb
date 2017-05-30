@@ -21,6 +21,8 @@ class User < ApplicationRecord
   # Associations
   ##
   belongs_to :token, foreign_key: :session_token, optional: true
+  belongs_to :token, foreign_key: :confirm_token, optional: true
+  belongs_to :token, foreign_key: :reset_token, optional: true
   belongs_to :group, foreign_key: :group_id, optional: true
   has_one :group, foreign_key: :admin
 
@@ -90,12 +92,44 @@ class User < ApplicationRecord
       raise Record::UserAuthError, msg
     end
 
+    unless self[:confirm_token].nil?
+      msg = 'Unconfirmed email address.'
+      raise Record::UserUnconfirmedError, msg
+    end
+
     # set and return a session token
     token = Token.create! expires: 6.hours.from_now
     update! session_token: token.token
 
     return token
   end
+
+  ##
+  # Generate a new confirm token.
+  #
+  # Will disable any existing token should it already exist.
+  ##
+  def generate_confirm_token!
+    unless self[:confirm_token].nil?
+      token = Token.find(self[:confirm_token])
+      token.disable!
+
+      update! confirm_token: nil
+    end
+
+    token = Token.create! expires: 24.hours.from_now
+    update! confirm_token: token.token
+  end
+
+  def remove_confirm_token!
+    unless self[:confirm_token].nil?
+      token = Token.find(self[:confirm_token])
+      token.disable!
+
+      update! confirm_token: nil
+    end
+  end
+
 
   ##
   # Disable the session token and remove it from the user.

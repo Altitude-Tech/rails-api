@@ -25,6 +25,26 @@ module V1
     end
 
     ##
+    #
+    ##
+    def resend_confirm_email
+
+    end
+
+    ##
+    #
+    ##
+    def confirm_email
+      user = User.find_by_confirm_token! params[:confirm]
+      user.remove_confirm_token!
+
+      @result = 'success'
+      render 'v1/result'
+    rescue ActiveRecord::RecordNotFound
+      raise Api::UserConfirmError
+    end
+
+    ##
     # Log a user in using their email and password.
     #
     # Creates and sets a session token as a cookie if successful.
@@ -42,6 +62,8 @@ module V1
       raise Api::NotFoundError, 'email'
     rescue Record::UserAuthError => exc
       raise Api::LoginAuthError, exc
+    rescue Record::UserUnconfirmedError, exc
+      raise Api::UserUnconfirmedError, exc.message
     end
 
     ##

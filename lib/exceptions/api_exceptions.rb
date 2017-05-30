@@ -172,4 +172,15 @@ module Api
       super(message)
     end
   end
+
+  ##
+  #
+  ##
+  class UserUnconfirmedError < Error
+    def initalize(message)
+      @code ||= 114
+      @user_message = 'Your email address is not confirmed.'
+
+      super(message)
+    end
 end

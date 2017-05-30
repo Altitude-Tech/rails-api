@@ -52,4 +52,10 @@ module Record
   ##
   class ConcMissingError < Error
   end
+
+  ##
+  #
+  ##
+  class UserUnconfirmedError < Error
+  end
 end
