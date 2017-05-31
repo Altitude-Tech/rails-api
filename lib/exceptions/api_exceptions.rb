@@ -183,4 +183,5 @@ module Api
 
       super(message)
     end
+  end
 end

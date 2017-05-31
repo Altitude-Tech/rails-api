@@ -73,11 +73,15 @@ ActiveRecord::Schema.define(version: 20170508130643) do
     t.string   "password_digest",                 null: false
     t.boolean  "staff",           default: false, null: false
     t.string   "session_token"
+    t.string   "confirm_token"
+    t.string   "reset_token"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "group_id"
+    t.index ["confirm_token"], name: "index_users_on_confirm_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["group_id"], name: "fk_rails_f40b3f4da6", using: :btree
+    t.index ["reset_token"], name: "index_users_on_reset_token", unique: true, using: :btree
     t.index ["session_token"], name: "index_users_on_session_token", unique: true, using: :btree
   end
 
@@ -87,5 +91,7 @@ ActiveRecord::Schema.define(version: 20170508130643) do
   add_foreign_key "groups", "users", column: "admin"
   add_foreign_key "raw_data", "devices"
   add_foreign_key "users", "groups"
+  add_foreign_key "users", "tokens", column: "confirm_token", primary_key: "token"
+  add_foreign_key "users", "tokens", column: "reset_token", primary_key: "token"
   add_foreign_key "users", "tokens", column: "session_token", primary_key: "token"
 end

@@ -10,7 +10,6 @@ environment = ENV['RAILS_ENV'] || 'development'
 
 # socket location
 # use /tmp so it works on vagrant too
-# <http://stackoverflow.com/a/16404342>
 bind 'unix:///tmp/puma.sock'
 
 # logging

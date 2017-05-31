@@ -5,8 +5,8 @@ require_relative 'application'
 Rails.application.initialize!
 
 ActionMailer::Base.smtp_settings = {
-  user_name: 'apikey',
-  password: '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',
+  user_name: 'username',
+  password: 'password',
   domain: 'altitude.tech',
   address: 'smtp.sendgrid.net',
   port: 587,

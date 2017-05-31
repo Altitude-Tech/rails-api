@@ -63,8 +63,9 @@ module V1
       expected = ''
 
       login
-      process :create, 'OPTIONS'
+      process :create, http_method = 'OPTIONS'
 
+      puts response.headers
       assert_equal expected, response.body
       assert_response :no_content
     end
