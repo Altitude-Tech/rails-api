@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- TODO: add proper title here -->
+    <title>Sensly</title>
+
+    <!-- stylesheets -->
+    <%= stylesheet_link_tag 'main', media: 'all' %>
+    <%= stylesheet_link_tag params[:controller] %>
+
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+    <div class="content-wrapper">
+      <%= yield %>
+    </div>
+  </body>
+</html>

@@ -1,6 +1,12 @@
 module V1
   class SessionApiController < ApiController
     ##
+    # Login form
+    ##
+    def new
+    end
+
+    ##
     # Create a new user session.
     ##
     def create
