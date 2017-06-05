@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- TODO: add proper title here -->
     <title>Sensly</title>
-    <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'main', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'main', 'data-turbolinks-track': 'reload' %>
+    <!-- stylesheets -->
+    <%= stylesheet_link_tag 'main', media: 'all' %>
+    <%= stylesheet_link_tag params[:controller] %>
+
+    <%= csrf_meta_tags %>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="wrapper">
+      <header class="topbar-wrapper">
+        <%= render partial: 'layouts/partials/topbar' %>
+      </header>
+
+      <aside class="sidebar-wrapper">
+        <%= render partial: 'layouts/partials/sidebar' %>
+      </aside>
+
+      <section>
+        <div class="content-wrapper">
+          <%= yield %>
+        </div>
+      </section>
+
+      <footer class="footer-wrapper">
+        <%= render partial: 'layouts/partials/footer' %>
+      </footer>
+    </div>
+
+    <!-- TODO: add scripts here -->
+    <%= javascript_include_tag 'main' %>
   </body>
 </html>
